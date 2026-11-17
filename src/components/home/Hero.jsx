@@ -54,8 +54,7 @@ const QR_NOISE = QR_CELLS.flatMap((x, i) =>
   ),
 )
 
-// Original decorative QR illustration.
-// Replace with a working QR image before publishing.
+// Decorative illustration, not a working QR code.
 function QRIllustration() {
   return (
     <div className="inline-block rounded-xl bg-white p-3 shadow-md">
@@ -140,60 +139,140 @@ function QRIllustration() {
   )
 }
 
-function StoreButtons() {
-  const buttonClass =
-    'inline-flex h-[46px] w-[150px] items-center gap-3 rounded-[13px] border border-white/15 bg-[#1B2934] px-3.5 text-white transition-colors hover:bg-[#263846] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#FF5722] motion-reduce:transition-none'
+function TiltStoreLink({ children, label }) {
+  const handlePointerMove = (event) => {
+    if (
+      event.pointerType !== 'mouse' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return
+    }
+
+    const wrapper = event.currentTarget
+    const rect = wrapper.getBoundingClientRect()
+
+    if (!rect.width || !rect.height) return
+
+    const x = Math.max(
+      0,
+      Math.min(1, (event.clientX - rect.left) / rect.width),
+    )
+
+    const y = Math.max(
+      0,
+      Math.min(1, (event.clientY - rect.top) / rect.height),
+    )
+
+    wrapper.style.setProperty('--button-x', `${(0.5 - y) * 18}deg`)
+    wrapper.style.setProperty('--button-y', `${(x - 0.5) * 18}deg`)
+    wrapper.style.setProperty('--button-lift', '-4px')
+  }
+
+  const resetTilt = (event) => {
+    const wrapper = event.currentTarget
+
+    wrapper.style.setProperty('--button-x', '0deg')
+    wrapper.style.setProperty('--button-y', '0deg')
+    wrapper.style.setProperty('--button-lift', '0px')
+  }
 
   return (
-    <div className="mb-8 flex flex-wrap items-center gap-2.5">
+    <div
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetTilt}
+      onPointerCancel={resetTilt}
+      className="group relative [perspective:700px]"
+    >
       <Link
         to="/download"
-        aria-label="Download on the App Store"
-        className={buttonClass}
+        aria-label={label}
+        className="
+          relative inline-flex h-[46px] w-[150px]
+          items-center rounded-[13px]
+          border border-white/20 bg-[#1B2934]
+          px-3.5 text-white
+          shadow-[0_4px_0_#101B24,0_8px_16px_rgba(15,23,42,0.15)]
+          [transform-style:preserve-3d]
+          transition-[transform,background-color,box-shadow]
+          duration-200 ease-out
+          hover:bg-[#0052CC]
+          hover:shadow-[0_4px_0_#003580,0_12px_24px_rgba(0,82,204,0.22)]
+          focus-visible:outline-2
+          focus-visible:outline-offset-4
+          focus-visible:outline-[#FF5722]
+          motion-safe:[transform:translateY(var(--button-lift,0px))_rotateX(var(--button-x,0deg))_rotateY(var(--button-y,0deg))]
+          motion-safe:active:[transform:translateY(2px)]
+          active:shadow-[0_1px_0_#101B24]
+          motion-reduce:transition-none
+        "
       >
+        <span
+          className="
+            pointer-events-none flex w-full items-center gap-3
+            motion-safe:[transform:translateZ(12px)]
+          "
+        >
+          {children}
+        </span>
+      </Link>
+    </div>
+  )
+}
+
+function StoreButtons() {
+  return (
+    <div className="mb-8 flex flex-wrap items-center gap-3">
+      <TiltStoreLink label="Download on the App Store">
         <FaApple
           aria-hidden="true"
           className="h-6 w-6 shrink-0"
         />
 
-        <div className="font-agni-body">
-          <span className="block text-[7px] leading-[10px] text-[#9AA6AF]">
+        <span className="font-agni-body">
+          <span
+            className="
+              block text-[7px] leading-[10px] text-[#B7C3CC]
+              transition-colors group-hover:text-blue-100
+              motion-reduce:transition-none
+            "
+          >
             DOWNLOAD ON THE
           </span>
 
-          <span className="block text-[13px] leading-[16px]">
+          <span className="agni-hero-button-label block text-[13px] leading-[16px]">
             App Store
           </span>
-        </div>
-      </Link>
+        </span>
+      </TiltStoreLink>
 
-      <Link
-        to="/download"
-        aria-label="Get it on Google Play"
-        className={buttonClass}
-      >
+      <TiltStoreLink label="Get it on Google Play">
         <FaGooglePlay
           aria-hidden="true"
           className="h-6 w-6 shrink-0"
         />
 
-        <div className="font-agni-body">
-          <span className="block text-[7px] leading-[10px] text-[#9AA6AF]">
+        <span className="font-agni-body">
+          <span
+            className="
+              block text-[7px] leading-[10px] text-[#B7C3CC]
+              transition-colors group-hover:text-blue-100
+              motion-reduce:transition-none
+            "
+          >
             GET IT ON
           </span>
 
-          <span className="block text-[13px] leading-[16px]">
+          <span className="agni-hero-button-label block text-[13px] leading-[16px]">
             Google Play
           </span>
-        </div>
-      </Link>
+        </span>
+      </TiltStoreLink>
     </div>
   )
 }
 
 export default function Hero({ lang = 'en' }) {
   const [activeScreen, setActiveScreen] = useState(0)
-
   const isBangla = lang === 'bn'
 
   useEffect(() => {
@@ -221,14 +300,30 @@ export default function Hero({ lang = 'en' }) {
     <section
       lang={lang}
       aria-labelledby="hero-title"
-      className={`${bodyFont} w-full overflow-hidden bg-[linear-gradient(135deg,#F8FAFF_0%,#EEF4FF_40%,#F8F9FA_100%)] py-20 font-normal text-[#1a202c] antialiased [font-synthesis:none]`}
+      className={`
+        agni-hero ${bodyFont}
+        w-full overflow-hidden
+        bg-[linear-gradient(135deg,#F8FAFF_0%,#EEF4FF_40%,#F8F9FA_100%)]
+        py-20 font-normal text-[#1a202c]
+        antialiased [font-synthesis:none]
+      `}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          {/* Text */}
+          {/* Hero text */}
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#FF5722]/20 bg-[#FF5722]/[0.08] px-4 py-2 text-sm text-[#0052CC]">
-              <FiTrendingUp aria-hidden="true" />
+            <div
+              className="
+                mb-6 inline-flex items-center gap-2
+                rounded-full border border-[#FF5722]/20
+                bg-[#FF5722]/[0.08] px-4 py-2
+                text-sm text-[#0052CC]
+              "
+            >
+              <FiTrendingUp
+                aria-hidden="true"
+                className="shrink-0"
+              />
 
               <span>
                 {isBangla
@@ -237,10 +332,14 @@ export default function Hero({ lang = 'en' }) {
               </span>
             </div>
 
-            {/* Rolling heading */}
+            {/* Bold rolling heading */}
             <h1
               id="hero-title"
-              className={`${headingFont} mb-4 text-[clamp(28px,5vw,52px)] font-normal leading-tight text-[#003366]`}
+              className={`
+                agni-hero-title ${headingFont}
+                mb-4 text-[clamp(28px,5vw,52px)]
+                leading-tight text-[#003366]
+              `}
             >
               {isBangla ? (
                 <CountText
@@ -260,9 +359,10 @@ export default function Hero({ lang = 'en' }) {
             </h1>
 
             <p
-              className={`mb-8 text-lg leading-relaxed text-[#4a5568] ${
-                isBangla ? '' : 'max-w-[540px]'
-              }`}
+              className={`
+                mb-8 text-lg leading-relaxed text-[#4a5568]
+                ${isBangla ? '' : 'max-w-[540px]'}
+              `}
             >
               {isBangla ? (
                 <>
@@ -288,69 +388,137 @@ export default function Hero({ lang = 'en' }) {
 
             <StoreButtons />
 
-            {/* Trust labels */}
-{/* Trust badges */}
-<ul className="flex flex-wrap items-center gap-3">
-  <li>
-    <Link
-      to="/security"
-      className="group inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-emerald-200/70 bg-emerald-50/80 px-3.5 py-2 text-emerald-900 transition-[transform,background-color,border-color,box-shadow] duration-300 hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600 motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
-    >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 text-emerald-700">
-        <FiLock
-          aria-hidden="true"
-          strokeWidth={2.5}
-          className="h-5 w-5"
-        />
-      </span>
+            {/* Trust badges */}
+            <ul className="flex flex-wrap items-center gap-3">
+              <li>
+                <Link
+                  to="/security"
+                  className="
+                    group inline-flex min-h-12 items-center gap-2.5
+                    rounded-xl border border-emerald-200/70
+                    bg-emerald-50/80 px-3.5 py-2 text-emerald-900
+                    transition-[transform,background-color,border-color,box-shadow]
+                    duration-300
+                    hover:border-emerald-300 hover:bg-emerald-100
+                    hover:shadow-sm
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-emerald-600
+                    motion-safe:hover:-translate-y-1
+                    motion-reduce:transition-none
+                  "
+                >
+                  <span
+                    className="
+                      flex h-8 w-8 shrink-0 items-center justify-center
+                      rounded-lg bg-white/80 text-emerald-700
+                    "
+                  >
+                    <FiLock
+                      aria-hidden="true"
+                      strokeWidth={2.5}
+                      className="h-5 w-5"
+                    />
+                  </span>
 
-      <span className="text-sm">TLS Encrypted</span>
-    </Link>
-  </li>
+                  <span className="text-sm">TLS Encrypted</span>
+                </Link>
+              </li>
 
-  <li>
-    <Link
-      to="/about"
-      className="group inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-sky-200/70 bg-sky-50/80 px-3.5 py-2 text-sky-900 transition-[transform,background-color,border-color,box-shadow] duration-300 hover:border-sky-300 hover:bg-sky-100 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-600 motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
-    >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 text-sky-700">
-        <FiShield
-          aria-hidden="true"
-          strokeWidth={2.5}
-          className="h-5 w-5"
-        />
-      </span>
+              <li>
+                <Link
+                  to="/about"
+                  className="
+                    group inline-flex min-h-12 items-center gap-2.5
+                    rounded-xl border border-sky-200/70
+                    bg-sky-50/80 px-3.5 py-2 text-sky-900
+                    transition-[transform,background-color,border-color,box-shadow]
+                    duration-300
+                    hover:border-sky-300 hover:bg-sky-100
+                    hover:shadow-sm
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-sky-600
+                    motion-safe:hover:-translate-y-1
+                    motion-reduce:transition-none
+                  "
+                >
+                  <span
+                    className="
+                      flex h-8 w-8 shrink-0 items-center justify-center
+                      rounded-lg bg-white/80 text-sky-700
+                    "
+                  >
+                    <FiShield
+                      aria-hidden="true"
+                      strokeWidth={2.5}
+                      className="h-5 w-5"
+                    />
+                  </span>
 
-      <span className="text-sm">BTRC Licensed</span>
-    </Link>
-  </li>
+                  <span className="text-sm">BTRC Licensed</span>
+                </Link>
+              </li>
 
-  <li>
-    <Link
-      to="/download"
-      className="group inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-amber-200/70 bg-amber-50/80 px-3.5 py-2 text-amber-900 transition-[transform,background-color,border-color,box-shadow] duration-300 hover:border-amber-300 hover:bg-amber-100 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-600 motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
-    >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 text-amber-600">
-        <FiStar
-          aria-hidden="true"
-          strokeWidth={2}
-          fill="currentColor"
-          className="h-5 w-5 transition-transform duration-300 motion-safe:group-hover:rotate-12 motion-reduce:transition-none"
-        />
-      </span>
+              <li>
+                <Link
+                  to="/download"
+                  className="
+                    group inline-flex min-h-12 items-center gap-2.5
+                    rounded-xl border border-amber-200/70
+                    bg-amber-50/80 px-3.5 py-2 text-amber-900
+                    transition-[transform,background-color,border-color,box-shadow]
+                    duration-300
+                    hover:border-amber-300 hover:bg-amber-100
+                    hover:shadow-sm
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-amber-600
+                    motion-safe:hover:-translate-y-1
+                    motion-reduce:transition-none
+                  "
+                >
+                  <span
+                    className="
+                      flex h-8 w-8 shrink-0 items-center justify-center
+                      rounded-lg bg-white/80 text-amber-600
+                    "
+                  >
+                    <FiStar
+                      aria-hidden="true"
+                      strokeWidth={2}
+                      fill="currentColor"
+                      className="
+                        h-5 w-5 transition-transform duration-300
+                        motion-safe:group-hover:rotate-12
+                        motion-reduce:transition-none
+                      "
+                    />
+                  </span>
 
-      <span className="text-sm">4.5 on Play Store</span>
-    </Link>
-  </li>
-</ul>
+                  <span className="text-sm">4.5 on Play Store</span>
+                </Link>
+              </li>
+            </ul>
           </div>
 
           {/* Phone and floating badges */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative">
               <div className="relative z-10 h-[480px] w-[240px] -rotate-3">
-                <div className="h-full w-full motion-safe:animate-[agniHeroFloat_4s_ease-in-out_infinite]">
-                  <div className="relative h-full w-full overflow-hidden rounded-[36px] bg-[#0a0a0a] shadow-[0_32px_80px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)]">
+                <div
+                  className="
+                    h-full w-full
+                    motion-safe:animate-[agniHeroFloat_4s_ease-in-out_infinite]
+                  "
+                >
+                  <div
+                    className="
+                      relative h-full w-full overflow-hidden
+                      rounded-[36px] bg-[#0a0a0a]
+                      shadow-[0_32px_80px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)]
+                    "
+                  >
                     {phoneScreens.map((screen, index) => (
                       <img
                         key={screen.src}
@@ -362,11 +530,17 @@ export default function Hero({ lang = 'en' }) {
                         fetchPriority={index === 0 ? 'high' : 'auto'}
                         loading="eager"
                         draggable={false}
-                        className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ease-in-out motion-reduce:transition-none ${
-                          activeScreen === index
-                            ? 'opacity-100'
-                            : 'opacity-0'
-                        }`}
+                        className={`
+                          absolute inset-0 h-full w-full
+                          object-cover object-top
+                          transition-opacity duration-700 ease-in-out
+                          motion-reduce:transition-none
+                          ${
+                            activeScreen === index
+                              ? 'opacity-100'
+                              : 'opacity-0'
+                          }
+                        `}
                       />
                     ))}
                   </div>
@@ -378,7 +552,13 @@ export default function Hero({ lang = 'en' }) {
                 className={`${badgeClass} -left-12 top-16 [animation-delay:0.5s]`}
               >
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E3F2FD] text-lg text-[#0052CC]">
+                  <div
+                    className="
+                      flex h-8 w-8 items-center justify-center
+                      rounded-full bg-[#E3F2FD]
+                      text-lg text-[#0052CC]
+                    "
+                  >
                     <FiBarChart2 aria-hidden="true" />
                   </div>
 
@@ -424,7 +604,12 @@ export default function Hero({ lang = 'en' }) {
                 className={`${badgeClass} -left-8 bottom-24 [animation-delay:1.5s]`}
               >
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E3F2FD] text-[#0052CC]">
+                  <div
+                    className="
+                      flex h-8 w-8 items-center justify-center
+                      rounded-full bg-[#E3F2FD] text-[#0052CC]
+                    "
+                  >
                     <FiPhone aria-hidden="true" />
                   </div>
 
@@ -440,7 +625,7 @@ export default function Hero({ lang = 'en' }) {
                 </div>
               </div>
 
-              {/* Desktop QR illustration */}
+              {/* Existing decorative QR illustration */}
               <div className="absolute -right-4 bottom-12 z-20 hidden xl:block">
                 <QRIllustration />
               </div>

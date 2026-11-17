@@ -312,3 +312,45 @@ html.lenis body { height: auto; }
     transform: translateY(0);
   }
 }
+
+/* Header navigation and button text */
+.agnitalk-ui.agnitalk-header nav a,
+.agnitalk-ui.agnitalk-header button,
+.agnitalk-ui.agnitalk-header a[href="/download"] {
+  font-weight: 700;
+  font-synthesis: weight;
+}
+
+/* Allow synthetic bold for the existing 400-weight fonts. */
+.agni-hero .agni-hero-title,
+.agni-hero .agni-hero-title span {
+  font-weight: 700;
+  font-synthesis: weight;
+}
+
+.agni-hero .agni-hero-button-label {
+  font-weight: 700;
+  font-synthesis: weight;
+}
+
+@keyframes agniHeroFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes agniHeroBadge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}

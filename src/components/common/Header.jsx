@@ -12,27 +12,31 @@ const navigation = [
 
 export default function Header({ lang = 'en', setLang }) {
   const [menuOpen, setMenuOpen] = useState(false)
+
   const menuRef = useRef(null)
   const openButtonRef = useRef(null)
+
   const location = useLocation()
   const isBangla = lang === 'bn'
 
   const closeMenu = () => setMenuOpen(false)
 
-  // Close the menu on navigation, including browser back/forward.
   useEffect(() => {
     menuRef.current?.close()
   }, [location])
 
   useEffect(() => {
     const dialog = menuRef.current
+
     if (!menuOpen || !dialog) return
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+
     dialog.showModal()
 
     const desktop = window.matchMedia('(min-width: 1280px)')
+
     const handleResize = () => {
       if (desktop.matches) {
         dialog.close()
@@ -47,6 +51,7 @@ export default function Header({ lang = 'en', setLang }) {
       document.body.style.overflow = previousOverflow
 
       if (dialog.open) dialog.close()
+
       openButtonRef.current?.focus()
     }
   }, [menuOpen])
@@ -81,9 +86,18 @@ export default function Header({ lang = 'en', setLang }) {
     <>
       <header
         lang={lang}
-        className="agnitalk-ui sticky top-0 z-40 w-full border-b border-slate-200 bg-white"
+        className="
+          agnitalk-ui agnitalk-header
+          sticky top-0 z-40 w-full
+          border-b border-slate-200 bg-white
+        "
       >
-        <div className="flex h-20 w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+        <div
+          className="
+            flex h-20 w-full items-center justify-between
+            gap-4 px-4 sm:px-6 lg:px-10
+          "
+        >
           <Link
             to="/"
             aria-label="AgniTalk home"
@@ -92,6 +106,7 @@ export default function Header({ lang = 'en', setLang }) {
             {logo}
           </Link>
 
+          {/* Desktop navigation */}
           <nav
             aria-label="Main navigation"
             className="hidden items-center gap-6 xl:flex"
@@ -101,9 +116,13 @@ export default function Header({ lang = 'en', setLang }) {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `whitespace-nowrap py-2 text-sm transition-colors hover:text-[#0052CC] ${
-                    isActive ? 'text-[#0052CC]' : 'text-slate-600'
-                  }`
+                  `
+                    whitespace-nowrap py-2 text-sm
+                    transition-colors duration-200
+                    hover:text-[#0052CC]
+                    motion-reduce:transition-none
+                    ${isActive ? 'text-[#0052CC]' : 'text-slate-600'}
+                  `
                 }
               >
                 {isBangla ? item.bn : item.en}
@@ -111,12 +130,19 @@ export default function Header({ lang = 'en', setLang }) {
             ))}
           </nav>
 
+          {/* Desktop actions */}
           <div className="hidden shrink-0 items-center gap-3 xl:flex">
             {setLang && (
               <button
                 type="button"
                 onClick={toggleLanguage}
-                className="rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50"
+                className="
+                  rounded-lg border border-slate-300
+                  px-4 py-3 text-sm text-slate-700
+                  transition-colors duration-200
+                  hover:bg-slate-50
+                  motion-reduce:transition-none
+                "
               >
                 {isBangla ? 'English' : 'বাংলা'}
               </button>
@@ -124,12 +150,19 @@ export default function Header({ lang = 'en', setLang }) {
 
             <Link
               to="/download"
-              className="rounded-lg bg-[#FF5722] px-5 py-3 text-sm text-white hover:bg-[#E64A19]"
+              className="
+                rounded-lg bg-[#FF5722]
+                px-5 py-3 text-sm text-white
+                transition-colors duration-200
+                hover:bg-[#E64A19]
+                motion-reduce:transition-none
+              "
             >
               {isBangla ? 'ডাউনলোড করুন' : 'Download App'}
             </Link>
           </div>
 
+          {/* Mobile menu trigger */}
           <button
             ref={openButtonRef}
             type="button"
@@ -138,7 +171,11 @@ export default function Header({ lang = 'en', setLang }) {
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[#003366] hover:bg-slate-100 xl:hidden"
+            className="
+              flex h-11 w-11 shrink-0 items-center justify-center
+              rounded-lg text-[#003366]
+              hover:bg-slate-100 xl:hidden
+            "
           >
             <svg
               viewBox="0 0 24 24"
@@ -155,18 +192,29 @@ export default function Header({ lang = 'en', setLang }) {
         </div>
       </header>
 
-      {/* Native modal provides focus trapping and Escape-key support. */}
+      {/* Full-screen mobile navigation */}
       <dialog
         ref={menuRef}
         id="mobile-navigation"
         lang={lang}
         aria-label={isBangla ? 'মেনু' : 'Navigation menu'}
         onClose={() => setMenuOpen(false)}
-        className="agnitalk-ui fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none border-0 bg-white p-0 text-slate-800 backdrop:bg-black/40"
+        className="
+          agnitalk-ui agnitalk-header
+          fixed inset-0 m-0 h-dvh max-h-none
+          w-full max-w-none border-0
+          bg-white p-0 text-slate-800
+          backdrop:bg-black/40
+        "
       >
         <div className="flex h-full min-h-0 flex-col">
-          {/* Mobile menu header */}
-          <div className="flex h-20 shrink-0 items-center justify-between gap-4 border-b border-slate-200 px-4 sm:px-6">
+          {/* Mobile header */}
+          <div
+            className="
+              flex h-20 shrink-0 items-center justify-between
+              gap-4 border-b border-slate-200 px-4 sm:px-6
+            "
+          >
             <Link
               to="/"
               onClick={closeMenu}
@@ -180,7 +228,10 @@ export default function Header({ lang = 'en', setLang }) {
               type="button"
               onClick={closeMenu}
               aria-label="Close navigation"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[#003366] hover:bg-slate-100"
+              className="
+                flex h-11 w-11 shrink-0 items-center justify-center
+                rounded-lg text-[#003366] hover:bg-slate-100
+              "
             >
               <svg
                 viewBox="0 0 24 24"
@@ -196,8 +247,16 @@ export default function Header({ lang = 'en', setLang }) {
             </button>
           </div>
 
-          {/* Scrollable full-screen content */}
-          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6 sm:px-6">
+          {/* Scrollable menu content */}
+          <div
+            className="
+              flex min-h-0 flex-1 flex-col
+              overflow-y-auto overscroll-contain
+              px-4 pt-6
+              pb-[max(1.5rem,env(safe-area-inset-bottom))]
+              sm:px-6
+            "
+          >
             <nav aria-label="Mobile navigation">
               <ul className="space-y-2">
                 {navigation.map((item) => (
@@ -206,11 +265,17 @@ export default function Header({ lang = 'en', setLang }) {
                       to={item.to}
                       onClick={closeMenu}
                       className={({ isActive }) =>
-                        `flex min-h-14 items-center justify-between gap-4 rounded-xl px-4 py-4 text-xl transition-colors ${
-                          isActive
-                            ? 'bg-blue-50 text-[#0052CC]'
-                            : 'text-slate-700 hover:bg-slate-50'
-                        }`
+                        `
+                          flex min-h-14 items-center justify-between
+                          gap-4 rounded-xl px-4 py-4 text-xl
+                          transition-colors duration-200
+                          motion-reduce:transition-none
+                          ${
+                            isActive
+                              ? 'bg-blue-50 text-[#0052CC]'
+                              : 'text-slate-700 hover:bg-slate-50'
+                          }
+                        `
                       }
                     >
                       <span>{isBangla ? item.bn : item.en}</span>
@@ -221,13 +286,27 @@ export default function Header({ lang = 'en', setLang }) {
               </ul>
             </nav>
 
+            {/* Mobile actions */}
             <div className="mt-auto pt-8">
-              <div className="flex flex-col gap-3 border-t border-slate-200 pt-6 sm:flex-row">
+              <div
+                className="
+                  flex flex-col gap-3
+                  border-t border-slate-200 pt-6
+                  sm:flex-row
+                "
+              >
                 {setLang && (
                   <button
                     type="button"
                     onClick={toggleLanguage}
-                    className="min-h-12 flex-1 rounded-xl border border-slate-300 px-5 py-3 text-base text-slate-700 hover:bg-slate-50"
+                    className="
+                      min-h-12 flex-1 rounded-xl
+                      border border-slate-300
+                      px-5 py-3 text-base text-slate-700
+                      transition-colors duration-200
+                      hover:bg-slate-50
+                      motion-reduce:transition-none
+                    "
                   >
                     {isBangla ? 'English' : 'বাংলা'}
                   </button>
@@ -236,7 +315,14 @@ export default function Header({ lang = 'en', setLang }) {
                 <Link
                   to="/download"
                   onClick={closeMenu}
-                  className="flex min-h-12 flex-1 items-center justify-center rounded-xl bg-[#FF5722] px-5 py-3 text-base text-white hover:bg-[#E64A19]"
+                  className="
+                    flex min-h-12 flex-1 items-center justify-center
+                    rounded-xl bg-[#FF5722]
+                    px-5 py-3 text-base text-white
+                    transition-colors duration-200
+                    hover:bg-[#E64A19]
+                    motion-reduce:transition-none
+                  "
                 >
                   {isBangla ? 'ডাউনলোড করুন' : 'Download App'}
                 </Link>
