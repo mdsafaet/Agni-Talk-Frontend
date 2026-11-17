@@ -3,66 +3,62 @@ import { Link } from 'react-router-dom'
 const quickLinks = [
   { to: '/features', en: 'Features', bn: 'ফিচার' },
   { to: '/rates', en: 'Calling Rates', bn: 'কল রেট' },
-  { to: '/how-it-works', en: 'How It Works', bn: 'কীভাবে' },
   { to: '/packages', en: 'Packages', bn: 'প্যাকেজ' },
-  { to: '/blog', en: 'Blog', bn: 'ব্লগ' },
-  { to: '/about', en: 'About AgniTalk', bn: 'পরিচিতি' },
+  { to: '/about', en: 'About Us', bn: 'আমাদের সম্পর্কে' },
 ]
 
-export default function Footer({ lang = 'en', socialLinks = [] }) {
+export default function Footer({ lang = 'en' }) {
   const isBangla = lang === 'bn'
 
   const headingClass =
-    'font-agni-heading mb-4 text-base text-white'
+    'font-agni-heading mb-3 text-sm font-normal text-[#003366] sm:text-base'
 
   const linkClass =
-    'inline-block py-2 text-sm leading-6 text-slate-300 transition-colors hover:text-white'
+    'inline-block max-w-full py-1.5 text-xs leading-6 text-slate-600 transition-colors duration-200 hover:text-[#0052CC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0052CC] motion-reduce:transition-none sm:text-sm'
 
   return (
     <footer
       lang={lang}
-      className="agnitalk-ui w-full bg-[#1A202C] text-white"
+      className="agnitalk-ui w-full border-t border-slate-200 bg-white text-slate-700"
     >
-      <div className="w-full px-4 pt-10 sm:px-6 sm:pt-12 lg:px-10 lg:pt-16">
-        <div className="grid grid-cols-1 gap-8 pb-10 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
-          {/* Brand */}
-          <div className="min-w-0">
+      <div className="w-full px-4 pt-10 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-6 pb-8 sm:gap-x-6 lg:grid-cols-[1.1fr_0.8fr_1.2fr_0.9fr]">
+          {/* Logo */}
+          <div className="col-span-3 min-w-0 lg:col-span-1">
             <Link
               to="/"
               aria-label="AgniTalk home"
-              className="inline-flex items-center gap-3"
+              className="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0052CC]"
             >
               <img
                 src="/agni-logo.png"
                 alt=""
-                className="h-12 w-12 shrink-0 rounded-xl object-contain"
+                width={40}
+                height={40}
+                className="h-10 w-10 shrink-0 object-contain"
               />
 
-              <div>
-                <span className="font-agni-heading block text-xl">
-                  AgniTalk
-                </span>
+              <div className="flex flex-col items-start gap-1">
+                <img
+                  src="/agni-talk-wordmark.png"
+                  alt="AgniTalk"
+                  className="h-6 w-auto max-w-[130px] object-contain"
+                />
 
-                <span className="mt-1 block text-xs text-slate-400">
+                <span className="font-agni-body text-xs leading-5 text-slate-500">
                   by Agni Systems PLC.
                 </span>
               </div>
             </Link>
 
-            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-300">
-              {isBangla
-                ? 'অগ্নিটকের মাধ্যমে প্রিয়জনদের সঙ্গে সংযুক্ত থাকুন। সহজ কলিং ও যোগাযোগের অভিজ্ঞতা উপভোগ করুন।'
-                : 'Stay connected with the people who matter through AgniTalk. Enjoy simple calling and communication wherever you go.'}
-            </p>
-
-            <address className="mt-4 text-sm leading-7 not-italic text-slate-400">
+            <address className="mt-3 hidden text-sm leading-6 not-italic text-slate-500 lg:block">
               Navana Tower, Gulshan Avenue,
               <br />
               Dhaka, Bangladesh
             </address>
           </div>
 
-          {/* Navigation */}
+          {/* Quick links */}
           <div className="min-w-0">
             <h2 className={headingClass}>
               {isBangla ? 'দ্রুত লিংক' : 'Quick Links'}
@@ -88,13 +84,17 @@ export default function Footer({ lang = 'en', socialLinks = [] }) {
             </h2>
 
             <ul>
-              <li>
-                <a href="tel:16620" className={linkClass}>
-                  {isBangla ? 'হটলাইন: ' : 'Hotline: '}16620
-                </a>
-              </li>
+              <li className="flex flex-wrap items-baseline gap-x-1 text-xs leading-6 text-slate-600 sm:text-sm">
+                <span>
+                  {isBangla ? 'হটলাইন:' : 'Hotline:'}
+                </span>
 
-              <li>
+                <a href="tel:16620" className={linkClass}>
+                  16620
+                </a>
+
+                <span>{isBangla ? 'ও' : 'and'}</span>
+
                 <a href="tel:09606100520" className={linkClass}>
                   09606100520
                 </a>
@@ -102,19 +102,8 @@ export default function Footer({ lang = 'en', socialLinks = [] }) {
 
               <li>
                 <a
-                  href="https://wa.me/8801894829135"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={linkClass}
-                >
-                  {isBangla ? 'হোয়াটসঅ্যাপ সহায়তা' : 'WhatsApp Support'}
-                </a>
-              </li>
-
-              <li>
-                <a
                   href="mailto:agniapps@agni.com"
-                  className={`${linkClass} max-w-full break-words`}
+                  className={`${linkClass} [overflow-wrap:anywhere]`}
                 >
                   agniapps@agni.com
                 </a>
@@ -128,39 +117,9 @@ export default function Footer({ lang = 'en', socialLinks = [] }) {
             </ul>
           </div>
 
-          {/* Download and legal */}
+          {/* Legal and download */}
           <div className="min-w-0">
             <h2 className={headingClass}>
-              {isBangla ? 'অ্যাপ ডাউনলোড' : 'Get AgniTalk'}
-            </h2>
-
-            <Link
-              to="/download"
-              className="flex min-h-12 w-full items-center justify-center rounded-lg bg-[#FF5722] px-5 py-3 text-sm text-white transition-colors hover:bg-[#E64A19] sm:w-fit"
-            >
-              {isBangla ? 'ডাউনলোড করুন' : 'Download App'}
-            </Link>
-
-            {socialLinks.length > 0 && (
-              <nav
-                aria-label="Social media"
-                className="mt-5 flex flex-wrap gap-2"
-              >
-                {socialLinks.map(({ label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-lg border border-white/20 px-3 py-2 text-sm text-slate-300 hover:border-white/50 hover:text-white"
-                  >
-                    {label}
-                  </a>
-                ))}
-              </nav>
-            )}
-
-            <h2 className={`${headingClass} mt-7`}>
               {isBangla ? 'নীতিমালা' : 'Legal'}
             </h2>
 
@@ -177,16 +136,24 @@ export default function Footer({ lang = 'en', socialLinks = [] }) {
                 </Link>
               </li>
             </ul>
+
+            <h2 className={`${headingClass} mt-4`}>
+              {isBangla ? 'অগ্নিটক' : 'Get AgniTalk'}
+            </h2>
+
+            <Link
+              to="/download"
+              className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#C94316] px-3 py-2.5 text-center text-xs leading-5 text-white transition-[background-color,transform] duration-300 ease-out hover:bg-[#0052CC] focus-visible:bg-[#0052CC] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0052CC] motion-safe:hover:-translate-y-0.5 motion-reduce:transition-none sm:px-5 sm:text-sm"
+            >
+              {isBangla ? 'ডাউনলোড করুন' : 'Download App'}
+            </Link>
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/15 py-6 text-center md:flex-row md:text-left">
-          <p className="text-xs leading-6 text-slate-400 sm:text-sm">
+        {/* Copyright */}
+        <div className="border-t border-slate-200 py-4 text-center">
+          <p className="text-xs leading-6 text-slate-500 sm:text-sm">
             © {new Date().getFullYear()} Agni Systems PLC. All Rights Reserved.
-          </p>
-
-          <p className="text-xs text-slate-400 sm:text-sm">
-            Made in Bangladesh
           </p>
         </div>
       </div>

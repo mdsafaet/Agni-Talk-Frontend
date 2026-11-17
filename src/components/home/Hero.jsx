@@ -10,6 +10,8 @@ import {
   FiTrendingUp,
 } from 'react-icons/fi'
 
+import CountText from '../shared/CountText'
+
 const phoneScreens = [
   {
     src: '/app/agni-number.jpg',
@@ -52,8 +54,8 @@ const QR_NOISE = QR_CELLS.flatMap((x, i) =>
   ),
 )
 
-// Decorative illustration from the original ZIP.
-// Replace with a real QR image before publishing.
+// Original decorative QR illustration.
+// Replace with a working QR image before publishing.
 function QRIllustration() {
   return (
     <div className="inline-block rounded-xl bg-white p-3 shadow-md">
@@ -235,24 +237,25 @@ export default function Hero({ lang = 'en' }) {
               </span>
             </div>
 
+            {/* Rolling heading */}
             <h1
               id="hero-title"
               className={`${headingFont} mb-4 text-[clamp(28px,5vw,52px)] font-normal leading-tight text-[#003366]`}
             >
               {isBangla ? (
-                <>
-                  অগ্নিটক — যেকোনো নাম্বারে কথা বলুন{' '}
-                  <span className="bg-[linear-gradient(135deg,#0052CC_0%,#0099FF_100%)] bg-clip-text text-transparent">
-                    সবচেয়ে কম খরচে
-                  </span>
-                </>
+                <CountText
+                  key="bn"
+                  text="অগ্নিটক — যেকোনো নাম্বারে কথা বলুন সবচেয়ে কম খরচে"
+                  highlight="সবচেয়ে কম খরচে"
+                  hold={2.5}
+                />
               ) : (
-                <>
-                  HD IP Telephony &amp; Free Messaging at{' '}
-                  <span className="bg-[linear-gradient(135deg,#0052CC_0%,#0099FF_100%)] bg-clip-text text-transparent">
-                    Unbeatable Rates
-                  </span>
-                </>
+                <CountText
+                  key="en"
+                  text="HD IP Telephony & Free Messaging at Unbeatable Rates"
+                  highlight="Unbeatable Rates"
+                  hold={2.5}
+                />
               )}
             </h1>
 
@@ -286,35 +289,67 @@ export default function Hero({ lang = 'en' }) {
             <StoreButtons />
 
             {/* Trust labels */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-[#718096]">
-              <div className="flex items-center gap-1.5">
-                <FiLock
-                  className="text-[#28A745]"
-                  aria-hidden="true"
-                />
-                <span>TLS Encrypted</span>
-              </div>
+{/* Trust badges */}
+<ul className="flex flex-wrap items-center gap-3">
+  <li>
+    <Link
+      to="/security"
+      className="group inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-emerald-200/70 bg-emerald-50/80 px-3.5 py-2 text-emerald-900 transition-[transform,background-color,border-color,box-shadow] duration-300 hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-600 motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
+    >
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 text-emerald-700">
+        <FiLock
+          aria-hidden="true"
+          strokeWidth={2.5}
+          className="h-5 w-5"
+        />
+      </span>
 
-              <div className="flex items-center gap-1.5">
-                <FiShield aria-hidden="true" />
-                <span>BTRC Licensed</span>
-              </div>
+      <span className="text-sm">TLS Encrypted</span>
+    </Link>
+  </li>
 
-              <div className="flex items-center gap-1.5">
-                <FiStar aria-hidden="true" />
-                <span>4.5 on Play Store</span>
-              </div>
-            </div>
+  <li>
+    <Link
+      to="/about"
+      className="group inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-sky-200/70 bg-sky-50/80 px-3.5 py-2 text-sky-900 transition-[transform,background-color,border-color,box-shadow] duration-300 hover:border-sky-300 hover:bg-sky-100 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-600 motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
+    >
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 text-sky-700">
+        <FiShield
+          aria-hidden="true"
+          strokeWidth={2.5}
+          className="h-5 w-5"
+        />
+      </span>
+
+      <span className="text-sm">BTRC Licensed</span>
+    </Link>
+  </li>
+
+  <li>
+    <Link
+      to="/download"
+      className="group inline-flex min-h-12 items-center gap-2.5 rounded-xl border border-amber-200/70 bg-amber-50/80 px-3.5 py-2 text-amber-900 transition-[transform,background-color,border-color,box-shadow] duration-300 hover:border-amber-300 hover:bg-amber-100 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-600 motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
+    >
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/80 text-amber-600">
+        <FiStar
+          aria-hidden="true"
+          strokeWidth={2}
+          fill="currentColor"
+          className="h-5 w-5 transition-transform duration-300 motion-safe:group-hover:rotate-12 motion-reduce:transition-none"
+        />
+      </span>
+
+      <span className="text-sm">4.5 on Play Store</span>
+    </Link>
+  </li>
+</ul>
           </div>
 
           {/* Phone and floating badges */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative">
-              {/* Static phone tilt */}
               <div className="relative z-10 h-[480px] w-[240px] -rotate-3">
-                {/* Floating phone animation */}
                 <div className="h-full w-full motion-safe:animate-[agniHeroFloat_4s_ease-in-out_infinite]">
-                  {/* Phone frame and slideshow */}
                   <div className="relative h-full w-full overflow-hidden rounded-[36px] bg-[#0a0a0a] shadow-[0_32px_80px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)]">
                     {phoneScreens.map((screen, index) => (
                       <img
