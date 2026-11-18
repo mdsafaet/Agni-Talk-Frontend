@@ -119,11 +119,11 @@ export default function Footer({ lang = 'en' }) {
 
           {/* Legal and download */}
           <div className="min-w-0">
-            <h2 className={headingClass}>
+            {/* <h2 className={headingClass}>
               {isBangla ? 'নীতিমালা' : 'Legal'}
-            </h2>
+            </h2> */}
 
-            <ul>
+            {/* <ul>
               <li>
                 <Link to="/privacy-policy" className={linkClass}>
                   {isBangla ? 'গোপনীয়তা নীতি' : 'Privacy Policy'}
@@ -135,9 +135,9 @@ export default function Footer({ lang = 'en' }) {
                   {isBangla ? 'সেবার শর্তাবলি' : 'Terms of Service'}
                 </Link>
               </li>
-            </ul>
+            </ul> */}
 
-            <h2 className={`${headingClass} mt-4`}>
+            <h2 className={`${headingClass}`}>
               {isBangla ? 'অগ্নিটক' : 'Get AgniTalk'}
             </h2>
 

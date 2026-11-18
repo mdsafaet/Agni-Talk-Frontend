@@ -182,65 +182,6 @@ const FILTERS = [
   },
 ]
 
-const CARD_COLORS = {
-  mobile: {
-    surface: '#F0F7FF',
-    border: '#C7DFFF',
-    accent: '#175CD3',
-    glow: 'rgba(59, 130, 246, 0.20)',
-    tint: '#DBEAFE',
-  },
-  landline: {
-    surface: '#F5F2FF',
-    border: '#DDD2FE',
-    accent: '#7047C6',
-    glow: 'rgba(139, 92, 246, 0.20)',
-    tint: '#EDE5FF',
-  },
-  app: {
-    surface: '#EFFBF5',
-    border: '#BDE8D0',
-    accent: '#087A50',
-    glow: 'rgba(16, 185, 129, 0.20)',
-    tint: '#D8F5E5',
-  },
-  usa: {
-    surface: '#FFF2F5',
-    border: '#F8CDDA',
-    accent: '#BD3565',
-    glow: 'rgba(236, 72, 153, 0.18)',
-    tint: '#FFE1EA',
-  },
-  uk: {
-    surface: '#F1F3FF',
-    border: '#D1D8FF',
-    accent: '#4E54C8',
-    glow: 'rgba(99, 102, 241, 0.20)',
-    tint: '#E1E6FF',
-  },
-  saudi: {
-    surface: '#EFFAF7',
-    border: '#BDE7DD',
-    accent: '#087F72',
-    glow: 'rgba(20, 184, 166, 0.20)',
-    tint: '#D5F2EB',
-  },
-  uae: {
-    surface: '#FFF7EB',
-    border: '#F3DCB5',
-    accent: '#996015',
-    glow: 'rgba(245, 158, 11, 0.20)',
-    tint: '#FCEACB',
-  },
-  malaysia: {
-    surface: '#FFF3EE',
-    border: '#F5D0BF',
-    accent: '#B8542C',
-    glow: 'rgba(249, 115, 22, 0.20)',
-    tint: '#FFE3D5',
-  },
-}
-
 function handleTilt(event) {
   if (
     event.pointerType !== 'mouse' ||
@@ -264,11 +205,9 @@ function handleTilt(event) {
     Math.min(1, (event.clientY - rect.top) / rect.height),
   )
 
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 16}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 16}deg`)
-  wrapper.style.setProperty('--lift', '-6px')
-  wrapper.style.setProperty('--pointer-x', `${x * 100}%`)
-  wrapper.style.setProperty('--pointer-y', `${y * 100}%`)
+  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 10}deg`)
+  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 10}deg`)
+  wrapper.style.setProperty('--lift', '-4px')
 }
 
 function resetTilt(event) {
@@ -277,8 +216,6 @@ function resetTilt(event) {
   wrapper.style.setProperty('--tilt-x', '0deg')
   wrapper.style.setProperty('--tilt-y', '0deg')
   wrapper.style.setProperty('--lift', '0px')
-  wrapper.style.setProperty('--pointer-x', '50%')
-  wrapper.style.setProperty('--pointer-y', '50%')
 }
 
 function normalizeSearch(value) {
@@ -288,25 +225,28 @@ function normalizeSearch(value) {
     .toLowerCase()
 }
 
-function CountryFlags({ countries }) {
+function CountryFlags({ countries, isSelected }) {
   if (!countries.length) {
     return (
       <div
         aria-hidden="true"
-        className="
+        className={`
           flex h-9 w-9 items-center justify-center
-          rounded-lg border border-white/90
-          bg-white/80 text-[var(--card-accent)]
-          shadow-[0_3px_10px_rgba(15,23,42,0.05)]
-        "
+          rounded-xl border transition-colors
+          ${
+            isSelected
+              ? 'border-[#FF5722]/30 bg-white text-[#FF5722]'
+              : 'border-[#FF5722]/20 bg-[#FFF7F4] text-[#FF5722]'
+          }
+        `}
       >
         <svg
-          width="20"
-          height="20"
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.8"
+          strokeWidth="1.9"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -323,11 +263,15 @@ function CountryFlags({ countries }) {
       {countries.map((code) => (
         <span
           key={code}
-          className="
+          className={`
             flex h-9 w-9 items-center justify-center
-            rounded-lg border border-white/90 bg-white/90
-            shadow-[0_3px_10px_rgba(15,23,42,0.05)]
-          "
+            rounded-xl border transition-colors
+            ${
+              isSelected
+                ? 'border-[#0052CC]/25 bg-white'
+                : 'border-slate-200/90 bg-[#F8FAFC]'
+            }
+          `}
         >
           <ReactCountryFlag
             countryCode={code}
@@ -335,8 +279,8 @@ function CountryFlags({ countries }) {
             title={COUNTRY_NAMES[code]}
             aria-label={COUNTRY_NAMES[code]}
             style={{
-              width: '24px',
-              height: '18px',
+              width: '22px',
+              height: '16px',
               objectFit: 'cover',
               borderRadius: '2px',
             }}
@@ -347,141 +291,123 @@ function CountryFlags({ countries }) {
   )
 }
 
-function RateCard({ rate, lang }) {
+function RateCard({ rate, lang, isSelected, onSelect }) {
   const language = lang === 'bn' ? 'bn' : 'en'
   const isFree = rate.rate === 0
-  const colors = CARD_COLORS[rate.id] ?? CARD_COLORS.mobile
+
+  const cardSurfaceClass = isFree
+    ? isSelected
+      ? 'border-[#FF5722] bg-[#FFF7F4] ring-2 ring-[#FF5722]/20 shadow-[0_14px_28px_-10px_rgba(255,87,34,0.22)]'
+      : 'border-[#FF5722]/25 bg-white hover:border-[#FF5722]/60 hover:bg-[#FFF7F4]/70 hover:shadow-[0_14px_28px_-10px_rgba(255,87,34,0.16)]'
+    : isSelected
+      ? 'border-[#0052CC] bg-[#F4F8FF] ring-2 ring-[#0052CC]/20 shadow-[0_14px_28px_-10px_rgba(0,82,204,0.2)]'
+      : 'border-slate-200/90 bg-white hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/70 hover:shadow-[0_14px_28px_-10px_rgba(0,82,204,0.14)]'
 
   return (
     <div
       onPointerMove={handleTilt}
       onPointerLeave={resetTilt}
       onPointerCancel={resetTilt}
-      className="
-        group relative isolate h-full min-w-0
-        [perspective:1000px] hover:z-10
-      "
-      style={{
-        '--card-surface': colors.surface,
-        '--card-border': colors.border,
-        '--card-accent': colors.accent,
-        '--card-glow': colors.glow,
-        '--card-tint': colors.tint,
-      }}
+      className="group relative h-full min-w-0 [perspective:1000px]"
     >
-      {/* Colour glow */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-x-5 bottom-0 -z-10
-          h-12 rounded-full bg-[var(--card-glow)] blur-xl
-          opacity-30 transition-opacity duration-500
-          group-hover:opacity-100
-          motion-reduce:transition-none
-        "
-      />
-
-      <article
-        className="
-          relative flex h-full flex-col
-          rounded-[20px] border border-[var(--card-border)]
-          bg-[var(--card-surface)] p-4
-          shadow-[0_4px_16px_rgba(15,23,42,0.035)]
-          [transform-style:preserve-3d]
-          transition-[transform,box-shadow,border-color]
-          duration-300 ease-out
-          group-hover:border-[var(--card-accent)]
-          group-hover:shadow-[0_18px_35px_-16px_var(--card-glow)]
+      <button
+        type="button"
+        aria-pressed={isSelected}
+        onClick={() => onSelect(rate)}
+        className={`
+          relative flex h-full w-full flex-col overflow-hidden
+          rounded-[20px] border p-4 text-left sm:p-5
+          shadow-[0_4px_16px_-4px_rgba(0,51,102,0.06)]
+          [transform-style:preserve-3d] cursor-pointer
+          transition-[transform,box-shadow,border-color,background-color]
+          duration-200 ease-out
+          focus-visible:outline-2
+          focus-visible:outline-offset-4
+          focus-visible:outline-[#0052CC]
           motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
+          motion-safe:active:scale-[0.99]
           motion-reduce:transition-none
-          sm:p-5
-        "
+          ${cardSurfaceClass}
+        `}
       >
-        {/* Mouse-following light */}
-        <div
+        {/* Subtle top accent bar */}
+        <span
           aria-hidden="true"
-          className="
-            pointer-events-none absolute inset-0 rounded-[inherit]
-            opacity-0 transition-opacity duration-500
-            group-hover:opacity-100 motion-reduce:hidden
-          "
-          style={{
-            background:
-              'radial-gradient(circle at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,0.85), transparent 65%)',
-          }}
+          className={`
+            absolute inset-x-0 top-0 h-1
+            ${isFree ? 'bg-[#FF5722]' : 'bg-[#0052CC]'}
+          `}
         />
 
-        <div
-          aria-hidden="true"
-          className="
-            pointer-events-none absolute inset-1.5
-            rounded-[15px] border border-white/60
-          "
-        />
-
-        <div
-          className="
-            relative mb-3 flex items-start justify-between gap-2
-            [transform-style:preserve-3d]
-            motion-safe:[transform:translateZ(16px)]
-          "
-        >
+        {/* Header: Title, Detail & Flag */}
+        <div className="mb-3 flex w-full items-start justify-between gap-2.5 pt-0.5">
           <div className="min-w-0">
             <h3
-              className={`mb-1 text-sm leading-5 text-slate-800 ${bn(lang)}`}
+              className={`mb-0.5 text-sm sm:text-[15px] font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
             >
               {rate.label[language]}
             </h3>
 
             <p
-              className={`text-[11px] leading-4 text-slate-500 ${bn(lang)}`}
+              className={`text-xs leading-4 text-slate-500 ${bn(lang)}`}
             >
               {rate.detail[language]}
             </p>
           </div>
 
-          <div
-            className="
-              shrink-0 transition-transform duration-300 ease-out
-              motion-safe:[transform:translateZ(12px)]
-              motion-safe:group-hover:[transform:translateZ(18px)_translateY(-2px)_rotate(3deg)]
-              motion-reduce:transition-none
-            "
-          >
-            <CountryFlags countries={rate.countries} />
-          </div>
+          <CountryFlags countries={rate.countries} isSelected={isSelected} />
         </div>
 
-        <div
-          className="
-            relative mb-3 flex items-end gap-1.5
-            motion-safe:[transform:translateZ(28px)]
-          "
-        >
-          <span
-            className="
-              font-agni-heading text-[32px] leading-tight
-              tracking-tight text-[var(--card-accent)]
-              sm:text-[36px]
-            "
-          >
-            {isFree ? 'FREE' : `৳${rate.rate.toFixed(2)}`}
-          </span>
-
-          {!isFree && (
-            <span className="mb-1.5 text-xs text-slate-500">
-              / min
+        {/* Price & Prefix Row */}
+        <div className="mb-3 flex w-full items-baseline justify-between gap-2">
+          <div className="flex items-baseline gap-1">
+            <span
+              className={`
+                font-agni-heading text-[30px] sm:text-[34px]
+                font-bold [font-synthesis:weight] leading-none tracking-tight
+                ${isFree ? 'text-[#FF5722]' : isSelected ? 'text-[#0052CC]' : 'text-[#003366]'}
+              `}
+            >
+              {isFree ? 'FREE' : `৳${rate.rate.toFixed(2)}`}
             </span>
-          )}
+
+            {!isFree && (
+              <span className="text-xs font-medium text-slate-500">
+                / min
+              </span>
+            )}
+          </div>
+
+          <span
+            className={`
+              rounded-lg border px-2 py-0.5 font-agni-body text-[11px] transition-colors
+              ${
+                isSelected
+                  ? 'border-[#0052CC]/20 bg-white text-[#003366]'
+                  : 'border-slate-200/80 bg-[#F8FAFC] text-slate-600'
+              }
+            `}
+          >
+            {rate.prefix}
+          </span>
         </div>
 
+        {/* Pulse / Feature Pill */}
         <div
           className={`
-            relative mb-4 inline-flex items-center gap-1.5
-            self-start rounded-full border border-white/80
-            bg-[var(--card-tint)] px-2.5 py-1
-            text-[11px] leading-4 text-[var(--card-accent)]
-            motion-safe:[transform:translateZ(18px)]
+            mb-3.5 inline-flex items-center gap-1.5
+            self-start rounded-full px-2.5 py-1
+            text-[11px] font-bold [font-synthesis:weight] leading-4
+            transition-colors
+            ${
+              isFree
+                ? isSelected
+                  ? 'bg-[#FF5722] text-white'
+                  : 'bg-[#FFF7F4] text-[#FF5722]'
+                : isSelected
+                  ? 'bg-[#0052CC] text-white'
+                  : 'bg-[#F4F8FF] text-[#0052CC]'
+            }
             ${bn(lang)}
           `}
         >
@@ -496,13 +422,12 @@ function RateCard({ rate, lang }) {
               cy="10"
               r="7.5"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="1.6"
             />
-
             <path
               d="m6.5 10 2.3 2.3 4.7-4.6"
               stroke="currentColor"
-              strokeWidth="1.7"
+              strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -519,19 +444,20 @@ function RateCard({ rate, lang }) {
           </span>
         </div>
 
+        {/* Bottom Note */}
         <div
-          className="
-            relative mt-auto border-t border-[var(--card-border)]
-            pt-3 motion-safe:[transform:translateZ(10px)]
-          "
+          className={`
+            mt-auto w-full border-t pt-2.5 transition-colors
+            ${isSelected ? 'border-[#0052CC]/15' : 'border-slate-100'}
+          `}
         >
           <p
-            className={`text-[11px] leading-5 text-slate-600 ${bn(lang)}`}
+            className={`text-[11px] leading-5 text-slate-500 ${bn(lang)}`}
           >
             {rate.note[language]}
           </p>
         </div>
-      </article>
+      </button>
     </div>
   )
 }
@@ -539,6 +465,7 @@ function RateCard({ rate, lang }) {
 export default function Rates({ lang = 'en' }) {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
+  const [selectedRateId, setSelectedRateId] = useState('mobile')
   const [minutes, setMinutes] = useState(20)
   const [destination, setDestination] = useState('local')
 
@@ -567,6 +494,11 @@ export default function Rates({ lang = 'en' }) {
     return matchesFilter && (!q || searchText.includes(q))
   })
 
+  const handleSelectCard = (rate) => {
+    setSelectedRateId((prev) => (prev === rate.id ? null : rate.id))
+    setDestination(rate.category === 'international' ? 'international' : 'local')
+  }
+
   const calculatorRate = destination === 'local' ? 0.4 : 1.1
   const operatorRate = destination === 'local' ? 2 : 5
   const monthlyMinutes = minutes * 30
@@ -581,25 +513,39 @@ export default function Rates({ lang = 'en' }) {
     <section
       id="rates"
       lang={language}
-      className="agnitalk-ui bg-[#F8FAFD] py-0!"
+      className="
+        agnitalk-ui relative overflow-hidden
+        border-b border-slate-200/70
+        bg-[#F8FAFF]
+        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
+        [background-size:22px_22px]
+        py-0!
+      "
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,255,0.65)_0%,rgba(255,255,255,0.9)_100%)]"
+      />
+
       <div
         id="Rate-Calculator-Module"
         className="
-          mx-auto w-full max-w-7xl px-4 py-14
-          sm:px-6 sm:py-16 lg:px-8 lg:py-20
+          relative mx-auto w-full max-w-7xl px-4 py-10
+          sm:px-6 sm:py-12 lg:px-8 lg:py-14
         "
       >
         {/* Heading */}
-        <div className="mb-10 text-center">
+        <div className="mb-8 text-center">
           <div
             className={`
-              mb-4 inline-flex rounded-full
-              border border-blue-100 bg-blue-50
-              px-4 py-2 text-xs tracking-wide text-[#0052CC]
+              mb-3 inline-flex items-center gap-2 rounded-full
+              border border-[#0052CC]/15 bg-white
+              px-3.5 py-1 text-[11px] font-bold [font-synthesis:weight]
+              uppercase tracking-wider text-[#0052CC] shadow-2xs
               ${bn(lang)}
             `}
           >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
             {lang === 'bn'
               ? 'স্বচ্ছ BTRC ট্যারিফ'
               : 'TRANSPARENT BTRC TARIFFS'}
@@ -607,7 +553,8 @@ export default function Rates({ lang = 'en' }) {
 
           <h2
             className={`
-              mb-3 text-[clamp(26px,4vw,36px)]
+              mb-2 text-[clamp(24px,4vw,36px)]
+              font-bold [font-synthesis:weight]
               leading-tight text-[#003366]
               ${lang === 'bn' ? bn(lang) : 'font-agni-heading'}
             `}
@@ -619,8 +566,8 @@ export default function Rates({ lang = 'en' }) {
 
           <p
             className={`
-              mx-auto max-w-2xl text-sm leading-7
-              text-slate-500 sm:text-base ${bn(lang)}
+              mx-auto max-w-2xl text-sm leading-relaxed
+              text-slate-600 sm:text-base ${bn(lang)}
             `}
           >
             {lang === 'bn'
@@ -632,17 +579,17 @@ export default function Rates({ lang = 'en' }) {
         {/* Search and filters */}
         <div
           className="
-            mb-6 flex flex-col items-stretch gap-4
-            rounded-2xl border border-slate-200/80
-            bg-white p-3 shadow-[0_4px_20px_rgba(15,23,42,0.03)]
-            sm:p-4 lg:flex-row lg:items-center
+            mb-6 flex flex-col items-stretch gap-3
+            rounded-[20px] border border-slate-200/90
+            bg-white p-3 shadow-[0_4px_18px_-6px_rgba(0,51,102,0.06)]
+            sm:p-3.5 lg:flex-row lg:items-center
           "
         >
           <div className="relative flex-1">
             <span
               aria-hidden="true"
               className="
-                pointer-events-none absolute left-4 top-1/2
+                pointer-events-none absolute left-3.5 top-1/2
                 -translate-y-1/2 text-[#0052CC]
               "
             >
@@ -665,12 +612,12 @@ export default function Rates({ lang = 'en' }) {
               onChange={(event) => setSearch(event.target.value)}
               className={`
                 w-full rounded-xl border border-slate-200
-                bg-[#FAFCFE] py-3 pl-12 pr-4
+                bg-[#F8FAFC] py-2.5 pl-11 pr-4
                 text-sm text-slate-700 outline-none
                 transition-colors duration-200
                 placeholder:text-slate-400
-                focus:border-blue-400 focus:bg-white
-                focus:ring-2 focus:ring-blue-100
+                focus:border-[#0052CC] focus:bg-white
+                focus:ring-2 focus:ring-[#0052CC]/15
                 motion-reduce:transition-none
                 ${bn(lang)}
               `}
@@ -691,20 +638,20 @@ export default function Rates({ lang = 'en' }) {
                 aria-pressed={filter === item.id}
                 onClick={() => setFilter(item.id)}
                 className={`
-                  rounded-full px-4 py-2.5 text-xs
+                  rounded-xl px-3.5 py-2 text-xs
+                  font-bold [font-synthesis:weight]
                   transition-[background-color,color,box-shadow,transform]
-                  duration-200
+                  duration-200 cursor-pointer
                   focus-visible:outline-2
                   focus-visible:outline-offset-2
                   focus-visible:outline-[#0052CC]
-                  motion-safe:hover:-translate-y-0.5
                   motion-safe:active:scale-[0.97]
                   motion-reduce:transition-none
                   ${bn(lang)}
                   ${
                     filter === item.id
-                      ? 'bg-[#0052CC] text-white shadow-sm hover:bg-[#003F9E]'
-                      : 'bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-[#0052CC]'
+                      ? 'bg-[#003366] text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-[#F4F8FF] hover:text-[#0052CC]'
                   }
                 `}
               >
@@ -714,23 +661,29 @@ export default function Rates({ lang = 'en' }) {
           </div>
         </div>
 
-        {/* Compact rate cards */}
+        {/* 3-Column Rate Cards Grid */}
         <div
           className="
-            mb-8 grid grid-cols-1 gap-4
-            sm:grid-cols-2 xl:grid-cols-4
+            mb-7 grid grid-cols-1 gap-3.5
+            sm:grid-cols-2 sm:gap-4 lg:grid-cols-3
           "
         >
           {filtered.map((rate) => (
-            <RateCard key={rate.id} rate={rate} lang={lang} />
+            <RateCard
+              key={rate.id}
+              rate={rate}
+              lang={lang}
+              isSelected={selectedRateId === rate.id}
+              onSelect={handleSelectCard}
+            />
           ))}
 
           {filtered.length === 0 && (
             <div
               role="status"
               className={`
-                col-span-full rounded-2xl border border-slate-200
-                bg-white px-5 py-10 text-center text-slate-500
+                col-span-full rounded-[20px] border border-slate-200/90
+                bg-white px-5 py-9 text-center text-sm text-slate-500
                 ${bn(lang)}
               `}
             >
@@ -744,23 +697,23 @@ export default function Rates({ lang = 'en' }) {
         {/* Savings calculator */}
         <div
           className="
-            grid grid-cols-1 items-center gap-8
-            rounded-3xl border border-slate-200/80
-            bg-white p-5
-            shadow-[0_8px_30px_rgba(0,51,102,0.04)]
-            sm:p-7 lg:grid-cols-2
+            grid grid-cols-1 items-center gap-6
+            rounded-[20px] border border-slate-200/90
+            bg-white p-4 sm:p-6
+            shadow-[0_6px_24px_-8px_rgba(0,51,102,0.07)]
+            lg:grid-cols-2 lg:gap-8
           "
         >
           <div>
             <div
               className="
-                mb-5 flex flex-wrap items-center
+                mb-4 flex flex-wrap items-center
                 justify-between gap-3
               "
             >
               <label
                 htmlFor={minutesId}
-                className={`text-sm text-slate-700 sm:text-base ${bn(lang)}`}
+                className={`text-sm font-bold [font-synthesis:weight] text-[#003366] sm:text-base ${bn(lang)}`}
               >
                 {lang === 'bn'
                   ? 'দৈনিক কলের সময়'
@@ -769,8 +722,8 @@ export default function Rates({ lang = 'en' }) {
 
               <span
                 className={`
-                  rounded-xl border border-blue-100 bg-blue-50
-                  px-3 py-2 text-sm text-[#0052CC]
+                  rounded-xl border border-[#0052CC]/15 bg-[#F4F8FF]
+                  px-3 py-1.5 text-xs sm:text-sm font-bold [font-synthesis:weight] text-[#0052CC]
                   ${bn(lang)}
                 `}
               >
@@ -793,7 +746,7 @@ export default function Rates({ lang = 'en' }) {
                 setMinutes(Number(event.target.value))
               }
               className="
-                mb-6 h-6 w-full cursor-pointer accent-[#0052CC]
+                mb-5 h-5 w-full cursor-pointer accent-[#0052CC]
                 focus-visible:outline-2
                 focus-visible:outline-offset-4
                 focus-visible:outline-[#0052CC]
@@ -802,15 +755,15 @@ export default function Rates({ lang = 'en' }) {
 
             <fieldset>
               <legend
-                className={`mb-3 text-sm text-slate-600 ${bn(lang)}`}
+                className={`mb-2.5 text-xs sm:text-sm font-bold [font-synthesis:weight] text-slate-600 ${bn(lang)}`}
               >
                 {lang === 'bn' ? 'গন্তব্য' : 'Destination'}
               </legend>
 
               <div
                 className="
-                  grid grid-cols-2 gap-2
-                  rounded-2xl bg-slate-100 p-1.5
+                  grid grid-cols-2 gap-1.5
+                  rounded-2xl border border-slate-200/80 bg-[#F8FAFC] p-1.5
                 "
               >
                 {['local', 'international'].map((item) => (
@@ -820,10 +773,11 @@ export default function Rates({ lang = 'en' }) {
                     aria-pressed={destination === item}
                     onClick={() => setDestination(item)}
                     className={`
-                      rounded-xl px-3 py-3
+                      rounded-xl px-3 py-2.5
                       text-xs leading-5 sm:text-sm
+                      font-bold [font-synthesis:weight]
                       transition-[background-color,color,box-shadow]
-                      duration-200
+                      duration-200 cursor-pointer
                       focus-visible:outline-2
                       focus-visible:outline-offset-2
                       focus-visible:outline-[#0052CC]
@@ -831,8 +785,8 @@ export default function Rates({ lang = 'en' }) {
                       ${bn(lang)}
                       ${
                         destination === item
-                          ? 'bg-white text-[#0052CC] shadow-sm hover:bg-blue-50'
-                          : 'text-slate-500 hover:bg-white/80 hover:text-[#0052CC]'
+                          ? 'bg-[#003366] text-white shadow-xs'
+                          : 'text-slate-600 hover:bg-white hover:text-[#0052CC]'
                       }
                     `}
                   >
@@ -851,27 +805,29 @@ export default function Rates({ lang = 'en' }) {
 
           <div
             className="
-              rounded-2xl border border-blue-100
-              bg-[#F0F6FF] p-5 sm:p-6
+              rounded-2xl border border-[#003366]/10
+              bg-[#F8FAFC] p-4 sm:p-5
             "
           >
             <div
               className={`
-                mb-3 flex flex-wrap justify-between gap-2
-                border-b border-blue-100 pb-3 text-sm
+                mb-2.5 flex flex-wrap justify-between gap-2
+                border-b border-slate-200/80 pb-2.5 text-sm
                 ${bn(lang)}
               `}
             >
-              <span className="text-slate-600">AgniTalk</span>
+              <span className="font-bold [font-synthesis:weight] text-[#003366]">
+                AgniTalk
+              </span>
 
-              <span className="tabular-nums text-[#003366]">
+              <span className="font-bold [font-synthesis:weight] tabular-nums text-[#0052CC]">
                 ৳{agniCost.toLocaleString()} / {month}
               </span>
             </div>
 
             <div
               className={`
-                mb-5 flex flex-wrap justify-between gap-2 text-sm
+                mb-4 flex flex-wrap justify-between gap-2 text-sm
                 ${bn(lang)}
               `}
             >
@@ -881,18 +837,20 @@ export default function Rates({ lang = 'en' }) {
                   : 'Standard Mobile Operator'}
               </span>
 
-              <span className="tabular-nums text-slate-700">
+              <span className="tabular-nums text-slate-600 line-through">
                 ৳{operatorCost.toLocaleString()} / {month}
               </span>
             </div>
 
-            <p
-              className={`text-lg leading-7 text-[#0052CC] ${bn(lang)}`}
-            >
-              {lang === 'bn'
-                ? `AgniTalk-এ বছরে প্রায় ৳${yearlySavings.toLocaleString()} সাশ্রয় করুন!`
-                : `You Save ~৳${yearlySavings.toLocaleString()} Every Year with AgniTalk!`}
-            </p>
+            <div className="rounded-xl border border-[#FF5722]/20 bg-[#FFF7F4] px-3.5 py-2.5">
+              <p
+                className={`text-base sm:text-lg font-bold [font-synthesis:weight] leading-snug text-[#FF5722] ${bn(lang)}`}
+              >
+                {lang === 'bn'
+                  ? `AgniTalk-এ বছরে প্রায় ৳${yearlySavings.toLocaleString()} সাশ্রয় করুন!`
+                  : `You Save ~৳${yearlySavings.toLocaleString()} Every Year with AgniTalk!`}
+              </p>
+            </div>
           </div>
         </div>
       </div>

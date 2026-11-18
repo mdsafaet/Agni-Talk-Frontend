@@ -5,7 +5,7 @@ const navigation = [
   { to: '/features', en: 'Features', bn: 'ফিচার' },
   { to: '/rates', en: 'Rates', bn: 'রেট' },
   { to: '/how-it-works', en: 'How It Works', bn: 'কীভাবে' },
-  { to: '/packages', en: 'Packages', bn: 'প্যাকেজ' },
+  // { to: '/packages', en: 'Packages', bn: 'প্যাকেজ' },
   { to: '/blog', en: 'Blog', bn: 'ব্লগ' },
   { to: '/faq', en: 'Support', bn: 'সহায়তা' },
 ]
@@ -139,8 +139,8 @@ export default function Header({ lang = 'en', setLang }) {
                 className="
                   rounded-lg border border-slate-300
                   px-4 py-3 text-sm text-slate-700
-                  transition-colors duration-200
-                  hover:bg-slate-50
+                  transition-colors duration-200 cursor-pointer
+                  hover:border-[#0052CC] hover:bg-[#F4F8FF] hover:text-[#0052CC]
                   motion-reduce:transition-none
                 "
               >
@@ -154,7 +154,7 @@ export default function Header({ lang = 'en', setLang }) {
                 rounded-lg bg-[#FF5722]
                 px-5 py-3 text-sm text-white
                 transition-colors duration-200
-                hover:bg-[#E64A19]
+                hover:bg-[#0052CC]
                 motion-reduce:transition-none
               "
             >
@@ -303,8 +303,8 @@ export default function Header({ lang = 'en', setLang }) {
                       min-h-12 flex-1 rounded-xl
                       border border-slate-300
                       px-5 py-3 text-base text-slate-700
-                      transition-colors duration-200
-                      hover:bg-slate-50
+                      transition-colors duration-200 cursor-pointer
+                      hover:border-[#0052CC] hover:bg-[#F4F8FF] hover:text-[#0052CC]
                       motion-reduce:transition-none
                     "
                   >
@@ -320,7 +320,7 @@ export default function Header({ lang = 'en', setLang }) {
                     rounded-xl bg-[#FF5722]
                     px-5 py-3 text-base text-white
                     transition-colors duration-200
-                    hover:bg-[#E64A19]
+                    hover:bg-[#0052CC]
                     motion-reduce:transition-none
                   "
                 >
