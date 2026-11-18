@@ -205,9 +205,11 @@ function handleTilt(event) {
     Math.min(1, (event.clientY - rect.top) / rect.height),
   )
 
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 10}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 10}deg`)
-  wrapper.style.setProperty('--lift', '-4px')
+  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 8}deg`)
+  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`)
+  wrapper.style.setProperty('--lift', '-8px')
+  wrapper.style.setProperty('--shadow-shift-x', `${(0.5 - x) * 16}px`)
+  wrapper.style.setProperty('--shadow-scale', '0.92')
 }
 
 function resetTilt(event) {
@@ -216,6 +218,8 @@ function resetTilt(event) {
   wrapper.style.setProperty('--tilt-x', '0deg')
   wrapper.style.setProperty('--tilt-y', '0deg')
   wrapper.style.setProperty('--lift', '0px')
+  wrapper.style.setProperty('--shadow-shift-x', '0px')
+  wrapper.style.setProperty('--shadow-scale', '1')
 }
 
 function normalizeSearch(value) {
@@ -297,11 +301,11 @@ function RateCard({ rate, lang, isSelected, onSelect }) {
 
   const cardSurfaceClass = isFree
     ? isSelected
-      ? 'border-[#FF5722] bg-[#FFF7F4] ring-2 ring-[#FF5722]/20 shadow-[0_14px_28px_-10px_rgba(255,87,34,0.22)]'
-      : 'border-[#FF5722]/25 bg-white hover:border-[#FF5722]/60 hover:bg-[#FFF7F4]/70 hover:shadow-[0_14px_28px_-10px_rgba(255,87,34,0.16)]'
+      ? 'border-[#FF5722] bg-[#FFF7F4] ring-2 ring-[#FF5722]/20 shadow-[0_8px_16px_-4px_rgba(255,87,34,0.22),0_22px_38px_-12px_rgba(255,87,34,0.3),0_36px_60px_-18px_rgba(0,26,61,0.34)]'
+      : 'border-[#FF5722]/30 bg-white shadow-[0_4px_10px_-2px_rgba(0,26,61,0.1),0_14px_24px_-10px_rgba(0,26,61,0.18),0_26px_46px_-16px_rgba(0,33,71,0.25)] hover:border-[#FF5722] hover:bg-[#FFF7F4]/70 hover:shadow-[0_8px_16px_-4px_rgba(255,87,34,0.22),0_22px_38px_-12px_rgba(255,87,34,0.3),0_36px_60px_-18px_rgba(0,26,61,0.34)]'
     : isSelected
-      ? 'border-[#0052CC] bg-[#F4F8FF] ring-2 ring-[#0052CC]/20 shadow-[0_14px_28px_-10px_rgba(0,82,204,0.2)]'
-      : 'border-slate-200/90 bg-white hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/70 hover:shadow-[0_14px_28px_-10px_rgba(0,82,204,0.14)]'
+      ? 'border-[#0052CC] bg-[#F4F8FF] ring-2 ring-[#0052CC]/20 shadow-[0_8px_16px_-4px_rgba(0,82,204,0.22),0_22px_38px_-12px_rgba(0,82,204,0.3),0_36px_60px_-18px_rgba(0,26,61,0.34)]'
+      : 'border-slate-200/95 bg-white shadow-[0_4px_10px_-2px_rgba(0,26,61,0.1),0_14px_24px_-10px_rgba(0,26,61,0.18),0_26px_46px_-16px_rgba(0,33,71,0.25)] hover:border-[#0052CC] hover:bg-[#F4F8FF]/70 hover:shadow-[0_8px_16px_-4px_rgba(0,82,204,0.22),0_22px_38px_-12px_rgba(0,82,204,0.3),0_36px_60px_-18px_rgba(0,26,61,0.34)]'
 
   return (
     <div
@@ -310,6 +314,44 @@ function RateCard({ rate, lang, isSelected, onSelect }) {
       onPointerCancel={resetTilt}
       className="group relative h-full min-w-0 [perspective:1000px]"
     >
+      {/* Layer 1: Wide Ambient Floor Shadow */}
+      <div
+        aria-hidden="true"
+        className={`
+          pointer-events-none absolute -bottom-5 inset-x-2 h-9
+          rounded-[100%] blur-xl transition-[transform,opacity] duration-200 ease-out
+          ${isSelected ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}
+          motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+        `}
+        style={{
+          background: isFree
+            ? 'radial-gradient(ellipse at center, rgba(255,87,34,0.38) 0%, rgba(0,26,61,0.28) 55%, transparent 82%)'
+            : 'radial-gradient(ellipse at center, rgba(0,82,204,0.38) 0%, rgba(0,26,61,0.28) 55%, transparent 82%)',
+        }}
+      />
+
+      {/* Layer 2: Mid-Range Dark Grounded Shadow */}
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none absolute -bottom-3 inset-x-5 h-5
+          rounded-[100%] bg-[#001A3D]/30 blur-md
+          transition-transform duration-200 ease-out
+          motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+        "
+      />
+
+      {/* Layer 3: Tight Contact Shadow Directly Under Bottom Edge */}
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none absolute -bottom-1 inset-x-9 h-2.5
+          rounded-[100%] bg-[#001430]/35 blur-xs
+          transition-transform duration-200 ease-out
+          motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+        "
+      />
+
       <button
         type="button"
         aria-pressed={isSelected}
@@ -317,7 +359,6 @@ function RateCard({ rate, lang, isSelected, onSelect }) {
         className={`
           relative flex h-full w-full flex-col overflow-hidden
           rounded-[20px] border p-4 text-left sm:p-5
-          shadow-[0_4px_16px_-4px_rgba(0,51,102,0.06)]
           [transform-style:preserve-3d] cursor-pointer
           transition-[transform,box-shadow,border-color,background-color]
           duration-200 ease-out
@@ -664,8 +705,8 @@ export default function Rates({ lang = 'en' }) {
         {/* 3-Column Rate Cards Grid */}
         <div
           className="
-            mb-7 grid grid-cols-1 gap-3.5
-            sm:grid-cols-2 sm:gap-4 lg:grid-cols-3
+            mb-10 grid grid-cols-1 gap-6
+            sm:grid-cols-2 sm:gap-7 lg:grid-cols-3
           "
         >
           {filtered.map((rate) => (
@@ -700,7 +741,7 @@ export default function Rates({ lang = 'en' }) {
             grid grid-cols-1 items-center gap-6
             rounded-[20px] border border-slate-200/90
             bg-white p-4 sm:p-6
-            shadow-[0_6px_24px_-8px_rgba(0,51,102,0.07)]
+            shadow-[0_12px_30px_-10px_rgba(0,51,102,0.12)]
             lg:grid-cols-2 lg:gap-8
           "
         >

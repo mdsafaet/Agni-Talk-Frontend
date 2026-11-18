@@ -124,9 +124,11 @@ function handleTilt(event) {
   const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
   const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
 
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 7}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 7}deg`)
-  wrapper.style.setProperty('--lift', '-6px')
+  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 8}deg`)
+  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`)
+  wrapper.style.setProperty('--lift', '-10px')
+  wrapper.style.setProperty('--shadow-shift-x', `${(0.5 - x) * 18}px`)
+  wrapper.style.setProperty('--shadow-scale', '0.9')
 }
 
 function resetTilt(event) {
@@ -134,6 +136,8 @@ function resetTilt(event) {
   wrapper.style.setProperty('--tilt-x', '0deg')
   wrapper.style.setProperty('--tilt-y', '0deg')
   wrapper.style.setProperty('--lift', '0px')
+  wrapper.style.setProperty('--shadow-shift-x', '0px')
+  wrapper.style.setProperty('--shadow-scale', '1')
 }
 
 export default function RatesPreview({ lang = 'en', to = '/rates' }) {
@@ -144,7 +148,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
       id="rates-preview"
       lang={lang}
       aria-labelledby="rates-preview-title"
-      className="relative isolate overflow-hidden border-b border-slate-200/80 bg-[#F4F8FF] py-14 sm:py-16 lg:py-20"
+      className="relative isolate overflow-hidden border-b border-slate-200/80 bg-[#EDF3FC] pt-12 pb-18 sm:pt-14 sm:pb-20 lg:pt-16 lg:pb-22"
     >
       {/* Creative Split-Stage Backdrop: Deep Brand Navy Top + Soft Light Bottom */}
       <div
@@ -161,12 +165,12 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header on Dark Navy Stage */}
-        <div className="mb-9 flex flex-col items-start justify-between gap-5 sm:mb-11 lg:flex-row lg:items-end">
+        <div className="mb-7 flex flex-col items-start justify-between gap-4 sm:mb-9 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <div
               className={`
-                mb-3 inline-flex items-center gap-2 rounded-full
-                border border-white/20 bg-white/10 px-4 py-1.5
+                mb-2.5 inline-flex items-center gap-2 rounded-full
+                border border-white/20 bg-white/10 px-3.5 py-1
                 text-xs font-bold [font-synthesis:weight]
                 uppercase tracking-wider text-white backdrop-blur-xs
                 ${bn(lang)}
@@ -187,7 +191,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
             </h2>
 
             <p
-              className={`mt-2 text-sm sm:text-base leading-relaxed text-sky-100/90 ${bn(lang)}`}
+              className={`mt-1.5 text-sm sm:text-base leading-relaxed text-sky-100/90 ${bn(lang)}`}
             >
               {isBangla
                 ? 'কোনো সংযোগ ফি নেই • ১-সেকেন্ড পালস • ৭০% কম ডাটা খরচ'
@@ -199,7 +203,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
             to={to}
             className={`
               group inline-flex shrink-0 items-center gap-2.5 rounded-2xl
-              bg-[#FF5722] px-5 py-3 text-sm font-bold [font-synthesis:weight]
+              bg-[#FF5722] px-5 py-2.5 text-sm font-bold [font-synthesis:weight]
               text-white shadow-[0_14px_28px_-8px_rgba(255,87,34,0.55)]
               transition-[background-color,transform] duration-200
               hover:bg-[#e64a19]
@@ -221,8 +225,8 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
           </Link>
         </div>
 
-        {/* Large 3-Card Grid Bridging Dark & Light Background */}
-        <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-3">
+        {/* 3-Card Grid with Compact Height & Deep 3D Floor Shadows */}
+        <div className="grid grid-cols-1 gap-8 sm:gap-9 lg:grid-cols-3 lg:gap-7">
           {FEATURED_RATES.map((item) => {
             const t = isBangla ? item.bn : item.en
 
@@ -234,12 +238,51 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                 onPointerCancel={resetTilt}
                 className="group relative h-full [perspective:1100px]"
               >
+                {/* Layer 1: Wide Ambient Floor Shadow */}
+                <div
+                  aria-hidden="true"
+                  className="
+                    pointer-events-none absolute -bottom-7 inset-x-2 h-11
+                    rounded-[100%] blur-2xl opacity-90
+                    transition-[transform,opacity] duration-200 ease-out
+                    group-hover:opacity-100
+                    motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+                  "
+                  style={{
+                    background: item.isFree
+                      ? 'radial-gradient(ellipse at center, rgba(255,87,34,0.42) 0%, rgba(0,26,61,0.34) 55%, transparent 82%)'
+                      : 'radial-gradient(ellipse at center, rgba(0,82,204,0.42) 0%, rgba(0,26,61,0.34) 55%, transparent 82%)',
+                  }}
+                />
+
+                {/* Layer 2: Mid-Range Dark Grounded Shadow */}
+                <div
+                  aria-hidden="true"
+                  className="
+                    pointer-events-none absolute -bottom-4 inset-x-6 h-6
+                    rounded-[100%] bg-[#001A3D]/35 blur-lg
+                    transition-transform duration-200 ease-out
+                    motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+                  "
+                />
+
+                {/* Layer 3: Tight Contact Shadow Directly Under Bottom Edge */}
+                <div
+                  aria-hidden="true"
+                  className="
+                    pointer-events-none absolute -bottom-1.5 inset-x-10 h-3
+                    rounded-[100%] bg-[#001430]/40 blur-xs
+                    transition-transform duration-200 ease-out
+                    motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+                  "
+                />
+
                 <Link
                   to={to}
                   className={`
-                    relative flex h-full min-h-[340px] flex-col overflow-hidden
-                    rounded-[24px] border bg-white p-6 sm:p-7
-                    shadow-[0_18px_40px_-14px_rgba(0,33,71,0.18)]
+                    relative flex h-full flex-col overflow-hidden
+                    rounded-[22px] border bg-white p-5 sm:p-5.5
+                    shadow-[0_4px_10px_-2px_rgba(0,26,61,0.12),0_16px_28px_-10px_rgba(0,26,61,0.22),0_32px_56px_-18px_rgba(0,33,71,0.32)]
                     [transform-style:preserve-3d]
                     transition-[transform,box-shadow,border-color,background-color]
                     duration-200 ease-out
@@ -249,8 +292,8 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     motion-reduce:transition-none
                     ${
                       item.isFree
-                        ? 'border-[#FF5722]/35 hover:border-[#FF5722] hover:bg-[#FFF9F7]'
-                        : 'border-slate-200/90 hover:border-[#0052CC] hover:bg-[#F8FBFF]'
+                        ? 'border-[#FF5722]/40 hover:border-[#FF5722] hover:bg-[#FFF9F7] hover:shadow-[0_8px_16px_-4px_rgba(255,87,34,0.22),0_26px_44px_-12px_rgba(255,87,34,0.32),0_44px_72px_-20px_rgba(0,26,61,0.38)]'
+                        : 'border-slate-200/95 hover:border-[#0052CC] hover:bg-[#F8FBFF] hover:shadow-[0_8px_16px_-4px_rgba(0,82,204,0.22),0_26px_44px_-12px_rgba(0,82,204,0.32),0_44px_72px_-20px_rgba(0,26,61,0.38)]'
                     }
                   `}
                 >
@@ -263,11 +306,11 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                   />
 
                   {/* Top Pill + Prefix */}
-                  <div className="mb-5 flex items-center justify-between gap-2 pt-0.5">
+                  <div className="mb-3 flex items-center justify-between gap-2 pt-0.5">
                     <span
                       className={`
                         inline-flex items-center gap-1.5 rounded-full
-                        px-3 py-1 text-xs font-bold [font-synthesis:weight]
+                        px-2.5 py-0.5 text-[11px] font-bold [font-synthesis:weight]
                         ${
                           item.isFree
                             ? 'bg-[#FFF7F4] text-[#FF5722]'
@@ -276,39 +319,39 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                         ${bn(lang)}
                       `}
                     >
-                      {item.id === 'app' && <FiSmartphone className="h-3.5 w-3.5" />}
-                      {item.id === 'mobile' && <FiPhoneCall className="h-3.5 w-3.5" />}
-                      {item.id === 'international' && <FiGlobe className="h-3.5 w-3.5" />}
+                      {item.id === 'app' && <FiSmartphone className="h-3 w-3" />}
+                      {item.id === 'mobile' && <FiPhoneCall className="h-3 w-3" />}
+                      {item.id === 'international' && <FiGlobe className="h-3 w-3" />}
                       {t.badge}
                     </span>
 
-                    <span className="rounded-xl border border-slate-200/90 bg-[#F8FAFC] px-2.5 py-1 font-agni-body text-xs font-medium text-slate-600">
+                    <span className="rounded-lg border border-slate-200/90 bg-[#F8FAFC] px-2 py-0.5 font-agni-body text-[11px] font-medium text-slate-600">
                       {item.prefix}
                     </span>
                   </div>
 
                   {/* Title & Flags Row */}
-                  <div className="mb-5 flex items-start justify-between gap-3">
+                  <div className="mb-3.5 flex items-start justify-between gap-2.5">
                     <div className="min-w-0">
                       <h3
-                        className={`mb-1 text-lg sm:text-xl font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
+                        className={`mb-0.5 text-base sm:text-lg font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
                         style={display(lang)}
                       >
                         {t.title}
                       </h3>
                       <p
-                        className={`text-xs sm:text-sm text-slate-500 ${bn(lang)}`}
+                        className={`text-xs text-slate-500 ${bn(lang)}`}
                       >
                         {t.subtitle}
                       </p>
                     </div>
 
                     {item.countries.length > 0 && (
-                      <div className="flex shrink-0 items-center gap-1.5">
+                      <div className="flex shrink-0 items-center gap-1">
                         {item.countries.map((code) => (
                           <span
                             key={code}
-                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/90 bg-[#F8FAFC] shadow-2xs"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/90 bg-[#F8FAFC] shadow-2xs"
                           >
                             <ReactCountryFlag
                               countryCode={code}
@@ -316,8 +359,8 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                               title={COUNTRY_NAMES[code]}
                               aria-label={COUNTRY_NAMES[code]}
                               style={{
-                                width: '22px',
-                                height: '16px',
+                                width: '18px',
+                                height: '13px',
                                 objectFit: 'cover',
                                 borderRadius: '2px',
                               }}
@@ -328,12 +371,12 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     )}
                   </div>
 
-                  {/* Big Rate Display */}
-                  <div className="mb-5 rounded-2xl border border-slate-200/75 bg-[#F8FAFC] px-4 py-3.5">
+                  {/* Rate Display */}
+                  <div className="mb-3.5 rounded-xl border border-slate-200/75 bg-[#F8FAFC] px-3.5 py-2.5">
                     <div className="flex items-baseline gap-2">
                       <span
                         className={`
-                          font-agni-heading text-[38px] sm:text-[44px]
+                          font-agni-heading text-[32px] sm:text-[36px]
                           font-bold [font-synthesis:weight] leading-none tracking-tight
                           ${item.isFree ? 'text-[#FF5722]' : 'text-[#003366]'}
                         `}
@@ -343,7 +386,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
 
                       {t.unit && (
                         <span
-                          className={`text-sm font-medium text-slate-500 ${bn(lang)}`}
+                          className={`text-xs sm:text-sm font-medium text-slate-500 ${bn(lang)}`}
                         >
                           {t.unit}
                         </span>
@@ -352,16 +395,16 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                   </div>
 
                   {/* Bullet Highlights */}
-                  <ul className="mb-6 flex flex-col gap-2.5">
+                  <ul className="mb-4 flex flex-col gap-1.5">
                     {t.highlights.map((point, index) => (
                       <li
                         key={index}
-                        className={`flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 ${bn(lang)}`}
+                        className={`flex items-start gap-2 text-xs sm:text-[13px] text-slate-600 ${bn(lang)}`}
                       >
                         <span
                           aria-hidden="true"
                           className={`
-                            mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full
+                            mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
                             ${
                               item.isFree
                                 ? 'bg-[#FFF7F4] text-[#FF5722]'
@@ -369,7 +412,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                             }
                           `}
                         >
-                          <FiCheck className="h-3 w-3" />
+                          <FiCheck className="h-2.5 w-2.5" />
                         </span>
                         <span className="leading-snug">{point}</span>
                       </li>
@@ -377,10 +420,10 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                   </ul>
 
                   {/* Card Footer Action */}
-                  <div className="mt-auto flex items-center justify-between gap-2 border-t border-slate-100 pt-4">
+                  <div className="mt-auto flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
                     <span
                       className={`
-                        text-xs sm:text-sm font-bold [font-synthesis:weight]
+                        text-xs font-bold [font-synthesis:weight]
                         ${item.isFree ? 'text-[#FF5722]' : 'text-[#0052CC]'}
                         ${bn(lang)}
                       `}
@@ -393,7 +436,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     <span
                       aria-hidden="true"
                       className={`
-                        flex h-8 w-8 items-center justify-center rounded-full
+                        flex h-7 w-7 items-center justify-center rounded-full
                         transition-transform duration-200 motion-safe:group-hover:translate-x-1
                         ${
                           item.isFree
@@ -402,7 +445,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                         }
                       `}
                     >
-                      <FiArrowRight className="h-4 w-4" />
+                      <FiArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
                 </Link>

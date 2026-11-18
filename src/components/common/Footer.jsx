@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 const quickLinks = [
   { to: '/features', en: 'Features', bn: 'ফিচার' },
   { to: '/rates', en: 'Calling Rates', bn: 'কল রেট' },
-  { to: '/packages', en: 'Packages', bn: 'প্যাকেজ' },
+  // { to: '/packages', en: 'Packages', bn: 'প্যাকেজ' },
   { to: '/about', en: 'About Us', bn: 'আমাদের সম্পর্কে' },
 ]
 

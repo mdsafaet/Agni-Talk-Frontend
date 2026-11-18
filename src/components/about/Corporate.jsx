@@ -4,6 +4,8 @@ import {
   FiAward,
   FiBriefcase,
   FiCalendar,
+  FiCheckCircle,
+  FiCpu,
   FiServer,
   FiShield,
   FiTrendingUp,
@@ -19,7 +21,7 @@ const STATS = [
     num: '25+',
     Icon: FiAward,
     accent: 'blue',
-    tag: { en: 'LEGACY', bn: 'অভিজ্ঞতা' },
+    tag: { en: 'Legacy', bn: 'অভিজ্ঞতা' },
     en: 'Years in Bangladesh Telecom',
     bn: 'বছর টেলিকম অভিজ্ঞতা',
   },
@@ -28,7 +30,7 @@ const STATS = [
     num: '1995',
     Icon: FiCalendar,
     accent: 'orange',
-    tag: { en: 'ESTABLISHED', bn: 'প্রতিষ্ঠিত' },
+    tag: { en: 'Established', bn: 'প্রতিষ্ঠিত' },
     en: 'Founded by Agni Systems PLC.',
     bn: 'প্রতিষ্ঠার বছর — অগ্নি সিস্টেমস PLC',
   },
@@ -37,8 +39,8 @@ const STATS = [
     num: 'DSE',
     Icon: FiTrendingUp,
     accent: 'orange',
-    tag: { en: 'PUBLIC COMPANY', bn: 'পাবলিক লিমিটেড' },
-    en: 'Publicly Listed on Dhaka Stock Exchange',
+    tag: { en: 'Publicly Listed', bn: 'পাবলিক লিমিটেড' },
+    en: 'Listed on Dhaka Stock Exchange',
     bn: 'ঢাকা স্টক এক্সচেঞ্জে তালিকাভুক্ত',
   },
   {
@@ -46,17 +48,23 @@ const STATS = [
     num: 'IPTSP',
     Icon: FiShield,
     accent: 'blue',
-    tag: { en: 'REGULATED', bn: 'লাইসেন্সপ্রাপ্ত' },
+    tag: { en: 'Regulated', bn: 'লাইসেন্সপ্রাপ্ত' },
     en: 'Licensed by BTRC Bangladesh',
     bn: 'BTRC বাংলাদেশ লাইসেন্সপ্রাপ্ত',
   },
 ]
 
+const INFRASTRUCTURE_PILLS = [
+  { en: 'Dedicated Fiber-Optic Backbone', bn: 'ডেডিকেটেড ফাইবার-অপটিক ব্যাকবোন' },
+  { en: 'iTel Class 5 Softswitch', bn: 'iTel Class 5 সফটসুইচ' },
+  { en: '24/7 NOC Engineering', bn: '২৪/৭ NOC ইঞ্জিনিয়ারিং সাপোর্ট' },
+]
+
 const ENTERPRISE = [
   { en: 'Hosted IP PBX & SIP Trunking', bn: 'হোস্টেড IP PBX ও SIP ট্রাঙ্কিং' },
-  { en: 'Call Center Solutions', bn: 'কল সেন্টার সমাধান' },
-  { en: 'Dedicated Corporate Lines', bn: 'ডেডিকেটেড কর্পোরেট লাইন' },
-  { en: 'SLA-backed Uptime Guarantees', bn: 'SLA-সমর্থিত আপটাইম নিশ্চয়তা' },
+  { en: 'Omni-Channel Call Center Solutions', bn: 'কল সেন্টার সমাধান' },
+  { en: 'Dedicated Corporate 09606 Lines', bn: 'ডেডিকেটেড কর্পোরেট ০৯৬০৬ লাইন' },
+  { en: 'SLA-Backed 99.9% Uptime Guarantee', bn: 'SLA-সমর্থিত আপটাইম নিশ্চয়তা' },
 ]
 
 function CountUpNumber({ target, suffix = '', shouldStart }) {
@@ -77,7 +85,6 @@ function CountUpNumber({ target, suffix = '', shouldStart }) {
     const tick = (now) => {
       const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3)
       setValue(Math.round(eased * target))
 
@@ -113,9 +120,9 @@ function handleTilt(event) {
   const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
   const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
 
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 7}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 7}deg`)
-  wrapper.style.setProperty('--lift', '-4px')
+  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 6}deg`)
+  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 6}deg`)
+  wrapper.style.setProperty('--lift', '-6px')
 }
 
 function resetTilt(event) {
@@ -154,59 +161,98 @@ export default function Corporate({ lang = 'en' }) {
       lang={lang}
       aria-labelledby="corporate-title"
       className="
-        relative overflow-hidden
-        border-b border-slate-200/70
+        relative isolate overflow-hidden
+        border-b border-slate-200/80
         bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
-        py-14 sm:py-16 lg:py-20
+        py-16 sm:py-20 lg:py-24
       "
     >
+      {/* Creative Architectural Backdrop */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(248,250,255,0.65)_100%)]"
-      />
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
+        {/* Subtle Dot Matrix */}
+        <div className="absolute inset-0 bg-[radial-gradient(#CBD5E1_0.9px,transparent_0.9px)] [background-size:24px_24px] opacity-75" />
+
+        {/* Soft Ambient Brand Glows */}
+        <div className="absolute -left-24 top-12 h-80 w-80 rounded-full bg-[#0052CC]/[0.07] blur-3xl" />
+        <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-[#FF5722]/[0.06] blur-3xl" />
+      </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* Left: Trust Narrative & Modern Stat Cards */}
+          {/* Left Column: Standard Clean Typography & Architectural Stat Grid */}
           <div className="lg:col-span-7">
-            {/* Bold ABOUT AGNITALK Badge */}
+            {/* Refined Section Eyebrow Pill */}
             <div
               className={`
                 mb-4 inline-flex items-center gap-2 rounded-full
-                border border-[#003366]/20 bg-[#003366]
-                px-4 py-1.5 text-xs font-extrabold [font-synthesis:weight]
-                uppercase tracking-[0.14em] text-white
-                shadow-[0_6px_18px_-6px_rgba(0,51,102,0.45)]
+                border border-[#0052CC]/15 bg-white
+                px-3.5 py-1.5 text-xs font-semibold
+                uppercase tracking-wider text-[#003366]
+                shadow-[0_2px_10px_-3px_rgba(0,51,102,0.12)]
                 ${bn(lang)}
               `}
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FF5722] text-white">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#0052CC]/10 text-[#0052CC]">
                 <FiBriefcase aria-hidden="true" className="h-3 w-3" />
               </span>
-              <span>{isBangla ? 'আমাদের সম্পর্কে' : 'ABOUT AGNITALK'}</span>
+              <span>{isBangla ? 'আমাদের সম্পর্কে' : 'About AgniTalk'}</span>
             </div>
 
+            {/* Clean Standard Display Heading */}
             <h2
               id="corporate-title"
-              className={`mb-4 text-[clamp(24px,3.8vw,38px)] font-extrabold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
+              className={`mb-4 text-[clamp(26px,3.6vw,38px)] font-bold [font-synthesis:weight] leading-[1.2] tracking-tight text-[#003366] ${bn(lang)}`}
               style={display(lang)}
             >
-              {isBangla
-                ? 'অগ্নি সিস্টেমস PLC-এর ২৫+ বছরের টেলিকম অভিজ্ঞতায় তৈরি'
-                : 'Powered by Agni Systems PLC. — 25+ Years of Telecom Excellence'}
+              {isBangla ? (
+                <>
+                  অগ্নি সিস্টেমস PLC-এর{' '}
+                  <span className="text-[#0052CC]">২৫+ বছরের</span> টেলিকম
+                  অভিজ্ঞতায় তৈরি
+                </>
+              ) : (
+                <>
+                  Powered by Agni Systems PLC. {' '}
+                  <span className="text-[#0052CC]">25+ Years</span> of Telecom
+                  Excellence
+                </>
+              )}
             </h2>
 
+            {/* Comfortable Readable Body Copy */}
             <p
-              className={`mb-7 text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
+              className={`mb-6 text-sm sm:text-base font-normal leading-relaxed text-slate-600 ${bn(lang)}`}
             >
               {isBangla
                 ? 'AgniTalk হলো Agni Systems PLC.-এর একটি পণ্য, যা ১৯৯৫ সাল থেকে বাংলাদেশের টেলিযোগাযোগ খাতে নেতৃত্ব দিয়ে আসছে। ঢাকা স্টক এক্সচেঞ্জে তালিকাভুক্ত এই কোম্পানি দেশের অন্যতম বিশ্বস্ত ISP এবং IPTSP অপারেটর।'
-                : 'AgniTalk is a product of Agni Systems PLC., a publicly-listed pioneer in Bangladesh telecommunications since 1995. With a dedicated fiber-optic backbone, enterprise-grade iTel Class 5 softswitch, and full BTRC IPTSP licensing, AgniTalk is built on infrastructure that enterprise clients trust with mission-critical communications.'}
+                : 'AgniTalk is a product of Agni Systems PLC., a publicly-listed pioneer in Bangladesh telecommunications since 1995. With a dedicated fiber-optic backbone, enterprise-grade iTel Class 5 softswitch, and full BTRC IPTSP licensing, AgniTalk is built on infrastructure trusted for mission-critical communications.'}
             </p>
 
-            {/* Modernized 2x2 Stats Grid */}
+            {/* Infrastructure Credential Chips */}
+            <div className="mb-8 flex flex-wrap gap-2">
+              {INFRASTRUCTURE_PILLS.map((pill) => (
+                <span
+                  key={pill.en}
+                  className={`
+                    inline-flex items-center gap-1.5 rounded-xl
+                    border border-slate-200/90 bg-white px-3 py-1.5
+                    text-xs font-medium text-slate-700 shadow-2xs
+                    ${bn(lang)}
+                  `}
+                >
+                  <FiCheckCircle
+                    aria-hidden="true"
+                    className="h-3.5 w-3.5 shrink-0 text-[#0052CC]"
+                  />
+                  <span>{isBangla ? pill.bn : pill.en}</span>
+                </span>
+              ))}
+            </div>
+
+            {/* 2x2 Modern Stat Cards */}
             <div
               ref={statsRef}
               className="grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -221,17 +267,17 @@ export default function Corporate({ lang = 'en' }) {
                     className={`
                       group relative overflow-hidden rounded-[22px]
                       border bg-white p-5 sm:p-6
-                      shadow-[0_8px_24px_-10px_rgba(0,51,102,0.09)]
+                      shadow-[0_10px_28px_-12px_rgba(0,51,102,0.12)]
                       transition-[transform,border-color,background-color,box-shadow]
                       duration-200 motion-safe:hover:-translate-y-1
                       ${
                         isOrange
-                          ? 'border-slate-200/90 hover:border-[#FF5722]/45 hover:bg-[#FFF9F7] hover:shadow-[0_14px_30px_-12px_rgba(255,87,34,0.18)]'
-                          : 'border-slate-200/90 hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/65 hover:shadow-[0_14px_30px_-12px_rgba(0,82,204,0.18)]'
+                          ? 'border-slate-200/90 hover:border-[#FF5722]/45 hover:bg-[#FFF9F7]/70 hover:shadow-[0_16px_34px_-12px_rgba(255,87,34,0.18)]'
+                          : 'border-slate-200/90 hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/70 hover:shadow-[0_16px_34px_-12px_rgba(0,82,204,0.18)]'
                       }
                     `}
                   >
-                    {/* Top Accent Bar */}
+                    {/* Top Accent Line */}
                     <span
                       aria-hidden="true"
                       className={`absolute inset-x-0 top-0 h-1 ${
@@ -239,13 +285,13 @@ export default function Corporate({ lang = 'en' }) {
                       }`}
                     />
 
-                    {/* Subtle Watermark Icon */}
+                    {/* Subtle Corner Watermark */}
                     <Icon
                       aria-hidden="true"
-                      className="pointer-events-none absolute -bottom-3 -right-3 h-20 w-20 text-slate-900/[0.03] transition-transform duration-300 group-hover:scale-110"
+                      className="pointer-events-none absolute -bottom-3 -right-3 h-20 w-20 text-slate-900/[0.035] transition-transform duration-300 group-hover:scale-110"
                     />
 
-                    {/* Header Row: Icon + Category Pill */}
+                    {/* Icon + Tag Row */}
                     <div className="mb-3.5 flex items-center justify-between gap-2">
                       <span
                         aria-hidden="true"
@@ -264,9 +310,8 @@ export default function Corporate({ lang = 'en' }) {
 
                       <span
                         className={`
-                          rounded-full px-2.5 py-0.5 text-[10px]
-                          font-extrabold [font-synthesis:weight]
-                          uppercase tracking-wider
+                          rounded-full px-2.5 py-0.5 text-[11px]
+                          font-semibold tracking-wide
                           ${
                             isOrange
                               ? 'bg-[#FFF7F4] text-[#FF5722]'
@@ -279,13 +324,13 @@ export default function Corporate({ lang = 'en' }) {
                       </span>
                     </div>
 
-                    {/* Bold Metric / Badge Value */}
+                    {/* Crisp Metric Number */}
                     <div
                       className={`
-                        mb-1.5 text-3xl sm:text-[34px] font-extrabold [font-synthesis:weight]
-                        leading-none tracking-tight
-                        ${isOrange ? 'text-[#003366]' : 'text-[#003366] group-hover:text-[#0052CC]'}
+                        mb-1 text-3xl sm:text-[34px] font-bold [font-synthesis:weight]
+                        leading-none tracking-tight text-[#003366]
                         transition-colors
+                        ${isOrange ? 'group-hover:text-[#FF5722]' : 'group-hover:text-[#0052CC]'}
                       `}
                       style={{ fontFamily: 'var(--agni-display)' }}
                     >
@@ -300,8 +345,9 @@ export default function Corporate({ lang = 'en' }) {
                       )}
                     </div>
 
+                    {/* Standard Medium-Weight Subtitle */}
                     <div
-                      className={`text-xs sm:text-sm font-semibold text-slate-600 leading-snug ${bn(lang)}`}
+                      className={`text-xs sm:text-sm font-medium text-slate-600 leading-snug ${bn(lang)}`}
                     >
                       {isBangla ? s.bn : s.en}
                     </div>
@@ -311,51 +357,76 @@ export default function Corporate({ lang = 'en' }) {
             </div>
           </div>
 
-          {/* Right: B2B Enterprise Callout Card */}
+          {/* Right Column: Creative Layered Enterprise Card with 3D Floor Shadow */}
           <div
             onPointerMove={handleTilt}
             onPointerLeave={resetTilt}
             onPointerCancel={resetTilt}
-            className="lg:col-span-5 [perspective:1100px]"
+            className="group relative lg:col-span-5 [perspective:1100px]"
           >
+            {/* 3D Floor Shadow Underneath Card */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-5 inset-x-6 h-8 rounded-[100%] bg-[#001F4D]/35 blur-xl transition-opacity duration-200 group-hover:opacity-95"
+            />
+
+            {/* Decorative Offset Backplate for Depth */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-2.5 -bottom-2.5 inset-0 hidden rounded-[26px] border border-[#0052CC]/20 bg-[#E4EEFF] sm:block"
+            />
+
             <div
               className="
                 relative overflow-hidden rounded-[24px]
-                border border-white/10
-                bg-[linear-gradient(145deg,#00244D_0%,#003366_55%,#004799_100%)]
+                border border-white/15
+                bg-[linear-gradient(145deg,#00244D_0%,#003366_52%,#0052CC_100%)]
                 p-6 sm:p-8
-                shadow-[0_22px_48px_-14px_rgba(0,33,71,0.38)]
+                shadow-[0_24px_48px_-14px_rgba(0,33,71,0.4)]
                 [transform-style:preserve-3d]
                 transition-transform duration-200 ease-out
                 motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
                 motion-reduce:transition-none
               "
             >
-              {/* Subtle Top Orange Accent Bar */}
+              {/* Top Orange Accent Bar */}
               <span
                 aria-hidden="true"
                 className="absolute inset-x-0 top-0 h-1.5 bg-[#FF5722]"
               />
 
-              {/* Subtle Decorative Glow */}
+              {/* Subtle Telecom Grid Texture inside Card */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#0052CC]/35 blur-2xl"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:20px_20px] opacity-50"
+              />
+
+              {/* Ambient Glow */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-sky-400/20 blur-2xl"
               />
 
               <div className="relative">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold [font-synthesis:weight] uppercase tracking-wider text-sky-200">
-                  <FiServer
-                    aria-hidden="true"
-                    className="h-3.5 w-3.5 text-[#FF5722]"
-                  />
-                  <span>
-                    {isBangla ? 'এন্টারপ্রাইজ সমাধান' : 'ENTERPRISE SOLUTIONS'}
+                <div className="mb-4 flex items-center justify-between gap-2">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-sky-100 backdrop-blur-xs">
+                    <FiServer
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 text-[#FF5722]"
+                    />
+                    <span>
+                      {isBangla ? 'এন্টারপ্রাইজ সমাধান' : 'Enterprise Solutions'}
+                    </span>
+                  </div>
+
+                  <span className="inline-flex items-center gap-1 rounded-lg border border-emerald-400/25 bg-emerald-500/15 px-2.5 py-1 text-[11px] font-medium text-emerald-300">
+                    <FiCpu className="h-3 w-3" />
+                    <span>Class 5 IPTSP</span>
                   </span>
                 </div>
 
                 <h3
-                  className={`mb-3 text-xl sm:text-2xl font-bold [font-synthesis:weight] leading-snug text-white ${bn(lang)}`}
+                  className={`mb-2.5 text-xl sm:text-2xl font-bold [font-synthesis:weight] leading-snug text-white ${bn(lang)}`}
                   style={{ fontFamily: 'var(--agni-display)' }}
                 >
                   {isBangla
@@ -364,22 +435,22 @@ export default function Corporate({ lang = 'en' }) {
                 </h3>
 
                 <p
-                  className={`mb-6 text-sm leading-relaxed text-sky-100/85 ${bn(lang)}`}
+                  className={`mb-6 text-sm font-normal leading-relaxed text-sky-100/85 ${bn(lang)}`}
                 >
                   {isBangla
                     ? 'আপনার ব্যবসার জন্য Agni Systems-এর এন্টারপ্রাইজ টেলিফোনি সমাধান বিবেচনা করুন।'
                     : 'Need enterprise telephony? Agni Systems offers hosted IP PBX, SIP trunking, and call center solutions backed by the same infrastructure powering AgniTalk.'}
                 </p>
 
-                <ul className="mb-7 flex flex-col gap-3 border-t border-white/10 pt-5">
+                <ul className="mb-7 flex flex-col gap-3 border-t border-white/15 pt-5">
                   {ENTERPRISE.map((item) => (
                     <li
                       key={item.en}
-                      className={`flex items-center gap-2.5 text-sm text-white/95 ${bn(lang)}`}
+                      className={`flex items-center gap-2.5 text-sm font-normal text-white/95 ${bn(lang)}`}
                     >
                       <span
                         aria-hidden="true"
-                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300"
+                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-400/20 text-emerald-300"
                       >
                         <IconCheck size={13} />
                       </span>
@@ -391,7 +462,7 @@ export default function Corporate({ lang = 'en' }) {
                 <Button
                   to="/faq"
                   variant="outlineWhite"
-                  className={`w-full justify-center ${bn(lang)}`}
+                  className={`w-full justify-center font-semibold ${bn(lang)}`}
                   style={{ display: 'flex' }}
                   icon={<IconArrowRight />}
                 >
