@@ -13,14 +13,17 @@ import { bn, display } from '../../utils/lang'
 
 const FEATURES = [
   {
+    num: '01',
     icon: <IconVideo />,
     en: {
       tab: 'HD Calls',
+      kicker: 'VOICE & VIDEO',
       title: 'Crystal-Clear HD Audio & Video Calls',
       desc: "Experience 1-on-1 and group video calls with up to 6 participants globally. Agni's dedicated IPTSP infrastructure ensures HD clarity even during peak hours, with zero call drops on stable connections.",
     },
     bn: {
       tab: 'এইচডি কল',
+      kicker: 'ভয়েস ও ভিডিও',
       title: 'এইচডি ভয়েস ও ভিডিও কল',
       desc: 'বিশ্বের যেকোনো প্রান্তে ৬ জন পর্যন্ত গ্রুপ ভিডিও কল করুন। অগ্নির ডেডিকেটেড নেটওয়ার্কে সর্বোচ্চ মানের কল উপভোগ করুন।',
     },
@@ -41,14 +44,17 @@ const FEATURES = [
     },
   },
   {
+    num: '02',
     icon: <IconMic />,
     en: {
       tab: 'Call Management',
+      kicker: 'SMART ROUTING',
       title: 'Smart Call Recording & Forwarding',
       desc: 'Never miss a critical conversation. Record important calls, forward incoming calls to your GSM number or voicemail when offline, and manage everything from one intuitive dashboard.',
     },
     bn: {
       tab: 'কল ম্যানেজমেন্ট',
+      kicker: 'স্মার্ট রাউটিং',
       title: 'স্মার্ট কল রেকর্ডিং ও ফরওয়ার্ডিং',
       desc: 'গুরুত্বপূর্ণ কল রেকর্ড করুন এবং অফলাইনে থাকলে কল ফরওয়ার্ড করুন।',
     },
@@ -69,14 +75,17 @@ const FEATURES = [
     },
   },
   {
+    num: '03',
     icon: <IconMessage />,
     en: {
       tab: 'Messaging',
+      kicker: 'ENCRYPTED CHAT',
       title: 'Rich Instant Messaging & Group Chat',
       desc: 'Stay connected with group chats supporting up to 50 members. Share your live location, voice notes, documents, stickers, and media with end-to-end encryption on every message.',
     },
     bn: {
       tab: 'মেসেজিং',
+      kicker: 'এনক্রিপ্টেড চ্যাট',
       title: 'গ্রুপ চ্যাট ও তাৎক্ষণিক বার্তা',
       desc: '৫০ জন পর্যন্ত গ্রুপ চ্যাটে থাকুন সংযুক্ত। লোকেশন, ভয়েস নোট, ডকুমেন্ট শেয়ার করুন।',
     },
@@ -97,14 +106,17 @@ const FEATURES = [
     },
   },
   {
+    num: '04',
     icon: <IconTransfer />,
     en: {
       tab: 'Balance & Referral',
+      kicker: 'CREDIT & REWARDS',
       title: 'Balance Transfer & Referral Rewards',
       desc: "Transfer credit to friends and family instantly. Earn bonus taka through AgniTalk's multi-level referral program — the more friends you invite, the more you earn.",
     },
     bn: {
       tab: 'ব্যালেন্স ও রেফারেল',
+      kicker: 'ক্রেডিট ও বোনাস',
       title: 'ব্যালেন্স ট্রান্সফার ও রেফারেল বোনাস',
       desc: 'বন্ধুদের কাছে ব্যালেন্স পাঠান এবং রেফারেল প্রোগ্রামে বোনাস উপার্জন করুন।',
     },
@@ -142,164 +154,229 @@ export default function Features({ lang = 'en' }) {
       id="features"
       lang={lang}
       aria-labelledby="features-title"
-      className="border-b border-slate-200/70 bg-white py-14 sm:py-16 lg:py-20"
+      className="
+        agnitalk-ui relative overflow-hidden
+        border-b border-slate-200/80
+        bg-[#F8FAFF]
+        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
+        [background-size:22px_22px]
+        py-16! sm:py-20! lg:py-24!
+      "
     >
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <div
-            className={`
-              mb-3 inline-flex items-center gap-2 rounded-full
-              border border-[#0052CC]/15 bg-[#F4F8FF]
-              px-3.5 py-1 text-[11px] font-bold [font-synthesis:weight]
-              uppercase tracking-wider text-[#0052CC]
-              ${bn(lang)}
-            `}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
-            {isBangla ? 'স্মার্ট ফিচারসমূহ' : 'PLATFORM FEATURES'}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(248,250,255,0.65)_100%)]"
+      />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Editorial Section Header */}
+        <div className="mb-10 flex flex-col justify-between gap-4 border-b border-slate-200/90 pb-8 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <span
+              className={`mb-2.5 block text-xs font-bold [font-synthesis:weight] uppercase tracking-[0.16em] text-[#FF5722] ${bn(lang)}`}
+            >
+              {isBangla ? 'স্মার্ট ফিচারসমূহ' : 'Platform Capabilities'}
+            </span>
+
+            <h2
+              id="features-title"
+              className={`text-[clamp(26px,3.8vw,38px)] leading-[1.18] tracking-tight text-[#003366] ${bn(lang)}`}
+              style={display(lang)}
+            >
+              {isBangla
+                ? 'সম্পূর্ণ যোগাযোগ সমাধান'
+                : 'Everything You Need to Communicate'}
+            </h2>
           </div>
 
-          <h2
-            id="features-title"
-            className={`mb-3 text-[clamp(24px,4vw,36px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
-            style={display(lang)}
+          <p
+            className={`max-w-md text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
           >
-            {isBangla
-              ? 'সম্পূর্ণ যোগাযোগ সমাধান'
-              : 'Everything You Need to Communicate'}
-          </h2>
-
-          <p className={`text-sm sm:text-base text-slate-600 ${bn(lang)}`}>
             {isBangla
               ? 'একটি অ্যাপেই পান সবকিছু — কল, মেসেজ, রিচার্জ এবং আরো অনেক কিছু।'
               : 'One app for HD calls, smart messaging, balance management, and more.'}
           </p>
         </div>
 
-        {/* Pill Tabs */}
+        {/* Clean Numbered Tab Rail */}
         <div
           role="tablist"
           aria-label={isBangla ? 'ফিচার নির্বাচন করুন' : 'Feature tabs'}
-          className="mb-12 flex flex-wrap justify-center gap-2.5"
+          className="mb-12 grid grid-cols-2 border-b border-slate-200/90 sm:grid-cols-4"
         >
           {FEATURES.map((f, i) => {
             const isActive = activeTab === i
             return (
               <button
-                key={i}
+                key={f.num}
                 type="button"
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveTab(i)}
                 className={`
-                  inline-flex items-center gap-2 rounded-full
-                  px-5 py-2.5 text-sm font-bold [font-synthesis:weight]
-                  transition-[background-color,color,border-color,box-shadow,transform]
-                  duration-200 cursor-pointer
-                  focus-visible:outline-2
-                  focus-visible:outline-offset-2
-                  focus-visible:outline-[#0052CC]
-                  motion-safe:hover:-translate-y-0.5
-                  motion-safe:active:scale-[0.98]
-                  motion-reduce:transition-none
-                  ${bn(lang)}
-                  ${
-                    isActive
-                      ? 'border border-[#003366] bg-[#003366] text-white shadow-[0_10px_22px_-8px_rgba(0,51,102,0.4)]'
-                      : 'border border-slate-200/90 bg-[#F8FAFC] text-slate-600 hover:border-[#0052CC]/35 hover:bg-[#F4F8FF] hover:text-[#0052CC]'
-                  }
+                  group relative flex items-center gap-3 px-3 py-4 text-left
+                  transition-colors duration-200 cursor-pointer
+                  focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0052CC]
+                  sm:px-5
+                  ${isActive ? 'text-[#003366]' : 'text-slate-500 hover:text-[#003366]'}
                 `}
-                style={display(lang)}
               >
                 <span
                   aria-hidden="true"
-                  className={isActive ? 'text-[#FF5722]' : 'text-[#0052CC]'}
+                  className={`
+                    font-agni-heading text-xs tracking-wider transition-colors
+                    ${isActive ? 'text-[#FF5722]' : 'text-slate-400 group-hover:text-[#0052CC]'}
+                  `}
+                >
+                  {f.num}
+                </span>
+
+                <span
+                  aria-hidden="true"
+                  className={`shrink-0 transition-colors ${
+                    isActive
+                      ? 'text-[#0052CC]'
+                      : 'text-slate-400 group-hover:text-[#0052CC]'
+                  }`}
                 >
                   {f.icon}
                 </span>
-                <span>{isBangla ? f.bn.tab : f.en.tab}</span>
+
+                <span
+                  className={`truncate text-sm font-bold [font-synthesis:weight] ${bn(lang)}`}
+                >
+                  {isBangla ? f.bn.tab : f.en.tab}
+                </span>
+
+                {/* Active Bottom Indicator Bar */}
+                <span
+                  aria-hidden="true"
+                  className={`
+                    absolute inset-x-0 bottom-[-1px] h-[2.5px] transition-all duration-200
+                    ${isActive ? 'bg-[#0052CC]' : 'bg-transparent'}
+                  `}
+                />
               </button>
             )
           })}
         </div>
 
-        {/* Original 2-Column Feature Content */}
+        {/* 2-Column Feature Showcase */}
         <div
           role="tabpanel"
-          className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2"
+          className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14"
         >
-          <div>
+          {/* Left Narrative */}
+          <div className="lg:col-span-6">
+            <div className="mb-3 flex items-center gap-2.5">
+              <span className="font-agni-heading text-xs tracking-widest text-[#0052CC]">
+                {active.num} / 04
+              </span>
+              <span aria-hidden="true" className="h-px w-6 bg-slate-300" />
+              <span
+                className={`text-xs font-bold [font-synthesis:weight] uppercase tracking-wider text-slate-500 ${bn(lang)}`}
+              >
+                {t.kicker}
+              </span>
+            </div>
+
             <h3
-              className={`mb-4 text-[clamp(22px,3vw,30px)] font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
+              className={`mb-4 text-[clamp(22px,3vw,32px)] leading-[1.24] text-[#003366] ${bn(lang)}`}
               style={display(lang)}
             >
               {t.title}
             </h3>
 
             <p
-              className={`mb-6 text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
+              className={`mb-7 text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
             >
               {t.desc}
             </p>
 
-            <ul className="mb-8 flex flex-col gap-3">
+            <ul className="mb-8 divide-y divide-slate-200/70 border-y border-slate-200/80">
               {(isBangla ? active.bullets.bn : active.bullets.en).map(
                 (b, i) => (
-                  <li key={i} className={`flex items-center gap-3 ${bn(lang)}`}>
+                  <li
+                    key={i}
+                    className={`flex items-center gap-3 py-3 text-sm sm:text-[15px] text-slate-700 ${bn(lang)}`}
+                  >
                     <span
                       aria-hidden="true"
-                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0052CC]/10 text-[#0052CC]"
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-[#0052CC] shadow-2xs ring-1 ring-[#0052CC]/15"
                     >
-                      <IconCheck />
+                      <IconCheck size={13} />
                     </span>
-                    <span className="text-sm sm:text-[15px] text-slate-700">
-                      {b}
-                    </span>
+                    <span>{b}</span>
                   </li>
                 ),
               )}
             </ul>
 
-            <Button
-              to="/download"
-              className="inline-flex"
-              icon={<IconArrowRight />}
-            >
-              {isBangla ? 'অ্যাপ ডাউনলোড করুন' : 'Try This Feature'}
-            </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                to="/download"
+                className="inline-flex"
+                icon={<IconArrowRight />}
+              >
+                {isBangla ? 'অ্যাপ ডাউনলোড করুন' : 'Try This Feature'}
+              </Button>
+
+              <Button
+                to="/app"
+                variant="secondary"
+                className="inline-flex"
+                icon={<IconArrowRight />}
+              >
+                {isBangla ? 'অ্যাপের স্ক্রিন দেখুন' : 'See the App Screens'}
+              </Button>
+            </div>
           </div>
 
-          {/* Right Phone Mockup / Artwork */}
-          <div className="flex justify-center">
-            {active.art ? (
-              <img
-                key={active.art.src}
-                src={active.art.src}
-                alt={active.art.alt}
-                width={active.art.w}
-                height={active.art.h}
-                draggable={false}
-                className="h-auto w-full max-w-[360px] lg:my-6 motion-safe:animate-[agniHeroFloat_4.8s_ease-in-out_infinite]"
+          {/* Right Framed Stage */}
+          <div className="lg:col-span-6">
+            <div className="relative flex min-h-[460px] items-center justify-center rounded-3xl border border-slate-200/90 bg-white/90 px-6 py-10 shadow-[0_14px_34px_-14px_rgba(0,51,102,0.1)] sm:min-h-[540px] sm:px-10">
+              {/* Subtle Architectural Corner Registration Marks */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute top-5 left-5 h-3 w-3 border-t-2 border-l-2 border-[#0052CC]/30"
               />
-            ) : (
-              <div className="w-[260px] h-[520px] rotate-2 transition-transform duration-300 motion-safe:hover:rotate-0">
-                <PhoneMockup screen={active.screen} />
-              </div>
-            )}
-          </div>
-        </div>
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute top-5 right-5 h-3 w-3 border-t-2 border-r-2 border-[#0052CC]/30"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-5 left-5 h-3 w-3 border-b-2 border-l-2 border-[#0052CC]/30"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-5 right-5 h-3 w-3 border-b-2 border-r-2 border-[#0052CC]/30"
+              />
 
-        {/* Bottom CTA */}
-        <div className="mt-12 text-center">
-          <Button
-            to="/app"
-            variant="secondary"
-            className="inline-flex"
-            icon={<IconArrowRight />}
-          >
-            {isBangla ? 'অ্যাপের স্ক্রিন দেখুন' : 'See the App Screens'}
-          </Button>
+              {active.art ? (
+                <img
+                  key={active.art.src}
+                  src={active.art.src}
+                  alt={active.art.alt}
+                  width={active.art.w}
+                  height={active.art.h}
+                  draggable={false}
+                  className="h-auto w-full max-w-[350px]"
+                />
+              ) : (
+                <div className="relative">
+                  {/* Grounded Floor Shadow Under Phone */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-4 inset-x-4 h-6 rounded-[100%] bg-[#00244D]/25 blur-lg"
+                  />
+                  <div className="w-[260px] h-[520px]">
+                    <PhoneMockup screen={active.screen} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>

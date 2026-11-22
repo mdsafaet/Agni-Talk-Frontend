@@ -54,6 +54,7 @@ function TiltBarLink({ children, label, variant = 'primary' }) {
         className={`
           relative inline-flex h-[50px] min-w-[162px]
           shrink-0 items-center rounded-2xl border px-4
+          font-agni-body font-normal not-italic
           [transform-style:preserve-3d]
           transition-[transform,background-color,border-color,box-shadow]
           duration-200 ease-out
@@ -90,25 +91,27 @@ export default function DownloadBar({ lang = 'en' }) {
         isBangla ? 'অগ্নিটক অ্যাপ ডাউনলোড বার' : 'Download AgniTalk App'
       }
       className="
-        relative overflow-hidden
+        agnitalk-ui relative overflow-hidden
         border-y border-white/10
         bg-[#003366]
         bg-[radial-gradient(rgba(255,255,255,0.08)_0.85px,transparent_0.85px)]
         [background-size:20px_20px]
-        py-7 sm:py-8
+        py-7! sm:py-8!
       "
     >
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-5 lg:flex-row">
           {/* Left Copy & Status Pill */}
           <div className="flex flex-col items-center gap-2 text-center lg:items-start lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-agni-body text-[11px] uppercase tracking-wider text-blue-100">
+            <span
+              className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-agni-body text-[11px] font-normal not-italic uppercase tracking-wider text-blue-100 ${bn(lang)}`}
+            >
               <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
               {isBangla ? 'ফ্রি অ্যাপ ইনস্টলেশন' : 'Free App Download'}
             </span>
 
             <p
-              className={`text-base sm:text-lg font-normal text-white leading-snug ${bn(lang)}`}
+              className={`text-base sm:text-lg font-normal not-italic text-white leading-snug ${bn(lang)}`}
               style={display(lang)}
             >
               {isBangla
@@ -128,12 +131,12 @@ export default function DownloadBar({ lang = 'en' }) {
                 className="h-5 w-5 shrink-0 text-white"
               />
 
-              <div className="font-agni-body text-left">
-                <span className="block text-[9px] uppercase tracking-wider text-blue-100">
+              <div className="font-agni-body font-normal not-italic text-left">
+                <span className="block text-[9px] font-normal not-italic uppercase tracking-wider text-blue-100">
                   GET IT ON
                 </span>
 
-                <span className="agni-hero-button-label block text-[14px] leading-tight text-white">
+                <span className="agni-hero-button-label block text-[14px] font-normal not-italic leading-tight text-white">
                   Google Play
                 </span>
               </div>
@@ -148,12 +151,12 @@ export default function DownloadBar({ lang = 'en' }) {
                 className="h-6 w-6 shrink-0 text-[#003366]"
               />
 
-              <div className="font-agni-body text-left">
-                <span className="block text-[9px] uppercase tracking-wider text-slate-500">
+              <div className="font-agni-body font-normal not-italic text-left">
+                <span className="block text-[9px] font-normal not-italic uppercase tracking-wider text-slate-500">
                   DOWNLOAD ON THE
                 </span>
 
-                <span className="agni-hero-button-label block text-[14px] leading-tight text-[#003366]">
+                <span className="agni-hero-button-label block text-[14px] font-normal not-italic leading-tight text-[#003366]">
                   App Store
                 </span>
               </div>

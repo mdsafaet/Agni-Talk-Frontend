@@ -115,7 +115,7 @@ export default function HowItWorks({ lang = 'en' }) {
       lang={lang}
       aria-labelledby="how-it-works-title"
       className="
-        relative overflow-hidden
+        agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
         bg-[#F8FAFF]
         bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
@@ -201,6 +201,7 @@ export default function HowItWorks({ lang = 'en' }) {
                     className={`
                       relative flex h-full w-full flex-col overflow-hidden
                       rounded-[20px] border p-4 text-left sm:p-5
+                      font-agni-body
                       shadow-[0_4px_16px_-4px_rgba(0,51,102,0.06)]
                       [transform-style:preserve-3d] cursor-pointer
                       transition-[transform,box-shadow,border-color,background-color]
@@ -253,7 +254,7 @@ export default function HowItWorks({ lang = 'en' }) {
                       <span
                         className={`
                           inline-flex items-center gap-1 rounded-full px-2.5 py-0.5
-                          font-agni-heading text-xs font-bold [font-synthesis:weight]
+                          font-agni-body text-xs font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.35px_currentColor]
                           transition-colors
                           ${
                             isSelected
@@ -273,14 +274,13 @@ export default function HowItWorks({ lang = 'en' }) {
                     </div>
 
                     <h3
-                      className={`mb-2 text-base sm:text-[17px] font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
-                      style={display(lang)}
+                      className={`mb-2 font-agni-body text-[17px] sm:text-[18px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] leading-snug text-[#003366] ${bn(lang)}`}
                     >
                       {content.title}
                     </h3>
 
                     <p
-                      className={`mb-4 text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                      className={`mb-4 font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
                     >
                       {content.desc}
                     </p>
@@ -289,7 +289,7 @@ export default function HowItWorks({ lang = 'en' }) {
                     <div
                       className={`
                         mt-auto flex w-full items-center justify-between gap-2
-                        border-t pt-2.5 text-[11px] font-bold [font-synthesis:weight]
+                        border-t pt-2.5 font-agni-body text-[11px] font-bold [font-synthesis:weight]
                         ${
                           isSelected
                             ? 'border-[#0052CC]/15 text-[#0052CC]'
@@ -316,7 +316,7 @@ export default function HowItWorks({ lang = 'en' }) {
         {/* Bottom Showcase & Regulatory Compliance Cards */}
         <div className="mt-7 grid grid-cols-1 gap-4 lg:mt-8 lg:grid-cols-12 lg:gap-5">
           {/* Phone Preview Stage */}
-          <div className="relative flex flex-col items-center justify-between overflow-hidden rounded-[20px] border border-slate-200/90 bg-white p-5 shadow-[0_6px_22px_-8px_rgba(0,51,102,0.08)] sm:p-6 lg:col-span-5">
+          <div className="relative flex flex-col items-center justify-between overflow-hidden rounded-[20px] border border-slate-200/90 bg-white p-5 font-agni-body shadow-[0_6px_22px_-8px_rgba(0,51,102,0.08)] sm:p-6 lg:col-span-5">
             <div className="mb-3 flex w-full items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F4F8FF] px-3 py-1 font-agni-body text-[11px] font-bold [font-synthesis:weight] text-[#0052CC]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
@@ -326,7 +326,7 @@ export default function HowItWorks({ lang = 'en' }) {
               </span>
 
               <span
-                className={`text-xs font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                className={`font-agni-body text-xs font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.35px_currentColor] text-[#003366] ${bn(lang)}`}
               >
                 {currentContent.title}
               </span>
@@ -356,8 +356,8 @@ export default function HowItWorks({ lang = 'en' }) {
                   onClick={() => setActiveStep(idx)}
                   aria-label={`Select step ${s.num}`}
                   className={`
-                    rounded-lg px-2.5 py-1 font-agni-heading text-[11px]
-                    font-bold [font-synthesis:weight] transition-colors cursor-pointer
+                    rounded-lg px-2.5 py-1 font-agni-body text-[11px]
+                    font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.35px_currentColor] transition-colors cursor-pointer
                     ${
                       activeStep === idx
                         ? 'bg-[#003366] text-white'
@@ -374,7 +374,7 @@ export default function HowItWorks({ lang = 'en' }) {
           {/* Regulatory & Privacy Assurance Cards */}
           <div className="flex flex-col justify-between gap-4 lg:col-span-7">
             {/* NID Notice */}
-            <div className="group flex flex-1 items-start gap-4 rounded-[20px] border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#0052CC]/35 hover:bg-[#F4F8FF]/40">
+            <div className="group flex flex-1 items-start gap-4 rounded-[20px] border border-slate-200/90 bg-white p-4 font-agni-body sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#0052CC]/35 hover:bg-[#F4F8FF]/40">
               <span
                 aria-hidden="true"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#0052CC]/15 bg-[#F4F8FF] text-[#0052CC] transition-colors group-hover:bg-[#0052CC] group-hover:text-white"
@@ -385,21 +385,20 @@ export default function HowItWorks({ lang = 'en' }) {
               <div className="min-w-0">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
                   <h3
-                    className={`text-sm sm:text-base font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
-                    style={display(lang)}
+                    className={`font-agni-body text-base sm:text-[17px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] text-[#003366] ${bn(lang)}`}
                   >
                     {isBangla
                       ? 'কেন NID প্রয়োজন?'
                       : 'Why is NID Required?'}
                   </h3>
 
-                  <span className="rounded-full bg-[#F4F8FF] px-2.5 py-0.5 text-[10px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#0052CC]">
+                  <span className="rounded-full bg-[#F4F8FF] px-2.5 py-0.5 font-agni-body text-[10px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#0052CC]">
                     BTRC &amp; Porichoy API
                   </span>
                 </div>
 
                 <p
-                  className={`text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                  className={`font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
                 >
                   {isBangla
                     ? 'BTRC-এর বিধিমালা অনুযায়ী ০৯৬০৬ ভার্চুয়াল নম্বর সক্রিয় করতে NID যাচাই বাধ্যতামূলক। আপনার তথ্য Porichoy API-এ এনক্রিপ্টেড আকারে পাঠানো হয়।'
@@ -409,7 +408,7 @@ export default function HowItWorks({ lang = 'en' }) {
             </div>
 
             {/* GPS Notice */}
-            <div className="group flex flex-1 items-start gap-4 rounded-[20px] border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#FF5722]/35 hover:bg-[#FFF7F4]/40">
+            <div className="group flex flex-1 items-start gap-4 rounded-[20px] border border-slate-200/90 bg-white p-4 font-agni-body sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#FF5722]/35 hover:bg-[#FFF7F4]/40">
               <span
                 aria-hidden="true"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#FF5722]/15 bg-[#FFF7F4] text-[#FF5722] transition-colors group-hover:bg-[#FF5722] group-hover:text-white"
@@ -420,21 +419,20 @@ export default function HowItWorks({ lang = 'en' }) {
               <div className="min-w-0">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
                   <h3
-                    className={`text-sm sm:text-base font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
-                    style={display(lang)}
+                    className={`font-agni-body text-base sm:text-[17px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] text-[#003366] ${bn(lang)}`}
                   >
                     {isBangla
                       ? 'GPS অনুমতি কেন?'
                       : 'Why GPS Location Permission?'}
                   </h3>
 
-                  <span className="rounded-full bg-[#FFF7F4] px-2.5 py-0.5 text-[10px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#FF5722]">
+                  <span className="rounded-full bg-[#FFF7F4] px-2.5 py-0.5 font-agni-body text-[10px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#FF5722]">
                     One-Time Check
                   </span>
                 </div>
 
                 <p
-                  className={`text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                  className={`font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
                 >
                   {isBangla
                     ? 'টেলিযোগাযোগ আইন অনুযায়ী নিবন্ধনের সময় একবার GPS অনুমতি প্রয়োজন যা নিশ্চিত করে আপনি বাংলাদেশে আছেন।'

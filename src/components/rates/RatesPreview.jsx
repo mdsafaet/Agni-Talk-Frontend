@@ -124,11 +124,9 @@ function handleTilt(event) {
   const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
   const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
 
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 8}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`)
-  wrapper.style.setProperty('--lift', '-10px')
-  wrapper.style.setProperty('--shadow-shift-x', `${(0.5 - x) * 18}px`)
-  wrapper.style.setProperty('--shadow-scale', '0.9')
+  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 6}deg`)
+  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 6}deg`)
+  wrapper.style.setProperty('--lift', '-4px')
 }
 
 function resetTilt(event) {
@@ -136,8 +134,6 @@ function resetTilt(event) {
   wrapper.style.setProperty('--tilt-x', '0deg')
   wrapper.style.setProperty('--tilt-y', '0deg')
   wrapper.style.setProperty('--lift', '0px')
-  wrapper.style.setProperty('--shadow-shift-x', '0px')
-  wrapper.style.setProperty('--shadow-scale', '1')
 }
 
 export default function RatesPreview({ lang = 'en', to = '/rates' }) {
@@ -148,17 +144,21 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
       id="rates-preview"
       lang={lang}
       aria-labelledby="rates-preview-title"
-      className="relative isolate overflow-hidden border-b border-slate-200/80 bg-[#EDF3FC] pt-12 pb-18 sm:pt-14 sm:pb-20 lg:pt-16 lg:pb-22"
+      className="
+        agnitalk-ui relative isolate overflow-hidden
+        border-b border-slate-200/80
+        bg-[#F8FAFF]
+        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
+        [background-size:22px_22px]
+        pt-12! pb-18! sm:pt-14! sm:pb-20! lg:pt-16! lg:pb-22!
+      "
     >
-      {/* Creative Split-Stage Backdrop: Deep Brand Navy Top + Soft Light Bottom */}
+      {/* Creative Split-Stage Backdrop: Deep Brand Navy Top + Dotted Light Bottom */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[62%] bg-[linear-gradient(135deg,#00244D_0%,#003366_48%,#0052CC_100%)]"
       >
-        {/* Subtle Telecom Pulse Grid Overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:24px_24px]" />
-
-        {/* Ambient Orange & Sky Glow Orbs */}
         <div className="absolute -left-24 -top-20 h-72 w-72 rounded-full bg-[#FF5722]/20 blur-3xl" />
         <div className="absolute -right-24 top-10 h-80 w-80 rounded-full bg-sky-400/20 blur-3xl" />
       </div>
@@ -225,8 +225,8 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
           </Link>
         </div>
 
-        {/* 3-Card Grid with Compact Height & Deep 3D Floor Shadows */}
-        <div className="grid grid-cols-1 gap-8 sm:gap-9 lg:grid-cols-3 lg:gap-7">
+        {/* 3-Card Grid: Standard Card Brightness + Rich Blue Hover + Questrial Text */}
+        <div className="grid grid-cols-1 gap-6 sm:gap-7 lg:grid-cols-3">
           {FEATURED_RATES.map((item) => {
             const t = isBangla ? item.bn : item.en
 
@@ -236,53 +236,28 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                 onPointerMove={handleTilt}
                 onPointerLeave={resetTilt}
                 onPointerCancel={resetTilt}
-                className="group relative h-full [perspective:1100px]"
+                className="group relative h-full [perspective:1000px]"
               >
-                {/* Layer 1: Wide Ambient Floor Shadow */}
+                {/* Subtle Grounded Floor Shadow */}
                 <div
                   aria-hidden="true"
                   className="
-                    pointer-events-none absolute -bottom-7 inset-x-2 h-11
-                    rounded-[100%] blur-2xl opacity-90
-                    transition-[transform,opacity] duration-200 ease-out
-                    group-hover:opacity-100
-                    motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
-                  "
-                  style={{
-                    background: item.isFree
-                      ? 'radial-gradient(ellipse at center, rgba(255,87,34,0.42) 0%, rgba(0,26,61,0.34) 55%, transparent 82%)'
-                      : 'radial-gradient(ellipse at center, rgba(0,82,204,0.42) 0%, rgba(0,26,61,0.34) 55%, transparent 82%)',
-                  }}
-                />
-
-                {/* Layer 2: Mid-Range Dark Grounded Shadow */}
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none absolute -bottom-4 inset-x-6 h-6
-                    rounded-[100%] bg-[#001A3D]/35 blur-lg
-                    transition-transform duration-200 ease-out
-                    motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
-                  "
-                />
-
-                {/* Layer 3: Tight Contact Shadow Directly Under Bottom Edge */}
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none absolute -bottom-1.5 inset-x-10 h-3
-                    rounded-[100%] bg-[#001430]/40 blur-xs
-                    transition-transform duration-200 ease-out
-                    motion-safe:[transform:translateX(var(--shadow-shift-x,0px))_scaleX(var(--shadow-scale,1))]
+                    pointer-events-none absolute -bottom-2.5 inset-x-6 h-4
+                    rounded-[100%] bg-slate-900/12 opacity-70 blur-md
+                    transition-[opacity,background-color] duration-200
+                    group-hover:bg-[#0052CC]/25 group-hover:opacity-100
                   "
                 />
 
                 <Link
                   to={to}
-                  className={`
+                  className="
                     relative flex h-full flex-col overflow-hidden
-                    rounded-[22px] border bg-white p-5 sm:p-5.5
-                    shadow-[0_4px_10px_-2px_rgba(0,26,61,0.12),0_16px_28px_-10px_rgba(0,26,61,0.22),0_32px_56px_-18px_rgba(0,33,71,0.32)]
+                    rounded-[20px] border border-slate-200/90 bg-white p-5 sm:p-6
+                    font-agni-body
+                    shadow-[0_6px_18px_-4px_rgba(15,23,42,0.1)]
+                    hover:border-[#0052CC]/60 hover:bg-[#E2EEFF]
+                    hover:shadow-[0_16px_32px_-8px_rgba(0,82,204,0.24)]
                     [transform-style:preserve-3d]
                     transition-[transform,box-shadow,border-color,background-color]
                     duration-200 ease-out
@@ -290,19 +265,19 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     focus-visible:outline-[#0052CC]
                     motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
                     motion-reduce:transition-none
-                    ${
-                      item.isFree
-                        ? 'border-[#FF5722]/40 hover:border-[#FF5722] hover:bg-[#FFF9F7] hover:shadow-[0_8px_16px_-4px_rgba(255,87,34,0.22),0_26px_44px_-12px_rgba(255,87,34,0.32),0_44px_72px_-20px_rgba(0,26,61,0.38)]'
-                        : 'border-slate-200/95 hover:border-[#0052CC] hover:bg-[#F8FBFF] hover:shadow-[0_8px_16px_-4px_rgba(0,82,204,0.22),0_26px_44px_-12px_rgba(0,82,204,0.32),0_44px_72px_-20px_rgba(0,26,61,0.38)]'
-                    }
-                  `}
+                  "
                 >
                   {/* Top Accent Bar */}
                   <span
                     aria-hidden="true"
-                    className={`absolute inset-x-0 top-0 h-1.5 ${
-                      item.isFree ? 'bg-[#FF5722]' : 'bg-[#0052CC]'
-                    }`}
+                    className={`
+                      absolute inset-x-0 top-0 h-[3px] transition-colors
+                      ${
+                        item.isFree
+                          ? 'bg-[#FF5722]/85 group-hover:bg-[#0052CC]'
+                          : 'bg-[#003366]/85 group-hover:bg-[#0052CC]'
+                      }
+                    `}
                   />
 
                   {/* Top Pill + Prefix */}
@@ -310,37 +285,46 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     <span
                       className={`
                         inline-flex items-center gap-1.5 rounded-full
-                        px-2.5 py-0.5 text-[11px] font-bold [font-synthesis:weight]
-                        ${
-                          item.isFree
-                            ? 'bg-[#FFF7F4] text-[#FF5722]'
-                            : 'bg-[#F4F8FF] text-[#0052CC]'
-                        }
+                        border border-slate-200/80 bg-[#F8FAFC]
+                        px-2.5 py-0.5 font-agni-body text-[11px] font-semibold [font-synthesis:weight]
+                        text-slate-600 transition-colors
+                        group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
                         ${bn(lang)}
                       `}
                     >
-                      {item.id === 'app' && <FiSmartphone className="h-3 w-3" />}
-                      {item.id === 'mobile' && <FiPhoneCall className="h-3 w-3" />}
-                      {item.id === 'international' && <FiGlobe className="h-3 w-3" />}
+                      {item.id === 'app' && (
+                        <FiSmartphone className="h-3 w-3 text-[#0052CC]" />
+                      )}
+                      {item.id === 'mobile' && (
+                        <FiPhoneCall className="h-3 w-3 text-[#0052CC]" />
+                      )}
+                      {item.id === 'international' && (
+                        <FiGlobe className="h-3 w-3 text-[#0052CC]" />
+                      )}
                       {t.badge}
                     </span>
 
-                    <span className="rounded-lg border border-slate-200/90 bg-[#F8FAFC] px-2 py-0.5 font-agni-body text-[11px] font-medium text-slate-600">
+                    <span
+                      className="
+                        rounded-lg border border-slate-200/80 bg-[#F8FAFC] px-2 py-0.5
+                        font-agni-body text-[11px] text-slate-600 transition-colors
+                        group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
+                      "
+                    >
                       {item.prefix}
                     </span>
                   </div>
 
-                  {/* Title & Flags Row */}
+                  {/* Title & Flags Row (Questrial) */}
                   <div className="mb-3.5 flex items-start justify-between gap-2.5">
                     <div className="min-w-0">
                       <h3
-                        className={`mb-0.5 text-base sm:text-lg font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
-                        style={display(lang)}
+                        className={`mb-0.5 font-agni-body text-base sm:text-[17px] font-bold [font-synthesis:weight] leading-snug text-[#003366] transition-colors group-hover:text-[#0047B3] ${bn(lang)}`}
                       >
                         {t.title}
                       </h3>
                       <p
-                        className={`text-xs text-slate-500 ${bn(lang)}`}
+                        className={`font-agni-body text-xs text-slate-500 transition-colors group-hover:text-slate-600 ${bn(lang)}`}
                       >
                         {t.subtitle}
                       </p>
@@ -351,7 +335,11 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                         {item.countries.map((code) => (
                           <span
                             key={code}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200/90 bg-[#F8FAFC] shadow-2xs"
+                            className="
+                              flex h-8 w-8 items-center justify-center rounded-lg
+                              border border-slate-200/80 bg-[#F8FAFC]
+                              transition-colors group-hover:border-[#0052CC]/30 group-hover:bg-white
+                            "
                           >
                             <ReactCountryFlag
                               countryCode={code}
@@ -371,14 +359,23 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     )}
                   </div>
 
-                  {/* Rate Display */}
-                  <div className="mb-3.5 rounded-xl border border-slate-200/75 bg-[#F8FAFC] px-3.5 py-2.5">
+                  {/* Rate Display (Questrial) */}
+                  <div
+                    className="
+                      mb-3.5 rounded-xl border border-slate-200/75 bg-[#F8FAFC] px-3.5 py-2.5
+                      transition-colors group-hover:border-[#0052CC]/25 group-hover:bg-white/90
+                    "
+                  >
                     <div className="flex items-baseline gap-2">
                       <span
                         className={`
-                          font-agni-heading text-[32px] sm:text-[36px]
-                          font-bold [font-synthesis:weight] leading-none tracking-tight
-                          ${item.isFree ? 'text-[#FF5722]' : 'text-[#003366]'}
+                          font-agni-body text-[32px] sm:text-[36px]
+                          font-bold [font-synthesis:weight] leading-none tracking-tight transition-colors
+                          ${
+                            item.isFree
+                              ? 'text-[#FF5722]'
+                              : 'text-[#003366] group-hover:text-[#0052CC]'
+                          }
                         `}
                       >
                         {t.rate}
@@ -386,7 +383,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
 
                       {t.unit && (
                         <span
-                          className={`text-xs sm:text-sm font-medium text-slate-500 ${bn(lang)}`}
+                          className={`font-agni-body text-xs sm:text-sm font-medium text-slate-500 transition-colors group-hover:text-slate-600 ${bn(lang)}`}
                         >
                           {t.unit}
                         </span>
@@ -394,23 +391,20 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     </div>
                   </div>
 
-                  {/* Bullet Highlights */}
+                  {/* Bullet Highlights (Questrial) */}
                   <ul className="mb-4 flex flex-col gap-1.5">
                     {t.highlights.map((point, index) => (
                       <li
                         key={index}
-                        className={`flex items-start gap-2 text-xs sm:text-[13px] text-slate-600 ${bn(lang)}`}
+                        className={`flex items-start gap-2 font-agni-body text-xs sm:text-[13px] text-slate-600 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
                       >
                         <span
                           aria-hidden="true"
-                          className={`
+                          className="
                             mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
-                            ${
-                              item.isFree
-                                ? 'bg-[#FFF7F4] text-[#FF5722]'
-                                : 'bg-[#F4F8FF] text-[#0052CC]'
-                            }
-                          `}
+                            bg-[#F4F8FF] text-[#0052CC] transition-colors
+                            group-hover:bg-white
+                          "
                         >
                           <FiCheck className="h-2.5 w-2.5" />
                         </span>
@@ -419,12 +413,18 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     ))}
                   </ul>
 
-                  {/* Card Footer Action */}
-                  <div className="mt-auto flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
+                  {/* Card Footer Action (Questrial) */}
+                  <div
+                    className="
+                      mt-auto flex items-center justify-between gap-2
+                      border-t border-slate-100 pt-3 transition-colors
+                      group-hover:border-[#0052CC]/20
+                    "
+                  >
                     <span
                       className={`
-                        text-xs font-bold [font-synthesis:weight]
-                        ${item.isFree ? 'text-[#FF5722]' : 'text-[#0052CC]'}
+                        font-agni-body text-xs font-bold [font-synthesis:weight]
+                        text-[#003366] transition-colors group-hover:text-[#0052CC]
                         ${bn(lang)}
                       `}
                     >
@@ -435,15 +435,12 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
 
                     <span
                       aria-hidden="true"
-                      className={`
+                      className="
                         flex h-7 w-7 items-center justify-center rounded-full
-                        transition-transform duration-200 motion-safe:group-hover:translate-x-1
-                        ${
-                          item.isFree
-                            ? 'bg-[#FFF7F4] text-[#FF5722]'
-                            : 'bg-[#F4F8FF] text-[#0052CC]'
-                        }
-                      `}
+                        bg-[#F4F8FF] text-[#0052CC] transition-all duration-200
+                        group-hover:bg-[#0052CC] group-hover:text-white
+                        motion-safe:group-hover:translate-x-1
+                      "
                     >
                       <FiArrowRight className="h-3.5 w-3.5" />
                     </span>

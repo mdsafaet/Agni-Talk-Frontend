@@ -264,7 +264,7 @@ function formatDate(iso, lang) {
 function PostMeta({ post, lang }) {
   return (
     <div
-      className={`flex items-center gap-2 text-xs text-slate-400 ${bn(lang)}`}
+      className={`flex items-center gap-2 font-agni-body text-xs text-slate-400 ${bn(lang)}`}
     >
       <span>{formatDate(post.date, lang)}</span>
       <span>·</span>
@@ -329,7 +329,7 @@ export default function Blog({ lang = 'en' }) {
       id="blog"
       lang={lang}
       className="
-        relative overflow-hidden
+        agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
         bg-[#F8FAFF]
         bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
@@ -422,7 +422,7 @@ export default function Blog({ lang = 'en' }) {
               className="
                 group relative block w-full overflow-hidden
                 rounded-[20px] border border-slate-200/90
-                bg-white text-left
+                bg-white text-left font-agni-body
                 shadow-[0_6px_22px_-8px_rgba(0,51,102,0.08)]
                 transition-[transform,border-color,box-shadow,background-color]
                 duration-200 ease-out cursor-pointer
@@ -443,32 +443,31 @@ export default function Blog({ lang = 'en' }) {
 
               <Cover cover={featured.cover} tall />
 
-              <div className="flex flex-col justify-center p-5 sm:p-7">
+              <div className="flex flex-col justify-center p-5 font-agni-body sm:p-7">
                 <div className="mb-3 flex items-center gap-2">
                   <span
                     className={`
                       inline-flex rounded-full bg-[#F4F8FF] px-3 py-1
-                      text-xs font-bold [font-synthesis:weight] text-[#0052CC]
+                      font-agni-body text-xs font-bold [font-synthesis:weight] text-[#0052CC]
                       ${bn(lang)}
                     `}
                   >
                     {label(featured.category)}
                   </span>
 
-                  <span className="rounded-full bg-[#FFF7F4] px-2.5 py-0.5 text-[11px] font-bold [font-synthesis:weight] text-[#FF5722]">
+                  <span className="rounded-full bg-[#FFF7F4] px-2.5 py-0.5 font-agni-body text-[11px] font-bold [font-synthesis:weight] text-[#FF5722]">
                     {isBangla ? 'ফিচার্ড' : 'Featured'}
                   </span>
                 </div>
 
                 <h3
-                  className={`mb-2.5 text-[clamp(20px,2.8vw,28px)] font-bold [font-synthesis:weight] leading-snug text-[#003366] group-hover:text-[#0052CC] transition-colors ${bn(lang)}`}
-                  style={display(lang)}
+                  className={`mb-2.5 font-agni-body text-[clamp(20px,2.8vw,28px)] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.45px_currentColor] tracking-[0.01em] leading-snug text-[#003366] group-hover:text-[#0052CC] transition-colors ${bn(lang)}`}
                 >
                   {isBangla ? featured.bn.title : featured.en.title}
                 </h3>
 
                 <p
-                  className={`mb-5 text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
+                  className={`mb-5 font-agni-body text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
                 >
                   {isBangla ? featured.bn.excerpt : featured.en.excerpt}
                 </p>
@@ -478,7 +477,7 @@ export default function Blog({ lang = 'en' }) {
 
                   <span
                     className={`
-                      inline-flex items-center gap-1.5 text-sm
+                      inline-flex items-center gap-1.5 font-agni-body text-sm
                       font-bold [font-synthesis:weight] text-[#0052CC]
                       ${bn(lang)}
                     `}
@@ -508,7 +507,7 @@ export default function Blog({ lang = 'en' }) {
                 className="
                   group relative flex h-full w-full flex-col overflow-hidden
                   rounded-[20px] border border-slate-200/90
-                  bg-white text-left
+                  bg-white text-left font-agni-body
                   shadow-[0_4px_16px_-4px_rgba(0,51,102,0.06)]
                   transition-[transform,border-color,box-shadow,background-color]
                   duration-200 ease-out cursor-pointer
@@ -530,11 +529,11 @@ export default function Blog({ lang = 'en' }) {
                   <Cover cover={p.cover} />
                 </div>
 
-                <div className="flex flex-1 flex-col p-4 sm:p-5">
+                <div className="flex flex-1 flex-col p-4 font-agni-body sm:p-5">
                   <span
                     className={`
                       mb-2.5 inline-flex self-start rounded-full
-                      bg-[#F4F8FF] px-2.5 py-0.5 text-[11px]
+                      bg-[#F4F8FF] px-2.5 py-0.5 font-agni-body text-[11px]
                       font-bold [font-synthesis:weight] text-[#0052CC]
                       ${bn(lang)}
                     `}
@@ -543,14 +542,13 @@ export default function Blog({ lang = 'en' }) {
                   </span>
 
                   <h3
-                    className={`mb-2 text-base sm:text-lg font-bold [font-synthesis:weight] leading-snug text-[#003366] group-hover:text-[#0052CC] transition-colors ${bn(lang)}`}
-                    style={display(lang)}
+                    className={`mb-2 font-agni-body text-[17px] sm:text-[18px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] leading-snug text-[#003366] group-hover:text-[#0052CC] transition-colors ${bn(lang)}`}
                   >
                     {isBangla ? p.bn.title : p.en.title}
                   </h3>
 
                   <p
-                    className={`mb-4 text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                    className={`mb-4 font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
                   >
                     {isBangla ? p.bn.excerpt : p.en.excerpt}
                   </p>
@@ -560,7 +558,7 @@ export default function Blog({ lang = 'en' }) {
 
                     <span
                       className={`
-                        inline-flex items-center gap-1 text-xs
+                        inline-flex items-center gap-1 font-agni-body text-xs
                         font-bold [font-synthesis:weight] text-[#FF5722]
                         ${bn(lang)}
                       `}

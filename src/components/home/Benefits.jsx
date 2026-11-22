@@ -140,6 +140,7 @@ function TiltBenefitCard({ benefit, titleId, isBangla, lang }) {
         className={`
           group relative flex h-full flex-col
           rounded-[20px] border p-4
+          font-agni-body font-normal not-italic
           shadow-[0_6px_18px_-8px_rgba(0,51,102,0.08)]
           [transform-style:preserve-3d]
           transition-[transform,border-color,box-shadow,background-color]
@@ -171,8 +172,7 @@ function TiltBenefitCard({ benefit, titleId, isBangla, lang }) {
 
           <h3
             id={titleId}
-            className={`text-base sm:text-[17px] font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
-            style={display(lang)}
+            className={`font-agni-body text-base sm:text-[17px] font-normal not-italic leading-snug text-[#003366] ${bn(lang)}`}
           >
             {content.title}
           </h3>
@@ -180,7 +180,7 @@ function TiltBenefitCard({ benefit, titleId, isBangla, lang }) {
 
         {/* Description */}
         <p
-          className={`mb-3.5 text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+          className={`mb-3.5 font-agni-body text-sm font-normal not-italic leading-relaxed text-slate-600 ${bn(lang)}`}
         >
           {content.desc}
         </p>
@@ -190,7 +190,7 @@ function TiltBenefitCard({ benefit, titleId, isBangla, lang }) {
           className={`
             mt-auto flex min-h-9 items-center justify-between gap-2
             border-t border-[#003366]/10 pt-2.5
-            text-xs sm:text-sm font-bold [font-synthesis:weight] text-[#003366]
+            font-agni-body text-xs sm:text-sm font-normal not-italic text-[#003366]
             ${bn(lang)}
           `}
         >
@@ -239,11 +239,12 @@ export default function Benefits({ lang = 'en' }) {
       lang={lang}
       aria-labelledby="benefits-title"
       className="
-        relative overflow-hidden
+        agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
         bg-[#F8FAFF]
         bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
         [background-size:22px_22px]
+        py-0!
       "
     >
       {/* Subtle surface fade */}
@@ -260,7 +261,7 @@ export default function Benefits({ lang = 'en' }) {
               mb-2 inline-flex items-center gap-2
               rounded-full border border-[#0052CC]/15
               bg-white px-3 py-0.5
-              text-[11px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#0052CC]
+              text-[11px] font-normal not-italic uppercase tracking-wider text-[#0052CC]
               shadow-2xs
               ${bn(lang)}
             `}
@@ -271,7 +272,7 @@ export default function Benefits({ lang = 'en' }) {
 
           <h2
             id="benefits-title"
-            className={`mb-2 text-[clamp(24px,3.8vw,36px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
+            className={`mb-2 text-[clamp(24px,3.8vw,36px)] font-normal not-italic leading-tight text-[#003366] ${bn(lang)}`}
             style={display(lang)}
           >
             {isBangla
@@ -280,7 +281,7 @@ export default function Benefits({ lang = 'en' }) {
           </h2>
 
           <p
-            className={`mx-auto max-w-xl text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+            className={`mx-auto max-w-xl text-sm font-normal not-italic leading-relaxed text-slate-600 ${bn(lang)}`}
           >
             {isBangla
               ? 'অগ্নি সিস্টেমসের ২৫+ বছরের অভিজ্ঞতায় তৈরি বাংলাদেশের সেরা আইপি টেলিফোনি সমাধান।'

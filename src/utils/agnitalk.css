@@ -1,23 +1,70 @@
-/* Tailwind is already imported in your existing index.css. */
+/* Fonts */
+@font-face {
+  font-family: "Lovelo";
+  src: url("/fonts/Lovelo-Black.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
+@font-face {
+  font-family: "Questrial";
+  src: url("/fonts/Questrial-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Tailwind font utilities */
 @theme inline {
   --font-agni-heading: "Lovelo", sans-serif;
   --font-agni-body: "Questrial", sans-serif;
 }
 
-/* Only applies to the AgniTalk components. */
+/* Base styles and shared tokens */
 .agnitalk-ui {
+  --agni-display: "Lovelo", sans-serif;
+  --agni-body: "Questrial", sans-serif;
+
+  --logo-blue: #0088d0;
+  --logo-red: #e00010;
+  --logo-orange: #f58220;
+  --logo-yellow: #f8e800;
+
   width: 100%;
-  font-family: var(--font-agni-body);
+  font-family: var(--agni-body);
   font-weight: 400;
   font-synthesis: none;
 }
 
+/* Bengali font tokens */
+.agnitalk-ui:lang(bn) {
+  --agni-display: "Nirmala UI", "Vrinda", sans-serif;
+  --agni-body: "Nirmala UI", "Vrinda", sans-serif;
+
+  font-family: var(--agni-body);
+}
+
+.agnitalk-ui .bengali {
+  font-family: "Nirmala UI", "Vrinda", sans-serif;
+}
+
+/* Explicit font utilities */
+.agnitalk-ui .font-agni-heading {
+  font-family: var(--agni-display);
+  font-weight: 400;
+}
+
+.agnitalk-ui .font-agni-body {
+  font-family: var(--agni-body);
+}
+
+/* Form controls */
 .agnitalk-ui button,
 .agnitalk-ui input,
 .agnitalk-ui select,
 .agnitalk-ui textarea {
-  font-family: inherit;
+  font-family: var(--agni-body);
   font-weight: 400;
 }
 
@@ -25,46 +72,340 @@
   cursor: pointer;
 }
 
-.agnitalk-ui .font-agni-heading {
-  font-family: var(--font-agni-heading);
-  font-weight: 400;
-}
-
-/* System fallback for Bengali characters. */
-.agnitalk-ui:lang(bn),
-.agnitalk-ui:lang(bn) .font-agni-heading {
-  font-family: "Nirmala UI", "Vrinda", sans-serif;
-}
-
-/* Visible keyboard focus. */
+/* Keyboard focus */
 .agnitalk-ui a:focus-visible,
 .agnitalk-ui button:focus-visible {
   outline: 2px solid #ff5722;
   outline-offset: 4px;
 }
 
-/* Respect reduced-motion preferences. */
-@media (prefers-reduced-motion: reduce) {
-  .agnitalk-ui *,
-  .agnitalk-ui *::before,
-  .agnitalk-ui *::after {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
+/* Shared buttons */
+.agnitalk-ui .btn-primary,
+.agnitalk-ui .btn-secondary,
+.agnitalk-ui .btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--agni-body);
+  font-size: 15px;
+  border-radius: 8px;
+  padding: 13px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.agnitalk-ui .btn-primary {
+  background: #e64a19;
+  color: white;
+  border: 1px solid #e64a19;
+}
+
+.agnitalk-ui .btn-primary:hover {
+  background: #c83e13;
+  border-color: #c83e13;
+}
+
+.agnitalk-ui .btn-secondary {
+  background: transparent;
+  color: #003366;
+  border: 1px solid #003366;
+}
+
+.agnitalk-ui .btn-secondary:hover {
+  background: #003366;
+  color: white;
+}
+
+.agnitalk-ui .btn-outline-white {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.agnitalk-ui .btn-outline-white:hover {
+  background: white;
+  color: #003366;
+}
+
+/* Rolling text */
+.agnitalk-ui .roll-text {
+  display: inline-block;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.agnitalk-ui .roll-text:lang(bn) {
+  line-height: 1.75;
+}
+
+.agnitalk-ui .roll-text__line {
+  display: block;
+}
+
+.agnitalk-ui .roll-text__line--copy {
+  display: none;
+}
+
+/* Shared cards */
+.agnitalk-ui .card {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: none;
+  transition: border-color 0.2s ease;
+}
+
+.agnitalk-ui .card:hover {
+  border-color: #b8c6d4;
+}
+
+/* Existing section spacing */
+.agnitalk-ui section {
+  padding: 80px 0;
+}
+
+/* Store badges */
+.agnitalk-ui .store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a202c;
+  color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.agnitalk-ui .store-badge:hover {
+  background: #2d3748;
+  transform: translateY(-2px);
+}
+
+/* Phone mockup */
+.agnitalk-ui .phone-mockup {
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: #0a0a0a;
+}
+
+/* Sticky mobile CTA */
+.agnitalk-ui .mobile-sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 12px 16px;
+  background: #003366;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+  .agnitalk-ui .mobile-sticky-cta {
+    display: none;
   }
 }
 
+/* FAQ */
+.agnitalk-ui .faq-item {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.agnitalk-ui .faq-question {
+  width: 100%;
+  text-align: left;
+  padding: 20px 0;
+  font-family: var(--agni-body);
+  font-size: 16px;
+  color: #1a202c;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: color 0.2s ease;
+}
+
+.agnitalk-ui .faq-question:hover {
+  color: #0052cc;
+}
+
+.agnitalk-ui .faq-answer {
+  padding-bottom: 20px;
+  color: #4a5568;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Rate cards */
+.agnitalk-ui .rate-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.agnitalk-ui .rate-card:hover {
+  border-color: #ff5722;
+  box-shadow: 0 4px 20px rgba(255, 87, 34, 0.1);
+}
+
+/* Rate calculator slider */
+.agnitalk-ui .rate-slider {
+  --slider-progress: 13%;
+
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #0099ff var(--slider-progress),
+    #dce5ef var(--slider-progress)
+  );
+  cursor: pointer;
+}
+
+.agnitalk-ui .rate-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #0052cc;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.3);
+}
+
+.agnitalk-ui .rate-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #0052cc;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.3);
+}
+
+/* App screenshots */
+.agnitalk-ui .screenshot-slide {
+  flex-shrink: 0;
+  scroll-snap-align: center;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Header navigation and buttons */
+.agnitalk-ui.agnitalk-header nav a,
+.agnitalk-ui.agnitalk-header button,
+.agnitalk-ui.agnitalk-header a[href="/download"] {
+  font-weight: 700;
+  font-synthesis: weight;
+}
+
+/* Hero store button labels */
+.agni-hero .agni-hero-button-label {
+  font-weight: 700;
+  font-synthesis: weight;
+}
+
+/*
+ * Headings use the naturally heavy Lovelo Black font.
+ * Weight 400 matches its @font-face mapping above.
+ */
+.agnitalk-ui :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--agni-display);
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+/* Animated and highlighted heading spans */
+.agnitalk-ui :is(h1, h2, h3, h4, h5, h6) span {
+  font-family: inherit;
+  font-weight: inherit;
+  font-synthesis: inherit;
+}
+
+/* Paragraphs */
+.agnitalk-ui p {
+  font-family: var(--agni-body);
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+/* Bengali headings */
+.agnitalk-ui :is(h1, h2, h3, h4, h5, h6):lang(bn) {
+  font-family: "Nirmala UI", "Vrinda", sans-serif;
+  font-weight: 700;
+  font-synthesis: weight;
+}
+
+/* Bengali paragraphs */
+.agnitalk-ui p:lang(bn) {
+  font-family: "Nirmala UI", "Vrinda", sans-serif;
+  font-weight: 400;
+}
+
+/* Phone floating animation */
 @keyframes agniHeroFloat {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translateY(0);
   }
 
   50% {
-    transform: translate3d(0, -12px, 0);
+    transform: translateY(-12px);
   }
 }
 
+/* Floating badges */
 @keyframes agniHeroBadge {
   0%,
   100% {
@@ -76,231 +417,7 @@
   }
 }
 
-/* =========================================================================
-   AgniTalk page sections (everything below is scoped to .agnitalk-ui)
-   ========================================================================= */
-
-/* Font tokens used by inline styles. Bengali switches to the system fallback. */
-.agnitalk-ui {
-  --agni-display: "Lovelo", sans-serif;
-  --agni-body: "Questrial", sans-serif;
-
-  /* AgniTalk logo colours */
-  --logo-blue: #0088D0;
-  --logo-red: #E00010;
-  --logo-orange: #F58220;
-  --logo-yellow: #F8E800;
-}
-
-.agnitalk-ui:lang(bn) {
-  --agni-display: "Nirmala UI", "Vrinda", sans-serif;
-  --agni-body: "Nirmala UI", "Vrinda", sans-serif;
-}
-
-/* This project uses Lovelo and Questrial at 400: keep every element at 400,
-   even where a section uses Tailwind's font-bold / font-semibold. */
-.agnitalk-ui *,
-.agnitalk-ui *::before,
-.agnitalk-ui *::after {
-  font-weight: 400;
-  font-synthesis: none;
-}
-
-.agnitalk-ui :is(h1, h2, h3, h4, h5) {
-  font-family: var(--agni-display);
-}
-
-.agnitalk-ui .bengali {
-  font-family: "Nirmala UI", "Vrinda", sans-serif;
-}
-
-.agnitalk-ui {
-  /* Shared actions: clear labels, solid fills and a small colour change. */
-  .btn-primary, .btn-secondary, .btn-outline-white {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--agni-body);
-    font-size: 15px;
-    border-radius: 8px;
-    padding: 13px 24px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
-  }
-  .btn-primary { background: #E64A19; color: white; border: 1px solid #E64A19; }
-  .btn-primary:hover { background: #C83E13; border-color: #C83E13; }
-  .btn-secondary { background: transparent; color: #003366; border: 1px solid #003366; }
-  .btn-secondary:hover { background: #003366; color: white; }
-  .btn-outline-white { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.6); }
-  .btn-outline-white:hover { background: white; color: #003366; }
-  .roll-text { display: inline-block; line-height: 1.4; vertical-align: middle; }
-  &:lang(bn) .roll-text { line-height: 1.75; }
-  .roll-text__line { display: block; }
-  .roll-text__line--copy { display: none; }
-
-  .card {
-    background: white;
-    border-radius: 10px;
-    border: 1px solid #E2E8F0;
-    box-shadow: none;
-    transition: border-color 0.2s ease;
-  }
-
-  .card:hover {
-    border-color: #B8C6D4;
-  }
-
-  /* Section spacing */
-  & section {
-    padding: 80px 0;
-  }
-
-  /* Store badge */
-  .store-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: #1a202c;
-    color: white;
-    border-radius: 10px;
-    padding: 10px 20px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .store-badge:hover {
-    background: #2d3748;
-    transform: translateY(-2px);
-  }
-
-  /* Phone mockup */
-  .phone-mockup {
-    border-radius: 36px;
-    overflow: hidden;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.1);
-    background: #0a0a0a;
-  }
-
-
-  /* Sticky mobile CTA */
-  .mobile-sticky-cta {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    padding: 12px 16px;
-    background: #003366;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
-  }
-
-  @media (min-width: 768px) {
-    .mobile-sticky-cta {
-      display: none;
-    }
-  }
-
-  /* FAQ accordion */
-  .faq-item {
-    border-bottom: 1px solid #E2E8F0;
-  }
-
-  .faq-question {
-    width: 100%;
-    text-align: left;
-    padding: 20px 0;
-    font-family: var(--agni-body);
-    font-size: 16px;
-    color: #1a202c;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    transition: color 0.2s ease;
-  }
-
-  .faq-question:hover {
-    color: #0052CC;
-  }
-
-  .faq-answer {
-    padding-bottom: 20px;
-    color: #4a5568;
-    font-size: 15px;
-    line-height: 1.7;
-  }
-
-  /* Rate card */
-  .rate-card {
-    background: white;
-    border-radius: 12px;
-    border: 1px solid #E2E8F0;
-    padding: 20px;
-    text-align: center;
-    transition: all 0.2s ease;
-  }
-
-  .rate-card:hover {
-    border-color: #FF5722;
-    box-shadow: 0 4px 20px rgba(255,87,34,0.1);
-  }
-
-  .rate-slider {
-    --slider-progress: 13%;
-    appearance: none;
-    height: 6px;
-    border-radius: 999px;
-    background: linear-gradient(to right, #0099FF var(--slider-progress), #DCE5EF var(--slider-progress));
-    cursor: pointer;
-  }
-
-  .rate-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    background: #0052CC;
-    border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(0, 82, 204, 0.3);
-  }
-
-  .rate-slider::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 999px;
-    background: #0052CC;
-    border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(0, 82, 204, 0.3);
-  }
-
-
-  .screenshot-slide {
-    flex-shrink: 0;
-    scroll-snap-align: center;
-  }
-
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
-
-/* Lenis smooth scroll */
-html.lenis,
-html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: hidden; }
+/* Benefit entrance animation */
 @keyframes agniBenefitEnter {
   from {
     opacity: 0;
@@ -313,44 +430,13 @@ html.lenis body { height: auto; }
   }
 }
 
-/* Header navigation and button text */
-.agnitalk-ui.agnitalk-header nav a,
-.agnitalk-ui.agnitalk-header button,
-.agnitalk-ui.agnitalk-header a[href="/download"] {
-  font-weight: 700;
-  font-synthesis: weight;
-}
-
-/* Allow synthetic bold for the existing 400-weight fonts. */
-.agni-hero .agni-hero-title,
-.agni-hero .agni-hero-title span {
-  font-weight: 700;
-  font-synthesis: weight;
-}
-
-.agni-hero .agni-hero-button-label {
-  font-weight: 700;
-  font-synthesis: weight;
-}
-
-@keyframes agniHeroFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-12px);
-  }
-}
-
-@keyframes agniHeroBadge {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .agnitalk-ui *,
+  .agnitalk-ui *::before,
+  .agnitalk-ui *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
