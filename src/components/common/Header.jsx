@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
 const navigation = [
+  { to: '/about', en: 'About', bn: 'আমাদের সম্পর্কে' },
   { to: '/features', en: 'Features', bn: 'ফিচার' },
   { to: '/rates', en: 'Rates', bn: 'রেট' },
   { to: '/how-it-works', en: 'How It Works', bn: 'কীভাবে' },

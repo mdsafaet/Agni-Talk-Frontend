@@ -479,22 +479,22 @@ export default function FAQ({ lang = 'en' }) {
 
             <span aria-hidden="true" className="text-slate-300">·</span>
 
-            <a
+            {/* <a
               href="https://wa.me/8801894829135"
               className="inline-flex items-center gap-1.5 font-bold [font-synthesis:weight] text-[#28A745] hover:underline"
             >
               <FiMessageCircle aria-hidden="true" className="h-3.5 w-3.5" />
               WhatsApp 01894829135
-            </a>
+            </a> */}
 
             <span aria-hidden="true" className="text-slate-300">·</span>
 
             <a
-              href="mailto:agniapps@agni.com"
+              href="mailto:customer.care@agni.com"
               className="inline-flex items-center gap-1.5 font-bold [font-synthesis:weight] text-[#003366] hover:underline"
             >
               <FiMail aria-hidden="true" className="h-3.5 w-3.5" />
-              agniapps@agni.com
+              - customer.care@agni.com
             </a>
           </p>
         </div>

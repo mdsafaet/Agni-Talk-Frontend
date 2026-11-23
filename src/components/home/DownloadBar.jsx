@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FaApple, FaGooglePlay } from 'react-icons/fa'
+import { FiSmartphone } from 'react-icons/fi'
 import { bn, display } from '../../utils/lang'
 
 function TiltBarLink({ children, label, variant = 'primary' }) {
@@ -101,12 +102,15 @@ export default function DownloadBar({ lang = 'en' }) {
     >
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-5 lg:flex-row">
-          {/* Left Copy & Status Pill */}
+          {/* Left Copy & App Badge */}
           <div className="flex flex-col items-center gap-2 text-center lg:items-start lg:text-left">
             <span
-              className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-agni-body text-[11px] font-normal not-italic uppercase tracking-wider text-blue-100 ${bn(lang)}`}
+              className={`inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-agni-body text-[11px] font-normal not-italic uppercase tracking-wider text-blue-100 ${bn(lang)}`}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
+              <FiSmartphone
+                aria-hidden="true"
+                className="h-3.5 w-3.5 shrink-0 text-[#FF5722]"
+              />
               {isBangla ? 'ফ্রি অ্যাপ ইনস্টলেশন' : 'Free App Download'}
             </span>
 

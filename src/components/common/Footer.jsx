@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { bn, display } from '../../utils/lang'
 
 const quickLinks = [
   { to: '/features', en: 'Features', bn: 'ফিচার' },
@@ -10,16 +11,14 @@ const quickLinks = [
 export default function Footer({ lang = 'en' }) {
   const isBangla = lang === 'bn'
 
-  const headingClass =
-    'font-agni-heading mb-3 text-sm font-normal text-[#003366] sm:text-base'
+  const headingClass = `mb-3 text-base font-normal normal-case tracking-normal text-[#003366] sm:text-lg ${bn(lang)}`
 
-  const linkClass =
-    'inline-block max-w-full py-1.5 text-xs leading-6 text-slate-600 transition-colors duration-200 hover:text-[#0052CC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0052CC] motion-reduce:transition-none sm:text-sm'
+  const linkClass = `inline-block max-w-full py-1.5 text-xs leading-6 text-slate-600 transition-colors duration-200 hover:text-[#0052CC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0052CC] motion-reduce:transition-none sm:text-sm ${bn(lang)}`
 
   return (
     <footer
       lang={lang}
-      className="agnitalk-ui w-full border-t border-slate-200 bg-white text-slate-700"
+      className={`agnitalk-ui w-full border-t border-slate-200 bg-white text-slate-700 ${bn(lang)}`}
     >
       <div className="w-full px-4 pt-10 sm:px-6 lg:px-10">
         <div className="grid grid-cols-3 gap-x-3 gap-y-6 pb-8 sm:gap-x-6 lg:grid-cols-[1.1fr_0.8fr_1.2fr_0.9fr]">
@@ -45,7 +44,7 @@ export default function Footer({ lang = 'en' }) {
                   className="h-6 w-auto max-w-[130px] object-contain"
                 />
 
-                <span className="font-agni-body text-xs leading-5 text-slate-500">
+                <span className="text-xs leading-5 text-slate-500">
                   by Agni Systems PLC.
                 </span>
               </div>
@@ -60,7 +59,7 @@ export default function Footer({ lang = 'en' }) {
 
           {/* Quick links */}
           <div className="min-w-0">
-            <h2 className={headingClass}>
+            <h2 className={headingClass} style={display(lang)}>
               {isBangla ? 'দ্রুত লিংক' : 'Quick Links'}
             </h2>
 
@@ -79,15 +78,15 @@ export default function Footer({ lang = 'en' }) {
 
           {/* Support */}
           <div className="min-w-0">
-            <h2 className={headingClass}>
+            <h2 className={headingClass} style={display(lang)}>
               {isBangla ? 'সহায়তা' : 'Support'}
             </h2>
 
             <ul>
-              <li className="flex flex-wrap items-baseline gap-x-1 text-xs leading-6 text-slate-600 sm:text-sm">
-                <span>
-                  {isBangla ? 'হটলাইন:' : 'Hotline:'}
-                </span>
+              <li
+                className={`flex flex-wrap items-baseline gap-x-1 text-xs leading-6 text-slate-600 sm:text-sm ${bn(lang)}`}
+              >
+                <span>{isBangla ? 'হটলাইন:' : 'Hotline:'}</span>
 
                 <a href="tel:16620" className={linkClass}>
                   16620
@@ -95,17 +94,17 @@ export default function Footer({ lang = 'en' }) {
 
                 <span>{isBangla ? 'ও' : 'and'}</span>
 
-                <a href="tel:09606100520" className={linkClass}>
-                  09606100520
+                <a href="tel:+8809606100700" className={linkClass}>
+                  +8809606100700
                 </a>
               </li>
 
               <li>
                 <a
-                  href="mailto:agniapps@agni.com"
+                  href="mailto:customer.care@agni.com"
                   className={`${linkClass} [overflow-wrap:anywhere]`}
                 >
-                  agniapps@agni.com
+                  customer.care@agni.com
                 </a>
               </li>
 
@@ -117,33 +116,15 @@ export default function Footer({ lang = 'en' }) {
             </ul>
           </div>
 
-          {/* Legal and download */}
+          {/* Download */}
           <div className="min-w-0">
-            {/* <h2 className={headingClass}>
-              {isBangla ? 'নীতিমালা' : 'Legal'}
-            </h2> */}
-
-            {/* <ul>
-              <li>
-                <Link to="/privacy-policy" className={linkClass}>
-                  {isBangla ? 'গোপনীয়তা নীতি' : 'Privacy Policy'}
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/terms" className={linkClass}>
-                  {isBangla ? 'সেবার শর্তাবলি' : 'Terms of Service'}
-                </Link>
-              </li>
-            </ul> */}
-
-            <h2 className={`${headingClass}`}>
+            <h2 className={headingClass} style={display(lang)}>
               {isBangla ? 'অগ্নিটক' : 'Get AgniTalk'}
             </h2>
 
             <Link
               to="/download"
-              className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#C94316] px-3 py-2.5 text-center text-xs leading-5 text-white transition-[background-color,transform] duration-300 ease-out hover:bg-[#0052CC] focus-visible:bg-[#0052CC] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0052CC] motion-safe:hover:-translate-y-0.5 motion-reduce:transition-none sm:px-5 sm:text-sm"
+              className={`inline-flex min-h-11 items-center justify-center rounded-lg bg-[#C94316] px-3 py-2.5 text-center text-xs leading-5 text-white transition-[background-color,transform] duration-300 ease-out hover:bg-[#0052CC] focus-visible:bg-[#0052CC] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0052CC] motion-safe:hover:-translate-y-0.5 motion-reduce:transition-none sm:px-5 sm:text-sm ${bn(lang)}`}
             >
               {isBangla ? 'ডাউনলোড করুন' : 'Download App'}
             </Link>

@@ -14,6 +14,7 @@ import Blog from '../pages/Blog'
 import FAQ from '../pages/FAQ'
 import Download from '../pages/Download'
 import NotFound from '../pages/NotFound'
+// import AboutUs from '../pages/AboutUs'
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
         path: 'download',
         element: <Download />,
       },
+      // {
+      //   path:'about-us',
+      //   element: <AboutUs />,
+      // },
       {
         path: '*',
         element: <NotFound />,

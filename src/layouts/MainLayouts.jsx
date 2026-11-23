@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
 import ScrollToTop from '../components/shared/ScrollToTop'
+import Chatbot from '../components/chatbot/Chatbot'
 
 
 const MainLayouts = () => {
@@ -18,6 +19,8 @@ const MainLayouts = () => {
       </main>
 
       <Footer lang={lang} />
+
+      <Chatbot lang={lang} />
     </div>
   )
 }

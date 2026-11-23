@@ -256,20 +256,6 @@ export default function Benefits({ lang = 'en' }) {
       <div className="relative mx-auto max-w-7xl px-4 py-9 sm:px-6 sm:py-11 lg:px-8 lg:py-12">
         {/* Compact Section Heading */}
         <div className="mx-auto mb-7 max-w-2xl text-center sm:mb-8">
-          <span
-            className={`
-              mb-2 inline-flex items-center gap-2
-              rounded-full border border-[#0052CC]/15
-              bg-white px-3 py-0.5
-              text-[11px] font-normal not-italic uppercase tracking-wider text-[#0052CC]
-              shadow-2xs
-              ${bn(lang)}
-            `}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
-            {isBangla ? 'অগ্নিটক সুবিধা' : 'Why AgniTalk'}
-          </span>
-
           <h2
             id="benefits-title"
             className={`mb-2 text-[clamp(24px,3.8vw,36px)] font-normal not-italic leading-tight text-[#003366] ${bn(lang)}`}

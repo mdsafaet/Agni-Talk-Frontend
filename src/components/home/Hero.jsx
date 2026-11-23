@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FaApple, FaGooglePlay } from 'react-icons/fa'
+import { FaApple, FaFire, FaGooglePlay } from 'react-icons/fa'
 import {
   FiBarChart2,
   FiLock,
   FiPhone,
   FiShield,
   FiStar,
-  FiTrendingUp,
 } from 'react-icons/fi'
 
 import CountText from '../shared/CountText'
@@ -321,12 +320,10 @@ export default function Hero({ lang = 'en' }) {
                 shadow-[0_4px_14px_-4px_rgba(0,82,204,0.12)]
               "
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FF5722]/10 text-[#FF5722]">
-                <FiTrendingUp
-                  aria-hidden="true"
-                  className="h-3.5 w-3.5 shrink-0"
-                />
-              </span>
+              <FaFire
+                aria-hidden="true"
+                className="h-4 w-4 shrink-0 text-[#FF5722]"
+              />
 
               <span>
                 {isBangla
