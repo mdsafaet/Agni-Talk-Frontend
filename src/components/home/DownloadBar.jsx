@@ -1,173 +1,503 @@
+
 import { Link } from 'react-router-dom'
 import { FaApple, FaGooglePlay } from 'react-icons/fa'
-import { FiSmartphone } from 'react-icons/fi'
+import {
+  FiSmartphone,
+  FiDownload,
+  FiArrowUpRight,
+} from 'react-icons/fi'
+import {
+  motion,
+  MotionConfig,
+  useReducedMotion,
+} from 'framer-motion'
+
 import { bn, display } from '../../utils/lang'
 
-function TiltBarLink({ children, label, variant = 'primary' }) {
-  const handlePointerMove = (event) => {
-    if (
-      event.pointerType !== 'mouse' ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return
-    }
+const MotionLink = motion.create(Link)
 
-    const wrapper = event.currentTarget
-    const rect = wrapper.getBoundingClientRect()
-    if (!rect.width || !rect.height) return
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+}
 
-    const x = Math.max(
-      0,
-      Math.min(1, (event.clientX - rect.left) / rect.width),
-    )
-    const y = Math.max(
-      0,
-      Math.min(1, (event.clientY - rect.top) / rect.height),
-    )
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+}
 
-    wrapper.style.setProperty('--button-x', `${(0.5 - y) * 14}deg`)
-    wrapper.style.setProperty('--button-y', `${(x - 0.5) * 14}deg`)
-    wrapper.style.setProperty('--button-lift', '-3px')
-  }
+/* ========================================
+   Animated brand background
+======================================== */
 
-  const resetTilt = (event) => {
-    const wrapper = event.currentTarget
-    wrapper.style.setProperty('--button-x', '0deg')
-    wrapper.style.setProperty('--button-y', '0deg')
-    wrapper.style.setProperty('--button-lift', '0px')
-  }
-
-  const variantStyles =
-    variant === 'primary'
-      ? 'border-white/15 bg-[#0052CC] text-white shadow-[0_10px_24px_-8px_rgba(0,0,0,0.35)] hover:border-white/30 hover:bg-[#0061f2]'
-      : 'border-white/20 bg-white text-[#003366] shadow-[0_10px_24px_-8px_rgba(0,0,0,0.28)] hover:bg-[#F8FAFF]'
-
+function BrandBackground({ reduced }) {
   return (
     <div
-      onPointerMove={handlePointerMove}
-      onPointerLeave={resetTilt}
-      onPointerCancel={resetTilt}
-      className="group relative [perspective:800px]"
+      aria-hidden="true"
+      className="
+        pointer-events-none absolute inset-0
+        overflow-hidden
+      "
     >
-      <Link
-        to="/download"
-        aria-label={label}
-        className={`
-          relative inline-flex h-[50px] min-w-[162px]
-          shrink-0 items-center rounded-2xl border px-4
-          font-agni-body font-normal not-italic
-          [transform-style:preserve-3d]
-          transition-[transform,background-color,border-color,box-shadow]
-          duration-200 ease-out
-          focus-visible:outline-2
-          focus-visible:outline-offset-4
-          focus-visible:outline-[#FF5722]
-          motion-safe:[transform:translateY(var(--button-lift,0px))_rotateX(var(--button-x,0deg))_rotateY(var(--button-y,0deg))]
-          motion-safe:active:scale-[0.98]
-          motion-reduce:transition-none
-          ${variantStyles}
-        `}
+      <motion.svg
+        viewBox="0 0 1440 240"
+        preserveAspectRatio="xMidYMid slice"
+        className="absolute h-full w-full"
       >
-        <span
-          className="
-            pointer-events-none flex w-full items-center gap-3
-            motion-safe:[transform:translateZ(10px)]
-          "
+        <motion.g
+          fill="none"
+          strokeLinecap="round"
+          initial={false}
+          animate={
+            reduced
+              ? {}
+              : {
+                  x: [0, -25, 0],
+                  y: [0, 12, 0],
+                }
+          }
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
         >
-          {children}
-        </span>
-      </Link>
+          <path
+            d="M1050 360 C1200 200 1100 30 1510 -70"
+            stroke="#E00010"
+            strokeWidth="24"
+            opacity=".65"
+          />
+
+          <path
+            d="M1120 390 C1270 210 1170 40 1570 -40"
+            stroke="#F58220"
+            strokeWidth="34"
+          />
+
+          <path
+            d="M1190 420 C1340 220 1240 50 1630 -10"
+            stroke="#F8E800"
+            strokeWidth="18"
+          />
+        </motion.g>
+
+        <g
+          stroke="white"
+          strokeWidth="1"
+          opacity=".10"
+          fill="none"
+        >
+          <circle cx="1420" cy="220" r="180" />
+          <circle cx="1420" cy="220" r="230" />
+          <circle cx="1420" cy="220" r="280" />
+          <circle cx="1420" cy="220" r="330" />
+        </g>
+      </motion.svg>
+
+      {/* Background contrast layer */}
+      <div
+        className="
+          absolute inset-0
+          bg-linear-to-r
+          from-[#0088D0]
+          via-[#0088D0]/90
+          to-transparent
+        "
+      />
     </div>
   )
 }
 
-export default function DownloadBar({ lang = 'en' }) {
-  const isBangla = lang === 'bn'
+/* ========================================
+   Animated app icon
+======================================== */
 
+function AppIcon({ reduced }) {
   return (
-    <section
-      id="download-bar"
-      lang={lang}
-      aria-label={
-        isBangla ? 'অগ্নিটক অ্যাপ ডাউনলোড বার' : 'Download AgniTalk App'
-      }
+    <motion.div
+      variants={itemVariants}
+      aria-hidden="true"
       className="
-        agnitalk-ui relative overflow-hidden
-        border-y border-white/10
-        bg-[#003366]
-        bg-[radial-gradient(rgba(255,255,255,0.08)_0.85px,transparent_0.85px)]
-        [background-size:20px_20px]
-        py-7! sm:py-8!
+        relative flex h-[76px] w-[76px]
+        shrink-0 items-center justify-center
+        rounded-[22px]
+        border border-white/30
+        bg-white/12
+        backdrop-blur-md
+        sm:h-[84px] sm:w-[84px]
       "
     >
-      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-between gap-5 lg:flex-row">
-          {/* Left Copy & App Badge */}
-          <div className="flex flex-col items-center gap-2 text-center lg:items-start lg:text-left">
-            <span
-              className={`inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-agni-body text-[11px] font-normal not-italic uppercase tracking-wider text-blue-100 ${bn(lang)}`}
-            >
-              <FiSmartphone
-                aria-hidden="true"
-                className="h-3.5 w-3.5 shrink-0 text-[#FF5722]"
-              />
-              {isBangla ? 'ফ্রি অ্যাপ ইনস্টলেশন' : 'Free App Download'}
-            </span>
+      <motion.div
+        animate={
+          reduced
+            ? {}
+            : {
+                y: [0, -4, 0],
+                rotate: [-5, 3, -5],
+              }
+        }
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      >
+        <FiSmartphone
+          size={38}
+          strokeWidth={1.5}
+          className="text-white"
+        />
+      </motion.div>
 
-            <p
-              className={`text-base sm:text-lg font-normal not-italic text-white leading-snug ${bn(lang)}`}
-              style={display(lang)}
-            >
-              {isBangla
-                ? 'Android ও iOS-এ AgniTalk ডাউনলোড করুন — মিনিটেই শুরু করুন'
-                : 'Download AgniTalk on Android & iOS — Start Calling in Minutes'}
-            </p>
+      {/* Animated download indicator */}
+      <motion.span
+        animate={
+          reduced
+            ? {}
+            : {
+                y: [0, -3, 0],
+              }
+        }
+        transition={{
+          duration: 2.5,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="
+          absolute -right-2 -top-2
+          flex h-7 w-7
+          items-center justify-center
+          rounded-full
+          border-[3px] border-[#0088D0]
+          bg-[#F8E800]
+          text-[#003366]
+        "
+      >
+        <FiDownload size={13} strokeWidth={2.5} />
+      </motion.span>
+    </motion.div>
+  )
+}
+
+/* ========================================
+   Download button
+======================================== */
+
+function StoreButton({
+  apple = false,
+  isBangla,
+  reduced,
+}) {
+  const Icon = apple ? FaApple : FaGooglePlay
+
+  return (
+    <MotionLink
+      to="/download"
+      variants={itemVariants}
+      whileHover={
+        reduced
+          ? undefined
+          : {
+              y: -4,
+              scale: 1.025,
+            }
+      }
+      whileTap={
+        reduced
+          ? undefined
+          : {
+              scale: 0.97,
+            }
+      }
+      transition={{
+        type: 'spring',
+        stiffness: 350,
+        damping: 22,
+      }}
+      aria-label={
+        apple
+          ? isBangla
+            ? 'অ্যাপ স্টোর থেকে ডাউনলোড করুন'
+            : 'Download on the App Store'
+          : isBangla
+            ? 'গুগল প্লে থেকে ডাউনলোড করুন'
+            : 'Get it on Google Play'
+      }
+      className={`
+        group relative flex min-h-[58px]
+        min-w-0 items-center gap-3
+        overflow-hidden rounded-xl
+        border px-4 py-2.5
+        font-agni-body no-underline
+        transition-colors duration-300
+        sm:min-w-[175px]
+        focus-visible:outline-2
+        focus-visible:outline-offset-4
+        focus-visible:outline-[#F8E800]
+
+        ${
+          apple
+            ? `
+              border-white/25
+              bg-[#003366]
+              text-white
+              hover:bg-[#00284F]
+            `
+            : `
+              border-white
+              bg-white
+              text-[#003366]
+              hover:border-[#F8E800]
+              hover:bg-[#F8E800]
+            `
+        }
+      `}
+    >
+      <Icon
+        aria-hidden="true"
+        className={`
+          relative z-10 h-6 w-6 shrink-0
+          ${apple ? 'text-white' : 'text-[#0088D0]'}
+        `}
+      />
+
+      <span className="relative z-10 min-w-0 text-left">
+        <small
+          className={`
+            block text-[9px]
+            leading-tight tracking-wide
+            ${apple ? 'text-white/80' : 'text-slate-500'}
+          `}
+        >
+          {isBangla
+            ? 'ডাউনলোড করুন'
+            : apple
+              ? 'DOWNLOAD ON THE'
+              : 'GET IT ON'}
+        </small>
+
+        <strong
+          className="
+            mt-0.5 block
+            whitespace-nowrap
+            text-[15px] font-semibold
+            leading-tight
+            [font-synthesis:weight]
+            sm:text-[16px]
+          "
+        >
+          {apple ? 'App Store' : 'Google Play'}
+        </strong>
+      </span>
+
+      <FiArrowUpRight
+        aria-hidden="true"
+        className="
+          ml-auto hidden h-4 w-4 shrink-0
+          opacity-50
+          transition-transform duration-300
+          motion-safe:group-hover:-translate-y-0.5
+          motion-safe:group-hover:translate-x-0.5
+          sm:block
+        "
+      />
+    </MotionLink>
+  )
+}
+
+/* ========================================
+   Main Download Bar
+======================================== */
+
+export default function DownloadBar({ lang = 'en' }) {
+  const isBangla = lang === 'bn'
+  const reduced = useReducedMotion()
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <section
+        id="download-bar"
+        lang={lang}
+        aria-labelledby="download-bar-title"
+        className="
+          agnitalk-ui
+          relative isolate w-full
+          overflow-hidden
+          bg-[#0088D0]
+          py-6! sm:py-7! lg:py-8!
+        "
+      >
+        <BrandBackground reduced={reduced} />
+
+        <motion.div
+          variants={containerVariants}
+          initial={reduced ? false : 'hidden'}
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          className="
+            relative z-10 mx-auto
+            flex w-full max-w-7xl
+            flex-col items-center
+            justify-between gap-6
+            px-4 sm:px-6 lg:px-8
+            lg:flex-row lg:gap-10
+          "
+        >
+          {/* Left content */}
+          <div
+            className="
+              flex flex-col items-center
+              gap-4 text-center
+              sm:flex-row sm:gap-6 sm:text-left
+            "
+          >
+            <AppIcon reduced={reduced} />
+
+            <div className="min-w-0">
+              <motion.div
+                variants={itemVariants}
+                className={`
+                  mb-2 flex items-center
+                  justify-center gap-2
+                  text-[10px] tracking-[0.14em]
+                  text-white/85
+                  sm:justify-start
+                  ${isBangla ? 'tracking-normal!' : 'uppercase'}
+                  ${bn(lang)}
+                `}
+              >
+                <span
+                  aria-hidden="true"
+                  className="
+                    h-1.5 w-1.5 shrink-0
+                    rounded-full bg-[#F8E800]
+                  "
+                />
+
+                {isBangla
+                  ? 'অ্যান্ড্রয়েড ও আইওএসে পাওয়া যাচ্ছে'
+                  : 'Available on Android & iOS'}
+              </motion.div>
+
+              <motion.h2
+                id="download-bar-title"
+                variants={itemVariants}
+                style={display(lang)}
+                className={`
+                  m-0 font-agni-heading
+                  text-[24px] leading-[1.2]
+                  text-white
+                  sm:text-[28px] lg:text-[30px]
+                  ${bn(lang)}
+                `}
+              >
+                {isBangla
+                  ? 'আপনার পৃথিবী, একটি অ্যাপ।'
+                  : 'Your world. One app.'}
+              </motion.h2>
+
+              <motion.p
+                variants={itemVariants}
+                className={`
+                  mb-0 mt-2
+                  font-agni-body
+                  text-[13px] leading-relaxed
+                  text-white/90
+                  sm:text-[14px]
+                  ${bn(lang)}
+                `}
+              >
+                {isBangla
+                  ? 'অগ্নিটক ডাউনলোড করুন — মিনিটেই কথা বলা শুরু করুন।'
+                  : 'Download AgniTalk and start calling in minutes.'}
+              </motion.p>
+
+              {/* Brand color signature */}
+              <motion.div
+                variants={itemVariants}
+                aria-hidden="true"
+                className="
+                  mt-3 flex items-center
+                  justify-center gap-1
+                  sm:justify-start
+                "
+              >
+                <motion.span
+                  initial={false}
+                  animate={
+                    reduced
+                      ? {}
+                      : { width: [24, 34, 24] }
+                  }
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="
+                    h-[3px] w-6
+                    rounded-full bg-[#F8E800]
+                  "
+                />
+
+                <span
+                  className="
+                    h-[3px] w-4
+                    rounded-full bg-[#F58220]
+                  "
+                />
+
+                <span
+                  className="
+                    h-[3px] w-2
+                    rounded-full bg-[#E00010]
+                  "
+                />
+              </motion.div>
+            </div>
           </div>
 
-          {/* Right Store Badges */}
-          <div className="flex shrink-0 flex-wrap items-center justify-center gap-3.5">
-            <TiltBarLink
-              label="Get it on Google Play"
-              variant="primary"
-            >
-              <FaGooglePlay
-                aria-hidden="true"
-                className="h-5 w-5 shrink-0 text-white"
-              />
+          {/* Store download buttons */}
+          <div
+            className="
+              grid w-full max-w-[420px]
+              shrink-0 grid-cols-2
+              gap-2.5
+              sm:flex sm:w-auto sm:max-w-none
+              sm:gap-3
+            "
+          >
+            <StoreButton
+              isBangla={isBangla}
+              reduced={reduced}
+            />
 
-              <div className="font-agni-body font-normal not-italic text-left">
-                <span className="block text-[9px] font-normal not-italic uppercase tracking-wider text-blue-100">
-                  GET IT ON
-                </span>
-
-                <span className="agni-hero-button-label block text-[14px] font-normal not-italic leading-tight text-white">
-                  Google Play
-                </span>
-              </div>
-            </TiltBarLink>
-
-            <TiltBarLink
-              label="Download on the App Store"
-              variant="light"
-            >
-              <FaApple
-                aria-hidden="true"
-                className="h-6 w-6 shrink-0 text-[#003366]"
-              />
-
-              <div className="font-agni-body font-normal not-italic text-left">
-                <span className="block text-[9px] font-normal not-italic uppercase tracking-wider text-slate-500">
-                  DOWNLOAD ON THE
-                </span>
-
-                <span className="agni-hero-button-label block text-[14px] font-normal not-italic leading-tight text-[#003366]">
-                  App Store
-                </span>
-              </div>
-            </TiltBarLink>
+            <StoreButton
+              apple
+              isBangla={isBangla}
+              reduced={reduced}
+            />
           </div>
-        </div>
-      </div>
-    </section>
+        </motion.div>
+      </section>
+    </MotionConfig>
   )
 }

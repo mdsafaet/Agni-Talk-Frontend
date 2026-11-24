@@ -391,7 +391,6 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     </div>
                   </div>
 
-                  {/* Bullet Highlights (Questrial) */}
                   <ul className="mb-4 flex flex-col gap-1.5">
                     {t.highlights.map((point, index) => (
                       <li

@@ -1,655 +1,131 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FaApple, FaFire, FaGooglePlay } from 'react-icons/fa'
-import {
-  FiBarChart2,
-  FiLock,
-  FiPhone,
-  FiShield,
-  FiStar,
-} from 'react-icons/fi'
+import { FaApple, FaGooglePlay } from 'react-icons/fa'
+import { FiArrowUpRight, FiChevronLeft, FiChevronRight, FiLock, FiShield, FiStar, FiPause, FiPlay, FiBarChart2, FiPhone } from 'react-icons/fi'
+import { motion, AnimatePresence, MotionConfig, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion'
 
-import CountText from '../shared/CountText'
 
-const phoneScreens = [
-  {
-    src: '/app/agni-number.jpg',
-    alt: 'AgniTalk virtual number screen',
-    label: '09606 ID',
-  },
-  {
-    src: '/app/free-calls.jpg',
-    alt: 'AgniTalk free calls screen',
-    label: 'Free Calls',
-  },
-  {
-    src: '/app/low-rates.jpg',
-    alt: 'AgniTalk calling rates screen',
-    label: 'Low Rates',
-  },
-  {
-    src: '/app/low-bandwidth.jpg',
-    alt: 'AgniTalk low data usage screen',
-    label: 'Data Saver',
-  },
-  {
-    src: '/app/privacy.jpg',
-    alt: 'AgniTalk privacy screen',
-    label: 'Privacy',
-  },
+
+const reveal = { hidden: { opacity: 0, y: 42 }, visible: { opacity: 1, y: 0, transition: { duration: .8, ease: [.22, 1, .36, 1] } } }
+const stagger = { hidden: {}, visible: { transition: { staggerChildren: .13 } } }
+
+const screens = [
+  { src: '/app/agni-number.jpg', en: 'Your own number', bn: 'নিজস্ব নাম্বার', detail: 'A dedicated 09606 virtual number.', detailBn: 'নিজস্ব ০৯৬০৬ ভার্চুয়াল নাম্বার।' },
+  { src: '/app/free-calls.jpg', en: 'Free calls', bn: 'ফ্রি কল', detail: 'HD app-to-app voice and video calls.', detailBn: 'অ্যাপ থেকে অ্যাপে এইচডি ভয়েস ও ভিডিও কল।' },
+  { src: '/app/low-rates.jpg', en: 'Low rates', bn: 'কম কলরেট', detail: 'Affordable calls to any number.', detailBn: 'সাশ্রয়ী খরচে যেকোনো নাম্বারে কল।' },
+  { src: '/app/low-bandwidth.jpg', en: 'Data saver', bn: 'ডাটা সেভার', detail: 'Up to 70% lower data usage.', detailBn: '৭০% পর্যন্ত কম ডাটা ব্যবহার।' },
+  { src: '/app/privacy.jpg', en: 'Privacy', bn: 'গোপনীয়তা', detail: 'TLS encrypted communication.', detailBn: 'TLS এনক্রিপ্টেড যোগাযোগ।' },
 ]
 
-const QR_CELLS = [40, 46, 52, 58, 64, 70, 76]
-
-const QR_SOLID = [
-  [40, 40], [52, 40], [64, 40], [76, 40],
-  [40, 52], [64, 52], [76, 52],
-  [40, 64], [52, 64], [70, 64],
-  [40, 76], [58, 76], [76, 76],
-  [5, 40], [11, 40], [17, 40], [23, 40],
-  [5, 52], [17, 58], [29, 46], [29, 58],
-  [40, 5], [52, 5], [58, 11], [40, 17],
-  [52, 23], [64, 17], [64, 5],
-]
-
-const QR_NOISE = QR_CELLS.flatMap((x, i) =>
-  QR_CELLS.flatMap((y, j) =>
-    (i * 7 + j * 3) % 5 < 2 ? [[x, y]] : [],
-  ),
-)
-
-// Decorative illustration, not a working QR code.
-function QRIllustration() {
+function FloatingFeature({ className, icon, title, subtitle, delay, x, y, reduced }) {
   return (
-    <div className="rounded-[20px] border border-slate-200/90 bg-white/95 p-3 shadow-[0_14px_32px_-8px_rgba(0,51,102,0.16)] backdrop-blur-xs">
-      <div className="overflow-hidden rounded-xl border border-slate-100 bg-white p-1.5">
-        <svg
-          width="88"
-          height="88"
-          viewBox="0 0 100 100"
-          aria-hidden="true"
-        >
-          <rect width="100" height="100" fill="white" />
-
-          {[
-            [5, 5],
-            [67, 5],
-            [5, 67],
-          ].map(([x, y]) => (
-            <g key={`${x}-${y}`}>
-              <rect
-                x={x}
-                y={y}
-                width="28"
-                height="28"
-                rx="4"
-                fill="#003366"
-              />
-              <rect
-                x={x + 4}
-                y={y + 4}
-                width="20"
-                height="20"
-                rx="2"
-                fill="white"
-              />
-              <rect
-                x={x + 8}
-                y={y + 8}
-                width="12"
-                height="12"
-                rx="2"
-                fill="#003366"
-              />
-            </g>
-          ))}
-
-          {QR_NOISE.map(([x, y]) => (
-            <rect
-              key={`noise-${x}-${y}`}
-              x={x}
-              y={y}
-              width="4"
-              height="4"
-              rx="1"
-              fill="#003366"
-            />
-          ))}
-
-          {QR_SOLID.map(([x, y]) => (
-            <rect
-              key={`solid-${x}-${y}`}
-              x={x}
-              y={y}
-              width="4"
-              height="4"
-              rx="1"
-              fill="#003366"
-            />
-          ))}
-
-          <rect
-            x="45"
-            y="45"
-            width="12"
-            height="12"
-            rx="3"
-            fill="#FF5722"
-          />
-        </svg>
-      </div>
-
-      <p className="mt-2 text-center text-[11px] tracking-wide text-[#003366]">
-        Scan to Install
-      </p>
-    </div>
+    <motion.div className={`agt-float-position ${className}`} style={{ x: reduced ? 0 : x, y: reduced ? 0 : y }}>
+      <motion.div className="agt-float-enter" initial={reduced ? false : { opacity: 0, scale: .85, y: 18 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: .65, delay: reduced ? 0 : delay }}>
+        <div className="agt-float-card" style={{ '--float-delay': `${-delay * 3}s` }}>
+          <span className="agt-float-icon">{icon}</span>
+          <span className="agt-float-text"><strong>{title}</strong><small>{subtitle}</small></span>
+        </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
-function TiltStoreLink({ children, label, variant = 'dark' }) {
-  const handlePointerMove = (event) => {
-    if (
-      event.pointerType !== 'mouse' ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return
-    }
-
-    const wrapper = event.currentTarget
-    const rect = wrapper.getBoundingClientRect()
-    if (!rect.width || !rect.height) return
-
-    const x = Math.max(
-      0,
-      Math.min(1, (event.clientX - rect.left) / rect.width),
-    )
-    const y = Math.max(
-      0,
-      Math.min(1, (event.clientY - rect.top) / rect.height),
-    )
-
-    wrapper.style.setProperty('--button-x', `${(0.5 - y) * 14}deg`)
-    wrapper.style.setProperty('--button-y', `${(x - 0.5) * 14}deg`)
-    wrapper.style.setProperty('--button-lift', '-3px')
-  }
-
-  const resetTilt = (event) => {
-    const wrapper = event.currentTarget
-    wrapper.style.setProperty('--button-x', '0deg')
-    wrapper.style.setProperty('--button-y', '0deg')
-    wrapper.style.setProperty('--button-lift', '0px')
-  }
-
-  const variantStyles =
-    variant === 'dark'
-      ? 'border-[#003366] bg-[#003366] text-white shadow-[0_12px_24px_-8px_rgba(0,51,102,0.45)] hover:border-[#0052CC] hover:bg-[#0052CC] hover:shadow-[0_16px_30px_-8px_rgba(0,82,204,0.45)]'
-      : 'border-slate-200/90 bg-white text-[#003366] shadow-[0_10px_24px_-10px_rgba(15,23,42,0.14)] hover:border-[#0052CC]/30 hover:bg-[#F8FAFF] hover:shadow-[0_14px_28px_-8px_rgba(0,82,204,0.18)]'
-
-  return (
-    <div
-      onPointerMove={handlePointerMove}
-      onPointerLeave={resetTilt}
-      onPointerCancel={resetTilt}
-      className="group relative [perspective:800px]"
-    >
-      <Link
-        to="/download"
-        aria-label={label}
-        className={`
-          relative inline-flex h-[52px] min-w-[164px]
-          items-center rounded-2xl border px-4
-          [transform-style:preserve-3d]
-          transition-[transform,background-color,border-color,box-shadow]
-          duration-200 ease-out
-          focus-visible:outline-2
-          focus-visible:outline-offset-4
-          focus-visible:outline-[#FF5722]
-          motion-safe:[transform:translateY(var(--button-lift,0px))_rotateX(var(--button-x,0deg))_rotateY(var(--button-y,0deg))]
-          motion-safe:active:scale-[0.98]
-          motion-reduce:transition-none
-          ${variantStyles}
-        `}
-      >
-        <span
-          className="
-            pointer-events-none flex w-full items-center gap-3
-            motion-safe:[transform:translateZ(10px)]
-          "
-        >
-          {children}
-        </span>
-      </Link>
-    </div>
-  )
-}
-
-function StoreButtons() {
-  return (
-    <div className="mb-8 flex flex-wrap items-center gap-3.5">
-      <TiltStoreLink label="Get it on Google Play" variant="dark">
-        <FaGooglePlay
-          aria-hidden="true"
-          className="h-5 w-5 shrink-0 text-white"
-        />
-
-        <span className="font-agni-body text-left">
-          <span className="block text-[9px] uppercase tracking-wider text-blue-200">
-            GET IT ON
-          </span>
-          <span className="agni-hero-button-label block text-[14px] leading-tight text-white">
-            Google Play
-          </span>
-        </span>
-      </TiltStoreLink>
-
-      <TiltStoreLink label="Download on the App Store" variant="light">
-        <FaApple
-          aria-hidden="true"
-          className="h-6 w-6 shrink-0 text-[#003366] transition-colors group-hover:text-[#0052CC]"
-        />
-
-        <span className="font-agni-body text-left">
-          <span className="block text-[9px] uppercase tracking-wider text-slate-500">
-            Download on the
-          </span>
-          <span className="agni-hero-button-label block text-[14px] leading-tight text-[#003366]">
-            App Store
-          </span>
-        </span>
-      </TiltStoreLink>
-    </div>
-  )
+function StoreLink({ apple, bn }) {
+  const Icon = apple ? FaApple : FaGooglePlay
+  return <Link to="/download" className="agt-store" aria-label={apple ? 'Download on the App Store' : 'Get it on Google Play'}>
+    <Icon aria-hidden="true" size={23} />
+    <span><small>{bn ? 'ডাউনলোড করুন' : apple ? 'Download on the' : 'GET IT ON'}</small><strong>{apple ? 'App Store' : 'Google Play'}</strong></span>
+    <FiArrowUpRight className="agt-store-arrow" aria-hidden="true" />
+  </Link>
 }
 
 export default function Hero({ lang = 'en' }) {
-  const [activeScreen, setActiveScreen] = useState(0)
-  const isBangla = lang === 'bn'
-
+  const bn = lang === 'bn'
+  const [active, setActive] = useState(0)
+  const [playing, setPlaying] = useState(false)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveScreen(
-        (current) => (current + 1) % phoneScreens.length,
-      )
-    }, 3000)
-
-    return () => window.clearInterval(timer)
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setPlaying(!media.matches)
+    sync()
+    media.addEventListener('change', sync)
+    return () => media.removeEventListener('change', sync)
   }, [])
-
-  const bodyFont = isBangla
-    ? "font-['Nirmala_UI',Vrinda,sans-serif]"
-    : 'font-agni-body'
-
-  const headingFont = isBangla
-    ? "font-['Nirmala_UI',Vrinda,sans-serif]"
-    : 'font-agni-heading'
-
-  const badgeClass =
-    'absolute z-20 rounded-[20px] border border-slate-200/90 bg-white/95 px-3.5 py-2.5 shadow-[0_14px_30px_-8px_rgba(0,51,102,0.16)] backdrop-blur-xs motion-safe:animate-[agniHeroBadge_3.6s_ease-in-out_infinite]'
-
+  useEffect(() => {
+    if (!playing || hovered || focused) return
+    const timer = window.setInterval(() => setActive(i => (i + 1) % screens.length), 5000)
+    return () => window.clearInterval(timer)
+  }, [playing, hovered, focused, active])
+  const select = i => { setActive((i + screens.length) % screens.length); setPlaying(false) }
+  const current = screens[active]
+  const running = playing && !hovered && !focused
+  const reduced = useReducedMotion()
+  const px = useMotionValue(0)
+  const py = useMotionValue(0)
+  const rx = useSpring(useTransform(py, [-1, 1], [12, -12]), { stiffness: 110, damping: 22 })
+  const ry = useSpring(useTransform(px, [-1, 1], [-16, 16]), { stiffness: 110, damping: 22 })
+  const cardX = useSpring(useTransform(px, [-1, 1], [-12, 12]), { stiffness: 90, damping: 22 })
+  const cardY = useSpring(useTransform(py, [-1, 1], [-9, 9]), { stiffness: 90, damping: 22 })
+  const reverseX = useTransform(cardX, v => -v)
+  const reverseY = useTransform(cardY, v => -v)
+  const move = e => {
+    if (reduced || e.pointerType !== 'mouse') return
+    const r = e.currentTarget.getBoundingClientRect()
+    px.set((e.clientX - r.left) / r.width * 2 - 1)
+    py.set((e.clientY - r.top) / r.height * 2 - 1)
+  }
+  const reset = () => { px.set(0); py.set(0) }
   return (
-    <section
-      lang={lang}
-      aria-labelledby="hero-title"
-      className={`
-        agni-hero ${bodyFont}
-        relative w-full overflow-hidden
-        bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
-        py-16 sm:py-20 lg:py-24
-        font-normal text-[#1a202c]
-        antialiased [font-synthesis:none]
-      `}
-    >
-      {/* Subtle top-to-bottom surface fade for clean contrast */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,255,0.45)_0%,rgba(255,255,255,0.92)_100%)]"
-      />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* Left Column: Copy & CTAs */}
-          <div className="lg:col-span-7">
-            <div
-              className="
-                mb-5 inline-flex items-center gap-2.5
-                rounded-full border border-[#0052CC]/15
-                bg-white px-3.5 py-1.5
-                text-xs sm:text-sm text-[#003366]
-                shadow-[0_4px_14px_-4px_rgba(0,82,204,0.12)]
-              "
-            >
-              <FaFire
-                aria-hidden="true"
-                className="h-4 w-4 shrink-0 text-[#FF5722]"
-              />
-
-              <span>
-                {isBangla
-                  ? 'বাংলাদেশের সেরা আইপি টেলিফোনি অ্যাপ'
-                  : "Bangladesh's Leading IP Telephony App"}
-              </span>
+    <MotionConfig reducedMotion="user"><section className={`agt-hero ${bn ? 'agt-bn' : ''}`} lang={lang} aria-labelledby="hero-title">
+      <div className="agt-backdrop" aria-hidden="true"><svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice"><g fill="none" strokeLinecap="round"><path className="agt-ribbon r1" d="M870 -180 C520 180 1460 170 1180 520 S650 850 1000 1050"/><path className="agt-ribbon r2" d="M970 -180 C620 180 1560 170 1280 520 S750 850 1100 1050"/><path className="agt-ribbon r3" d="M1070 -180 C720 180 1660 170 1380 520 S850 850 1200 1050"/></g></svg></div><div className="agt-shell">
+        <div className="agt-main">
+          <motion.div className="agt-copy" variants={stagger} initial={reduced ? false : "hidden"} animate="visible">
+            <motion.div variants={reveal} className="agt-kicker"><span aria-hidden="true" />{bn ? 'বাংলাদেশের আইপি টেলিফোনি অ্যাপ' : 'IP TELEPHONY MADE FOR BANGLADESH'}</motion.div>
+            <h1 id="hero-title">{(bn ? ['দূরত্ব যতই হোক,','কথা হোক।'] : ['Talk more.','Spend less.']).map((line,i) => <span className="agt-line" key={line}><motion.span variants={reveal} className={i === 1 ? 'agt-accent' : ''}>{line}</motion.span></span>)}</h1>
+            <motion.p variants={reveal} className="agt-description">{bn ? 'নিজস্ব ০৯৬০৬ নাম্বার, ফ্রি এইচডি ভয়েস ও ভিডিও কল, মেসেজিং এবং সাশ্রয়ী কলরেট। বিকাশ দিয়ে সহজেই রিচার্জ করুন।' : 'Your own 09606 number. Free app-to-app HD calls and messaging, affordable calls to any number, and instant bKash top-ups.'}</motion.p>
+            <motion.div variants={reveal} className="agt-stores"><StoreLink bn={bn}/><StoreLink apple bn={bn}/></motion.div>
+            <motion.div variants={reveal} className="agt-trust">
+              <Link to="/security"><FiLock aria-hidden="true"/>{bn ? 'TLS এনক্রিপ্টেড' : 'TLS encrypted'}</Link>
+              <Link to="/about"><FiShield aria-hidden="true"/>{bn ? 'বিটিআরসি লাইসেন্সপ্রাপ্ত' : 'BTRC licensed'}</Link>
+              <Link to="/download"><FiStar aria-hidden="true"/>{bn ? '৪.৫ প্লে স্টোর' : '4.5 on Play Store'}</Link>
+            </motion.div>
+          </motion.div>
+          <motion.div initial={reduced ? false : {opacity:0, scale:.96}} animate={{opacity:1,scale:1}} transition={{duration:.85}} onPointerMove={move} onPointerLeave={reset} className="agt-stage" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false) }}>
+            <svg className="agt-signal" viewBox="0 0 600 600" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              {[85,125,165,205,245,285,325].map(r => <circle key={r} cx="350" cy="280" r={r} fill="none" stroke="currentColor" strokeWidth="1"/>)}
+              <path d="M0 280H600M350 0V600" stroke="currentColor" strokeDasharray="4 8" fill="none"/>
+            </svg>
+            <div className="agt-stage-top"><span>AGNI<span className="agt-orange">TALK</span> / APP</span><span>{String(active + 1).padStart(2,'0')} — 05</span></div>
+            <div className="agt-device-area"><svg className="agt-brand-sweep" viewBox="0 0 600 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-70 270 Q210 440 650 70" className="agt-sweep-orange"/><path d="M-70 307 Q210 477 650 107" className="agt-sweep-yellow"/><path d="M-70 327 Q210 497 650 127" className="agt-sweep-red"/></svg><div className="agt-poster" aria-hidden="true"><span>09606</span></div><div className="agt-wave" aria-hidden="true">{Array.from({length:25},(_,i)=><i key={i} style={{'--n':i,'--h':`${15+Math.round(Math.sin(i*1.7)**2*65)}px`}}/>)}</div>
+              
+              <motion.div className="agt-device-rig" style={{ rotateX: reduced ? 0 : rx, rotateY: reduced ? 0 : ry }}>
+                <div className="agt-device">
+                  <AnimatePresence initial={false}>
+                    <motion.img key={current.src} src={current.src} alt={bn ? current.bn : current.en} initial={reduced ? false : {opacity:0,x:28,scale:1.04}} animate={{opacity:1,x:0,scale:1}} exit={{opacity:0,x:-28}} transition={{duration:reduced ? 0 : .45}} width="600" height="1194" draggable={false}/>
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+              <FloatingFeature className="agt-float-data" icon={<FiBarChart2 aria-hidden="true" />} title={bn ? '৭০% ডাটা সেভিং' : '70% Data Saved'} subtitle="Byte Saver™" delay={.3} x={reverseX} y={cardY} reduced={reduced} />
+              <FloatingFeature className="agt-float-bkash" icon={<img src="/images/bkash.png" alt="" width="36" height="28" />} title={bn ? 'বিকাশ রেডি' : 'bKash Ready'} subtitle={bn ? 'তাৎক্ষণিক রিচার্জ' : 'Instant Top-up'} delay={.5} x={cardX} y={reverseY} reduced={reduced} />
+              <FloatingFeature className="agt-float-number" icon={<FiPhone aria-hidden="true" />} title={bn ? '০৯৬০৬ নাম্বার' : '09606 Number'} subtitle={bn ? 'ভার্চুয়াল আইপিটিএসপি' : 'Virtual IPTSP'} delay={.7} x={reverseX} y={reverseY} reduced={reduced} />
+              
+              
             </div>
-
-            <h1
-              id="hero-title"
-              className={`
-                agni-hero-title ${headingFont}
-                mb-5 text-[clamp(30px,4.6vw,54px)]
-                leading-[1.14] tracking-tight text-[#003366]
-              `}
-            >
-              {isBangla ? (
-                <CountText
-                  key="bn"
-                  text="অগ্নিটক — যেকোনো নাম্বারে কথা বলুন সবচেয়ে কম খরচে"
-                  highlight="সবচেয়ে কম খরচে"
-                  hold={2.5}
-                />
-              ) : (
-                <CountText
-                  key="en"
-                  text="HD IP Telephony & Free Messaging at Unbeatable Rates"
-                  highlight="Unbeatable Rates"
-                  hold={2.5}
-                />
-              )}
-            </h1>
-
-            <p
-              className={`
-                mb-8 text-base sm:text-lg leading-relaxed text-slate-600
-                ${isBangla ? 'max-w-xl' : 'max-w-[540px]'}
-              `}
-            >
-              {isBangla ? (
-                <>
-                  এইচডি ভয়েস কল, ০৯৬০৬ ভার্চুয়াল নাম্বার,
-                  বিকাশ/নগদ রিচার্জ এবং ৭০% ডাটা সেভিং টেকনোলজি —
-                  সবই এক অ্যাপে।
-                </>
-              ) : (
-                <>
-                  Get your dedicated{' '}
-                  <strong className="font-normal text-[#003366]">
-                    09606 virtual number
-                  </strong>
-                  . Enjoy free app-to-app HD voice &amp; video calls,
-                  instant bKash top-ups, and up to{' '}
-                  <strong className="font-normal text-[#003366]">
-                    70% lower data usage
-                  </strong>{' '}
-                  on any network across Bangladesh.
-                </>
-              )}
-            </p>
-
-            <StoreButtons />
-
-            {/* Compact Trust Pills */}
-            <ul className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-              <li>
-                <Link
-                  to="/security"
-                  className="
-                    group inline-flex min-h-11 items-center gap-2
-                    rounded-2xl border border-slate-200/90
-                    bg-white px-3.5 py-2 text-xs sm:text-sm text-[#003366]
-                    shadow-2xs
-                    transition-[transform,border-color,box-shadow]
-                    duration-200
-                    hover:border-emerald-300 hover:shadow-sm
-                    focus-visible:outline-2
-                    focus-visible:outline-offset-4
-                    focus-visible:outline-emerald-600
-                    motion-safe:hover:-translate-y-0.5
-                    motion-reduce:transition-none
-                  "
-                >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                    <FiLock
-                      aria-hidden="true"
-                      strokeWidth={2.2}
-                      className="h-4 w-4"
-                    />
-                  </span>
-                  <span>TLS Encrypted</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/about"
-                  className="
-                    group inline-flex min-h-11 items-center gap-2
-                    rounded-2xl border border-slate-200/90
-                    bg-white px-3.5 py-2 text-xs sm:text-sm text-[#003366]
-                    shadow-2xs
-                    transition-[transform,border-color,box-shadow]
-                    duration-200
-                    hover:border-sky-300 hover:shadow-sm
-                    focus-visible:outline-2
-                    focus-visible:outline-offset-4
-                    focus-visible:outline-sky-600
-                    motion-safe:hover:-translate-y-0.5
-                    motion-reduce:transition-none
-                  "
-                >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-[#0052CC]">
-                    <FiShield
-                      aria-hidden="true"
-                      strokeWidth={2.2}
-                      className="h-4 w-4"
-                    />
-                  </span>
-                  <span>BTRC Licensed</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/download"
-                  className="
-                    group inline-flex min-h-11 items-center gap-2
-                    rounded-2xl border border-slate-200/90
-                    bg-white px-3.5 py-2 text-xs sm:text-sm text-[#003366]
-                    shadow-2xs
-                    transition-[transform,border-color,box-shadow]
-                    duration-200
-                    hover:border-amber-300 hover:shadow-sm
-                    focus-visible:outline-2
-                    focus-visible:outline-offset-4
-                    focus-visible:outline-amber-600
-                    motion-safe:hover:-translate-y-0.5
-                    motion-reduce:transition-none
-                  "
-                >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
-                    <FiStar
-                      aria-hidden="true"
-                      strokeWidth={2}
-                      fill="currentColor"
-                      className="
-                        h-4 w-4 transition-transform duration-300
-                        motion-safe:group-hover:rotate-12
-                        motion-reduce:transition-none
-                      "
-                    />
-                  </span>
-                  <span>4.5 on Play Store</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Right Column: Modern Phone Stage & Floating Cards */}
-          <div className="relative flex flex-col items-center lg:col-span-5 lg:items-end">
-            <div className="relative mx-auto lg:mr-6">
-              {/* Soft Ambient Frame behind Device */}
-              <div
-                aria-hidden="true"
-                className="
-                  absolute -inset-6 rounded-[44px]
-                  border border-[#0052CC]/10
-                  bg-white/70
-                "
-              />
-
-              {/* Phone Device */}
-              <div className="relative z-10 h-[490px] w-[246px]">
-                <div
-                  className="
-                    h-full w-full
-                    motion-safe:animate-[agniHeroFloat_4.5s_ease-in-out_infinite]
-                  "
-                >
-                  <div
-                    className="
-                      relative h-full w-full overflow-hidden
-                      rounded-[38px] border-[6px] border-[#0F172A]
-                      bg-[#0F172A]
-                      shadow-[0_28px_60px_-14px_rgba(0,51,102,0.34)]
-                    "
-                  >
-                    {/* Top Dynamic Speaker Notch */}
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-x-0 top-2 z-20 flex justify-center"
-                    >
-                      <div className="h-3.5 w-20 rounded-full bg-[#0F172A]" />
-                    </div>
-
-                    {phoneScreens.map((screen, index) => (
-                      <img
-                        key={screen.src}
-                        src={screen.src}
-                        alt={screen.alt}
-                        aria-hidden={activeScreen !== index}
-                        width={600}
-                        height={1194}
-                        fetchPriority={index === 0 ? 'high' : 'auto'}
-                        loading="eager"
-                        draggable={false}
-                        className={`
-                          absolute inset-0 h-full w-full
-                          rounded-[30px] object-cover object-top
-                          transition-opacity duration-500 ease-out
-                          motion-reduce:transition-none
-                          ${
-                            activeScreen === index
-                              ? 'opacity-100'
-                              : 'opacity-0'
-                          }
-                        `}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Data saving badge */}
-              <div
-                className={`${badgeClass} -left-10 sm:-left-16 top-12 [animation-delay:0.4s]`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF4FF] text-[#0052CC]">
-                    <FiBarChart2 aria-hidden="true" className="h-4 w-4" />
-                  </div>
-
-                  <div>
-                    <div className="font-agni-heading text-xs text-[#003366]">
-                      70% Data Saved
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                      Byte Saver™
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* bKash badge */}
-              <div
-                className={`${badgeClass} -right-6 sm:-right-12 top-32 [animation-delay:0.9s]`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-pink-50/80 p-1">
-                    <img
-                      src="/images/bkash.png"
-                      alt="bKash"
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-
-                  <div>
-                    <div className="font-agni-heading text-xs text-[#003366]">
-                      bKash Ready
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                      Instant Top-up
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Virtual number badge */}
-              <div
-                className={`${badgeClass} -left-8 sm:-left-14 bottom-20 [animation-delay:1.4s]`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FFF3EE] text-[#FF5722]">
-                    <FiPhone aria-hidden="true" className="h-4 w-4" />
-                  </div>
-
-                  <div>
-                    <div className="font-agni-heading text-xs text-[#003366]">
-                      09606 Number
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                      Virtual IPTSP
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative QR card */}
-              <div className="absolute -right-10 bottom-8 z-20 hidden xl:block">
-                <QRIllustration />
+            <div className="agt-stage-bottom">
+              <div className="agt-caption" aria-live={playing ? 'off' : 'polite'}><AnimatePresence mode="wait" initial={false}><motion.div key={active} initial={reduced ? false : {opacity:0,y:8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:reduced ? 0 : .18}}><strong>{bn ? current.bn : current.en}</strong><span>{bn ? current.detailBn : current.detail}</span></motion.div></AnimatePresence></div>
+              <div className="agt-controls">
+                <button type="button" onClick={() => select(active - 1)} aria-label={bn ? 'আগের স্ক্রিন' : 'Previous screen'}><FiChevronLeft/></button>
+                <button type="button" onClick={() => { setPlaying(p => !p); setFocused(false); setHovered(false) }} aria-label={playing ? 'Pause slideshow' : 'Play slideshow'}>{playing ? <FiPause/> : <FiPlay/>}</button>
+                <button type="button" onClick={() => select(active + 1)} aria-label={bn ? 'পরের স্ক্রিন' : 'Next screen'}><FiChevronRight/></button>
               </div>
             </div>
-
-            {/* Interactive Screen Switcher Dots */}
-            <div
-              role="tablist"
-              aria-label="App screen preview selector"
-              className="mt-8 flex items-center gap-2 rounded-full border border-slate-200/90 bg-white px-3 py-1.5 shadow-2xs lg:mr-14"
-            >
-              {phoneScreens.map((screen, index) => {
-                const isActive = activeScreen === index
-                return (
-                  <button
-                    key={screen.src}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-label={`Show ${screen.label} screen`}
-                    onClick={() => setActiveScreen(index)}
-                    className={`
-                      h-2 rounded-full transition-all duration-300 cursor-pointer
-                      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0052CC]
-                      ${
-                        isActive
-                          ? 'w-6 bg-[#0052CC]'
-                          : 'w-2 bg-slate-300 hover:bg-slate-400'
-                      }
-                    `}
-                  />
-                )
-              })}
-            </div>
-          </div>
+          </motion.div>
+        </div>
+        <div className="agt-feature-nav" role="group" aria-label={bn ? 'অ্যাপের ফিচার' : 'Explore app features'}>
+          {screens.map((s,i) => <button type="button" key={s.src} aria-pressed={active === i} onClick={() => select(i)} className={active === i ? 'is-active' : ''}>{active === i && <motion.span layoutId="agt-active-track" className="agt-active-track" transition={{type:"spring",stiffness:300,damping:30}}/>}<span className="agt-feature-number">0{i + 1}</span><span>{bn ? s.bn : s.en}</span><FiArrowUpRight aria-hidden="true"/>{active === i && <span key={`${active}-${running}`} className={`agt-progress ${running ? "is-run" : "is-still"}`} aria-hidden="true"/>}</button>)}
         </div>
       </div>
-    </section>
+    </section></MotionConfig>
   )
 }
