@@ -6,8 +6,9 @@ import { motion, AnimatePresence, MotionConfig, useMotionValue, useSpring, useTr
 
 
 
-const reveal = { hidden: { opacity: 0, y: 42 }, visible: { opacity: 1, y: 0, transition: { duration: .8, ease: [.22, 1, .36, 1] } } }
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: .13 } } }
+
+const reveal = { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: .5, ease: [.22, 1, .36, 1] } } }
+const stagger = { hidden: {}, visible: { transition: { staggerChildren: .08 } } }
 
 const screens = [
   { src: '/app/agni-number.jpg', en: 'Your own number', bn: 'নিজস্ব নাম্বার', detail: 'A dedicated 09606 virtual number.', detailBn: 'নিজস্ব ০৯৬০৬ ভার্চুয়াল নাম্বার।' },
@@ -20,7 +21,7 @@ const screens = [
 function FloatingFeature({ className, icon, title, subtitle, delay, x, y, reduced }) {
   return (
     <motion.div className={`agt-float-position ${className}`} style={{ x: reduced ? 0 : x, y: reduced ? 0 : y }}>
-      <motion.div className="agt-float-enter" initial={reduced ? false : { opacity: 0, scale: .85, y: 18 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: .65, delay: reduced ? 0 : delay }}>
+      <motion.div className="agt-float-enter" initial={reduced ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: .65, delay: reduced ? 0 : delay }}>
         <div className="agt-float-card" style={{ '--float-delay': `${-delay * 3}s` }}>
           <span className="agt-float-icon">{icon}</span>
           <span className="agt-float-text"><strong>{title}</strong><small>{subtitle}</small></span>
@@ -63,10 +64,10 @@ export default function Hero({ lang = 'en' }) {
   const reduced = useReducedMotion()
   const px = useMotionValue(0)
   const py = useMotionValue(0)
-  const rx = useSpring(useTransform(py, [-1, 1], [12, -12]), { stiffness: 110, damping: 22 })
-  const ry = useSpring(useTransform(px, [-1, 1], [-16, 16]), { stiffness: 110, damping: 22 })
-  const cardX = useSpring(useTransform(px, [-1, 1], [-12, 12]), { stiffness: 90, damping: 22 })
-  const cardY = useSpring(useTransform(py, [-1, 1], [-9, 9]), { stiffness: 90, damping: 22 })
+  const rx = useSpring(useTransform(py, [-1, 1], [3, -3]), { stiffness: 110, damping: 22 })
+  const ry = useSpring(useTransform(px, [-1, 1], [-4, 4]), { stiffness: 110, damping: 22 })
+  const cardX = useSpring(useTransform(px, [-1, 1], [-4, 4]), { stiffness: 90, damping: 22 })
+  const cardY = useSpring(useTransform(py, [-1, 1], [-3, 3]), { stiffness: 90, damping: 22 })
   const reverseX = useTransform(cardX, v => -v)
   const reverseY = useTransform(cardY, v => -v)
   const move = e => {
@@ -78,7 +79,7 @@ export default function Hero({ lang = 'en' }) {
   const reset = () => { px.set(0); py.set(0) }
   return (
     <MotionConfig reducedMotion="user"><section className={`agt-hero ${bn ? 'agt-bn' : ''}`} lang={lang} aria-labelledby="hero-title">
-      <div className="agt-backdrop" aria-hidden="true"><svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice"><g fill="none" strokeLinecap="round"><path className="agt-ribbon r1" d="M870 -180 C520 180 1460 170 1180 520 S650 850 1000 1050"/><path className="agt-ribbon r2" d="M970 -180 C620 180 1560 170 1280 520 S750 850 1100 1050"/><path className="agt-ribbon r3" d="M1070 -180 C720 180 1660 170 1380 520 S850 850 1200 1050"/></g></svg></div><div className="agt-shell">
+      <div className="agt-shell">
         <div className="agt-main">
           <motion.div className="agt-copy" variants={stagger} initial={reduced ? false : "hidden"} animate="visible">
             <motion.div variants={reveal} className="agt-kicker"><span aria-hidden="true" />{bn ? 'বাংলাদেশের আইপি টেলিফোনি অ্যাপ' : 'IP TELEPHONY MADE FOR BANGLADESH'}</motion.div>
@@ -91,18 +92,17 @@ export default function Hero({ lang = 'en' }) {
               <Link to="/download"><FiStar aria-hidden="true"/>{bn ? '৪.৫ প্লে স্টোর' : '4.5 on Play Store'}</Link>
             </motion.div>
           </motion.div>
-          <motion.div initial={reduced ? false : {opacity:0, scale:.96}} animate={{opacity:1,scale:1}} transition={{duration:.85}} onPointerMove={move} onPointerLeave={reset} className="agt-stage" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false) }}>
+          <motion.div initial={reduced ? false : {opacity:0, y:12}} animate={{opacity:1,y:0}} transition={{duration:.85}} onPointerMove={move} onPointerLeave={reset} className="agt-stage" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false) }}>
             <svg className="agt-signal" viewBox="0 0 600 600" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-              {[85,125,165,205,245,285,325].map(r => <circle key={r} cx="350" cy="280" r={r} fill="none" stroke="currentColor" strokeWidth="1"/>)}
-              <path d="M0 280H600M350 0V600" stroke="currentColor" strokeDasharray="4 8" fill="none"/>
-            </svg>
-            <div className="agt-stage-top"><span>AGNI<span className="agt-orange">TALK</span> / APP</span><span>{String(active + 1).padStart(2,'0')} — 05</span></div>
-            <div className="agt-device-area"><svg className="agt-brand-sweep" viewBox="0 0 600 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M-70 270 Q210 440 650 70" className="agt-sweep-orange"/><path d="M-70 307 Q210 477 650 107" className="agt-sweep-yellow"/><path d="M-70 327 Q210 497 650 127" className="agt-sweep-red"/></svg><div className="agt-poster" aria-hidden="true"><span>09606</span></div><div className="agt-wave" aria-hidden="true">{Array.from({length:25},(_,i)=><i key={i} style={{'--n':i,'--h':`${15+Math.round(Math.sin(i*1.7)**2*65)}px`}}/>)}</div>
+              {[100,150,200].map(r => <circle key={r} cx="350" cy="280" r={r} fill="none" stroke="currentColor" strokeWidth="1"/>)}
               
+            </svg>
+            <div className="agt-stage-top"><span>{bn ? 'অগ্নিটক অ্যাপ' : 'EXPLORE AGNITALK'}</span><span>{String(active + 1).padStart(2,'0')} — 05</span></div>
+            <div className="agt-device-area">
               <motion.div className="agt-device-rig" style={{ rotateX: reduced ? 0 : rx, rotateY: reduced ? 0 : ry }}>
                 <div className="agt-device">
                   <AnimatePresence initial={false}>
-                    <motion.img key={current.src} src={current.src} alt={bn ? current.bn : current.en} initial={reduced ? false : {opacity:0,x:28,scale:1.04}} animate={{opacity:1,x:0,scale:1}} exit={{opacity:0,x:-28}} transition={{duration:reduced ? 0 : .45}} width="600" height="1194" draggable={false}/>
+                    <motion.img key={current.src} src={current.src} alt={bn ? current.bn : current.en} initial={reduced ? false : {opacity:0,x:8}} animate={{opacity:1,x:0,scale:1}} exit={{opacity:0,x:-8}} transition={{duration:reduced ? 0 : .45}} width="600" height="1194" draggable={false}/>
                   </AnimatePresence>
                 </div>
               </motion.div>

@@ -2,8 +2,6 @@
 import { FaApple, FaGooglePlay } from 'react-icons/fa'
 import {
   FiArrowUpRight,
-  FiCamera,
-  FiDownload,
   FiSmartphone,
 } from 'react-icons/fi'
 import {
@@ -31,13 +29,13 @@ const containerVariants = {
 const revealVariants = {
   hidden: {
     opacity: 0,
-    y: 24,
+    y: 12,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -46,15 +44,15 @@ const revealVariants = {
 const imageVariants = {
   hidden: {
     opacity: 0,
-    x: 35,
-    scale: 0.94,
+    x: 12,
+    scale: 1,
   },
   visible: {
     opacity: 1,
     x: 0,
     scale: 1,
     transition: {
-      duration: 0.9,
+      duration: 0.55,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -66,126 +64,21 @@ const imageVariants = {
 
 function BrandBackground({ reduced }) {
   return (
-    <div
-      aria-hidden="true"
-      className="
-        pointer-events-none absolute inset-0
-        overflow-hidden
-      "
-    >
-      {/* Blue brand composition */}
-      <div
-        className="
-          absolute inset-0
-          bg-linear-to-br
-          from-[#004A80]
-          via-[#0069A8]
-          to-[#0088D0]
-        "
-      />
-
-      {/* Asymmetric background panel */}
-      <div
-        className="
-          absolute inset-y-0 right-0
-          w-[48%] bg-[#0088D0]
-          opacity-50
-          [clip-path:polygon(28%_0,100%_0,100%_100%,0_100%)]
-        "
-      />
-
-      <motion.svg
-        viewBox="0 0 1200 500"
-        preserveAspectRatio="xMidYMid slice"
-        className="absolute inset-0 h-full w-full"
-      >
-        {/* Animated brand ribbons */}
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 bg-linear-to-br from-[#004A80] via-[#0069A8] to-[#0088D0]" />
+      <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
         <motion.g
-          fill="none"
-          strokeLinecap="round"
+          fill="none" strokeLinecap="round" opacity=".16"
           initial={false}
-          animate={
-            reduced
-              ? {}
-              : {
-                  x: [0, -18, 0],
-                  y: [0, 16, 0],
-                  rotate: [0, 3, 0],
-                }
-          }
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{
-            transformOrigin: '85% 50%',
-          }}
+          animate={reduced ? {} : { x: [0, -12, 0], y: [0, 8, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <path
-            d="M810 -130 C550 120 1320 120 1020 390 S760 570 1030 680"
-            stroke="#E00010"
-            strokeWidth="18"
-            opacity=".85"
-          />
-
-          <path
-            d="M870 -130 C610 120 1380 120 1080 390 S820 570 1090 680"
-            stroke="#F58220"
-            strokeWidth="34"
-          />
-
-          <path
-            d="M930 -130 C670 120 1440 120 1140 390 S880 570 1150 680"
-            stroke="#F8E800"
-            strokeWidth="17"
-          />
+          <path d="M810 -130 C550 120 1320 120 1020 390 S760 570 1030 680" stroke="#E00010" strokeWidth="12" />
+          <path d="M870 -130 C610 120 1380 120 1080 390 S820 570 1090 680" stroke="#F58220" strokeWidth="20" />
+          <path d="M930 -130 C670 120 1440 120 1140 390 S880 570 1150 680" stroke="#F8E800" strokeWidth="10" />
         </motion.g>
-
-        {/* Subtle signal rings */}
-        <g
-          fill="none"
-          stroke="white"
-          strokeWidth="1"
-          opacity=".12"
-        >
-          {[150, 200, 250, 300, 350].map((radius) => (
-            <circle
-              key={radius}
-              cx="975"
-              cy="240"
-              r={radius}
-            />
-          ))}
-        </g>
-
-        {/* Moving signal point */}
-        <motion.circle
-          cx="975"
-          cy="90"
-          r="5"
-          fill="#F8E800"
-          initial={false}
-          animate={
-            reduced ? {} : { opacity: [1, 0.3, 1] }
-          }
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-          }}
-        />
-      </motion.svg>
-
-      {/* Maintain text readability */}
-      <div
-        className="
-          absolute inset-0
-          bg-linear-to-r
-          from-[#004A80]
-          via-[#005B96]/65
-          to-transparent
-        "
-      />
+      </svg>
+      <div className="absolute inset-0 bg-linear-to-r from-[#004A80] via-[#005B96]/65 to-transparent" />
     </div>
   )
 }
@@ -210,8 +103,8 @@ function StoreAnchor({
         reduced
           ? undefined
           : {
-              y: -4,
-              scale: 1.025,
+              y: -2,
+              scale: 1,
             }
       }
       whileTap={
@@ -259,8 +152,8 @@ function StoreAnchor({
             : `
               border-white bg-white
               text-[#003366]
-              hover:border-[#F8E800]
-              hover:bg-[#F8E800]
+              hover:border-white
+              hover:bg-[#EFF7FC]
             `
         }
       `}
@@ -317,255 +210,56 @@ function StoreAnchor({
 }
 
 /* ========================================
-   Floating QR code dock
+   Stationary QR code dock
 ======================================== */
 
-function QRDownloadDock({
-  lang,
-  isBangla,
-  reduced,
-}) {
+function QRDownloadDock() {
   return (
     <motion.div
-      initial={
-        reduced
-          ? false
-          : {
-              opacity: 0,
-              y: 25,
-              scale: 0.95,
-            }
-      }
-      whileInView={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      }}
-      viewport={{ once: true }}
-      transition={{
-        duration: 0.65,
-        delay: reduced ? 0 : 0.35,
-      }}
+      variants={revealVariants}
       className="
-        relative z-20
-        -mt-10 w-full max-w-[285px]
-        self-center
-        sm:-mt-12
-        lg:-ml-12 lg:self-start
+        relative z-20 mx-auto mt-4
+        w-fit rounded-xl
+        border border-white/25
+        bg-[#003366]/30 p-1.5
+        backdrop-blur-sm
+        xl:absolute xl:bottom-4 xl:left-0
+        xl:mx-0 xl:mt-0
       "
     >
-      <motion.div
-        initial={false}
-        animate={
-          reduced
-            ? {}
-            : {
-                y: [0, -7, 0],
-              }
-        }
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="
-          flex items-center gap-3
-          rounded-2xl
-          border border-white/50
-          bg-white/85 p-3
-          shadow-[0_18px_40px_-12px_rgba(0,51,102,0.3)]
-          backdrop-blur-xl
-        "
-      >
-        {/* Functional QR code */}
-        <div
-          className="
-            relative shrink-0
-            overflow-hidden rounded-xl
-            border border-[#DCE8F0]
-            bg-white p-2
-          "
-        >
-          <QRCode size={76} caption="" />
-        </div>
-
-        {/* QR instructions */}
-        <div className="min-w-0">
-          <div
-            className={`
-              mb-1 flex items-center gap-1.5
-              text-[9px] tracking-[0.12em]
-              text-[#006DA8]
-              ${isBangla ? 'tracking-normal!' : 'uppercase'}
-              ${bn(lang)}
-            `}
-          >
-            <FiCamera
-              size={12}
-              aria-hidden="true"
-            />
-
-            {isBangla
-              ? 'স্ক্যান করুন'
-              : 'Scan & Install'}
-          </div>
-
-          <strong
-            className={`
-              block text-[15px]
-              font-semibold leading-snug
-              text-[#003366]
-              [font-synthesis:weight]
-              ${bn(lang)}
-            `}
-          >
-            {isBangla
-              ? 'মিনিটেই শুরু করুন।'
-              : 'Ready in minutes.'}
-          </strong>
-
-          <p
-            className={`
-              mb-0 mt-1 text-[11px]
-              leading-relaxed text-[#526579]
-              ${bn(lang)}
-            `}
-          >
-            {isBangla
-              ? 'ফোনের ক্যামেরা দিয়ে QR কোড স্ক্যান করুন।'
-              : 'Open your phone camera to download.'}
-          </p>
-        </div>
-
-        {/* Decorative download icon */}
-        <span
-          aria-hidden="true"
-          className="
-            absolute -right-2 -top-2
-            flex h-7 w-7
-            items-center justify-center
-            rounded-full
-            border-2 border-white
-            bg-[#F8E800]
-            text-[#003366]
-          "
-        >
-          <FiDownload
-            size={13}
-            strokeWidth={2.5}
-          />
-        </span>
-      </motion.div>
+      <div className="rounded-lg bg-white p-2">
+        <QRCode size={88} caption="" />
+      </div>
     </motion.div>
   )
 }
 
-/* ========================================
-   Campaign image showcase
-======================================== */
-
-function CampaignVisual({
-  lang,
-  isBangla,
-  reduced,
-}) {
+/* Larger campaign image with lower-left QR dock */
+function CampaignVisual({ lang, isBangla, reduced }) {
   return (
     <motion.div
-      variants={imageVariants}
-      className="
-        relative mx-auto flex
-        w-full max-w-[380px]
-        flex-col items-center
-        lg:mx-0 lg:ml-auto
-      "
+      variants={containerVariants}
+      className="relative mx-auto w-full min-w-0 max-w-[720px] xl:ml-auto xl:mr-0"
     >
-      {/* Background decorative shape */}
-      <motion.div
-        aria-hidden="true"
-        initial={false}
-        animate={
-          reduced
-            ? {}
-            : {
-                rotate: [-10, -6, -10],
-              }
-        }
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="
-          absolute inset-x-3 top-3
-          aspect-square rounded-[26px]
-          bg-[#F8E800]
-          opacity-90
-        "
-      />
-
-      {/* Secondary brand accent */}
-      <div
-        aria-hidden="true"
-        className="
-          absolute -right-3 top-8
-          h-[75%] w-[85%]
-          rotate-[8deg]
-          rounded-[24px]
-          border-2 border-white/35
-        "
-      />
-
-      {/* Campaign image */}
-      <motion.div
-        initial={false}
-        animate={
-          reduced
-            ? {}
-            : {
-                y: [0, -5, 0],
-                rotate: [2, 0, 2],
-              }
-        }
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="
-          relative z-10 w-full
-          max-w-[330px]
-          overflow-hidden rounded-[22px]
-          border border-white/40
-          bg-white p-1.5
-          shadow-[0_30px_60px_-20px_rgba(0,25,50,0.5)]
-        "
-      >
+      <motion.div variants={imageVariants} className="relative z-10 ml-auto w-full min-w-0 max-w-[600px]">
+        <motion.div
+          whileHover={reduced ? undefined : { y: -3 }}
+          transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+          className="rounded-2xl"
+        >
         <img
           src="/images/campaign.webp"
-          alt={
-            isBangla
-              ? 'অগ্নিটক অ্যাপ এবং ভার্চুয়াল নম্বরের প্রচারণা'
-              : 'AgniTalk campaign featuring the Agni virtual number and mobile app'
-          }
+          alt={isBangla ? 'অগ্নিটক অ্যাপ এবং ভার্চুয়াল নম্বরের প্রচারণা' : 'AgniTalk campaign featuring the Agni virtual number and mobile app'}
           width="1000"
           height="1000"
           loading="lazy"
           decoding="async"
           draggable={false}
-          className="
-            block aspect-square
-            h-auto w-full
-            rounded-[17px] object-cover
-          "
+          className="block h-auto w-full rounded-2xl border border-white/20 object-contain"
         />
+        </motion.div>
       </motion.div>
-
-      {/* Floating QR download dock */}
-      <QRDownloadDock
-        lang={lang}
-        isBangla={isBangla}
-        reduced={reduced}
-      />
+      <QRDownloadDock lang={lang} isBangla={isBangla} />
     </motion.div>
   )
 }
@@ -589,29 +283,14 @@ export default function FinalCTA({
         lang={lang}
         aria-labelledby="final-cta-title"
         className="
-          agnitalk-ui relative
+          agnitalk-ui relative isolate
           w-full overflow-hidden
-          bg-[#F5F8FA]
-          py-7! sm:py-9! lg:py-10!
+          bg-[#005B96]
+          py-7! sm:py-8! lg:py-9!
         "
       >
-        <div
-          className="
-            mx-auto w-full max-w-7xl
-            px-4 sm:px-6 lg:px-8
-          "
-        >
-          {/* Main campaign banner */}
-          <div
-            className="
-              relative isolate overflow-hidden
-              rounded-[24px]
-              bg-[#005B96]
-              sm:rounded-[28px]
-              lg:rounded-[32px]
-            "
-          >
-            <BrandBackground reduced={reduced} />
+        <BrandBackground reduced={reduced} />
+        <div className="relative mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8">
 
             <motion.div
               variants={containerVariants}
@@ -624,18 +303,16 @@ export default function FinalCTA({
               className="
                 relative z-10 grid
                 grid-cols-1 items-center
-                gap-9 px-5 py-8
-                sm:px-8 sm:py-10
-                lg:grid-cols-12
-                lg:gap-10 lg:px-12 lg:py-9
-                xl:px-14
+                gap-7
+                xl:grid-cols-12
+                lg:gap-8 xl:gap-12
               "
             >
               {/* Left content */}
               <div
                 className="
                   min-w-0 text-center
-                  lg:col-span-7 lg:text-left
+                  xl:col-span-5 xl:text-left
                 "
               >
                 {/* Editorial eyebrow */}
@@ -647,7 +324,7 @@ export default function FinalCTA({
                     text-[10px]
                     tracking-[0.16em]
                     text-white/90
-                    lg:justify-start
+                    xl:justify-start
                     ${isBangla ? 'tracking-normal!' : 'uppercase'}
                     ${bn(lang)}
                   `}
@@ -671,7 +348,7 @@ export default function FinalCTA({
                   style={display(lang)}
                   className={`
                     m-0
-                    text-[clamp(34px,5vw,65px)]
+                    text-[clamp(30px,4vw,48px)]
                     leading-[1.08]
                     tracking-[-0.035em]
                     text-white
@@ -723,7 +400,7 @@ export default function FinalCTA({
                     leading-[1.7]
                     text-white/90
                     sm:text-[16px]
-                    lg:mx-0
+                    xl:mx-0
                     ${bn(lang)}
                   `}
                 >
@@ -738,12 +415,12 @@ export default function FinalCTA({
                   className="
                     mx-auto grid w-full
                     max-w-[420px]
-                    grid-cols-2 gap-2.5
+                    grid-cols-1 gap-2.5 min-[420px]:grid-cols-2
                     sm:flex sm:w-auto
                     sm:max-w-none
                     sm:flex-wrap
                     sm:justify-center
-                    lg:mx-0 lg:justify-start
+                    xl:mx-0 xl:justify-start
                   "
                 >
                   <StoreAnchor
@@ -769,7 +446,7 @@ export default function FinalCTA({
                     gap-x-3 gap-y-2
                     text-[12px]
                     text-white/85
-                    lg:justify-start
+                    xl:justify-start
                   "
                 >
                   <span
@@ -815,28 +492,13 @@ export default function FinalCTA({
                   </span>
                 </motion.div>
 
-                {/* Brand signature */}
-                <motion.div
-                  variants={revealVariants}
-                  aria-hidden="true"
-                  className="
-                    mt-6 flex items-center
-                    justify-center gap-1
-                    lg:justify-start
-                  "
-                >
-                  <span className="h-[3px] w-8 rounded-full bg-[#F8E800]" />
-                  <span className="h-[3px] w-5 rounded-full bg-[#F58220]" />
-                  <span className="h-[3px] w-3 rounded-full bg-[#E00010]" />
-                  <span className="h-[3px] w-2 rounded-full bg-[#0088D0]" />
-                </motion.div>
               </div>
 
               {/* Right campaign showcase */}
               <div
                 className="
                   relative min-w-0
-                  lg:col-span-5
+                  xl:col-span-7
                 "
               >
                 <CampaignVisual
@@ -846,7 +508,6 @@ export default function FinalCTA({
                 />
               </div>
             </motion.div>
-          </div>
         </div>
       </section>
     </MotionConfig>
