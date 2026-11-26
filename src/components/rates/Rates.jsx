@@ -182,42 +182,6 @@ const FILTERS = [
   },
 ]
 
-function handleTilt(event) {
-  if (
-    event.pointerType !== 'mouse' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
-    return
-  }
-
-  const wrapper = event.currentTarget
-  const rect = wrapper.getBoundingClientRect()
-
-  if (!rect.width || !rect.height) return
-
-  const x = Math.max(
-    0,
-    Math.min(1, (event.clientX - rect.left) / rect.width),
-  )
-
-  const y = Math.max(
-    0,
-    Math.min(1, (event.clientY - rect.top) / rect.height),
-  )
-
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 6}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 6}deg`)
-  wrapper.style.setProperty('--lift', '-4px')
-}
-
-function resetTilt(event) {
-  const wrapper = event.currentTarget
-
-  wrapper.style.setProperty('--tilt-x', '0deg')
-  wrapper.style.setProperty('--tilt-y', '0deg')
-  wrapper.style.setProperty('--lift', '0px')
-}
-
 function normalizeSearch(value) {
   return value
     .replace(/[০-৯]/g, (digit) => '০১২৩৪৫৬৭৮৯'.indexOf(digit))
@@ -232,8 +196,8 @@ function CountryFlags({ countries }) {
         aria-hidden="true"
         className="
           flex h-9 w-9 items-center justify-center
-          rounded-xl border border-slate-200/80 bg-[#F8FAFC] text-[#FF5722]
-          transition-colors group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
+          rounded-xl border border-slate-200/80 bg-[#F8FAFC] text-[#F58220]
+          transition-colors group-hover:border-[#006DA8]/30 group-hover:bg-white group-hover:text-[#006DA8]
         "
       >
         <svg
@@ -262,7 +226,7 @@ function CountryFlags({ countries }) {
           className="
             flex h-9 w-9 items-center justify-center
             rounded-xl border border-slate-200/80 bg-[#F8FAFC]
-            transition-colors group-hover:border-[#0052CC]/30 group-hover:bg-white
+            transition-colors group-hover:border-[#006DA8]/30 group-hover:bg-white
           "
         >
           <ReactCountryFlag
@@ -289,39 +253,30 @@ function RateCard({ rate, lang, onSelect }) {
 
   return (
     <div
-      onPointerMove={handleTilt}
-      onPointerLeave={resetTilt}
-      onPointerCancel={resetTilt}
-      className="group relative h-full min-w-0 [perspective:1000px]"
+
+
+
+      className="group relative h-full min-w-0 "
     >
-      {/* Subtle Grounded Floor Shadow */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute -bottom-2.5 inset-x-6 h-4
-          rounded-[100%] bg-slate-900/10 opacity-65 blur-md
-          transition-[opacity,background-color] duration-200
-          group-hover:bg-[#0052CC]/25 group-hover:opacity-100
-        "
-      />
+      
 
       <button
         type="button"
         onClick={() => onSelect(rate)}
         className="
           relative flex h-full w-full flex-col overflow-hidden
-          rounded-[20px] border border-slate-200/90 bg-white p-4 text-left sm:p-5
+          rounded-xl border border-slate-200/90 bg-white p-4 text-left sm:p-5
           font-agni-body
           shadow-[0_4px_14px_-4px_rgba(15,23,42,0.08)]
-          hover:border-[#0052CC]/60 hover:bg-[#E2EEFF]
-          hover:shadow-[0_16px_32px_-8px_rgba(0,82,204,0.24)]
-          [transform-style:preserve-3d] cursor-pointer
+          hover:border-[#006DA8]/60 hover:bg-[#F0F8FC]
+          hover:shadow-[0_16px_32px_-8px_rgba(0,109,168,0.12)]
+           cursor-pointer
           transition-[transform,box-shadow,border-color,background-color]
           duration-200 ease-out
           focus-visible:outline-2
           focus-visible:outline-offset-4
-          focus-visible:outline-[#0052CC]
-          motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
+          focus-visible:outline-[#006DA8]
+          motion-safe:hover:-translate-y-1
           motion-safe:active:scale-[0.99]
           motion-reduce:transition-none
         "
@@ -333,8 +288,8 @@ function RateCard({ rate, lang, onSelect }) {
             absolute inset-x-0 top-0 h-[3px] transition-colors
             ${
               isFree
-                ? 'bg-[#FF5722]/85 group-hover:bg-[#0052CC]'
-                : 'bg-[#003366]/85 group-hover:bg-[#0052CC]'
+                ? 'bg-[#F58220]/85 group-hover:bg-[#006DA8]'
+                : rate.category === 'international' ? 'bg-[#E00010]' : 'bg-[#0088D0]'
             }
           `}
         />
@@ -343,13 +298,13 @@ function RateCard({ rate, lang, onSelect }) {
         <div className="mb-3 flex w-full items-start justify-between gap-2.5 pt-0.5">
           <div className="min-w-0">
             <h3
-              className={`mb-0.5 font-agni-body text-base sm:text-[17px] font-bold [font-synthesis:weight] leading-snug text-[#003366] transition-colors group-hover:text-[#0047B3] ${bn(lang)}`}
+              className={`mb-0.5 font-agni-body text-[17px] sm:text-[18px] font-bold [font-synthesis:weight] leading-snug text-[#003366] transition-colors group-hover:text-[#005B8C] ${bn(lang)}`}
             >
               {rate.label[language]}
             </h3>
 
             <p
-              className={`font-agni-body text-xs leading-4 text-slate-500 transition-colors group-hover:text-slate-600 ${bn(lang)}`}
+              className={`font-agni-body text-[13px] leading-4 text-slate-700 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
             >
               {rate.detail[language]}
             </p>
@@ -363,12 +318,12 @@ function RateCard({ rate, lang, onSelect }) {
           <div className="flex items-baseline gap-1">
             <span
               className={`
-                font-agni-body text-[32px] sm:text-[36px]
+                font-agni-body text-[34px] sm:text-[40px]
                 font-bold [font-synthesis:weight] leading-none tracking-tight transition-colors
                 ${
                   isFree
-                    ? 'text-[#FF5722]'
-                    : 'text-[#003366] group-hover:text-[#0052CC]'
+                    ? 'text-[#98500C]'
+                    : 'text-[#003366] group-hover:text-[#006DA8]'
                 }
               `}
             >
@@ -376,7 +331,7 @@ function RateCard({ rate, lang, onSelect }) {
             </span>
 
             {!isFree && (
-              <span className="font-agni-body text-xs font-medium text-slate-500 transition-colors group-hover:text-slate-600">
+              <span className="font-agni-body text-[13px] font-medium text-slate-700 transition-colors group-hover:text-slate-700">
                 / min
               </span>
             )}
@@ -385,8 +340,8 @@ function RateCard({ rate, lang, onSelect }) {
           <span
             className="
               rounded-lg border border-slate-200/80 bg-[#F8FAFC] px-2 py-0.5
-              font-agni-body text-[11px] text-slate-600 transition-colors
-              group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
+              font-agni-body text-[13px] text-slate-700 transition-colors
+              group-hover:border-[#006DA8]/30 group-hover:bg-white group-hover:text-[#006DA8]
             "
           >
             {rate.prefix}
@@ -398,8 +353,8 @@ function RateCard({ rate, lang, onSelect }) {
           className={`
             mb-3.5 inline-flex items-center gap-1.5
             self-start rounded-full border border-slate-200/80 bg-[#F8FAFC] px-2.5 py-1
-            font-agni-body text-[11px] font-semibold [font-synthesis:weight] leading-4 text-slate-600
-            transition-colors group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
+            font-agni-body text-[13px] font-semibold [font-synthesis:weight] leading-4 text-slate-700
+            transition-colors group-hover:border-[#006DA8]/30 group-hover:bg-white group-hover:text-[#006DA8]
             ${bn(lang)}
           `}
         >
@@ -407,7 +362,7 @@ function RateCard({ rate, lang, onSelect }) {
             aria-hidden="true"
             viewBox="0 0 20 20"
             fill="none"
-            className="h-3.5 w-3.5 shrink-0 text-[#0052CC]"
+            className="h-3.5 w-3.5 shrink-0 text-[#006DA8]"
           >
             <circle
               cx="10"
@@ -440,11 +395,11 @@ function RateCard({ rate, lang, onSelect }) {
         <div
           className="
             mt-auto w-full border-t border-slate-100 pt-2.5
-            transition-colors group-hover:border-[#0052CC]/20
+            transition-colors group-hover:border-[#006DA8]/20
           "
         >
           <p
-            className={`font-agni-body text-[11px] leading-5 text-slate-500 transition-colors group-hover:text-slate-600 ${bn(lang)}`}
+            className={`font-agni-body text-[13px] leading-5 text-slate-700 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
           >
             {rate.note[language]}
           </p>
@@ -506,9 +461,9 @@ export default function Rates({ lang = 'en' }) {
       className="
         agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
-        bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
+        bg-[#F8FBFD]
+        
+        
         py-0!
       "
     >
@@ -520,30 +475,27 @@ export default function Rates({ lang = 'en' }) {
       <div
         id="Rate-Calculator-Module"
         className="
-          relative mx-auto w-full max-w-7xl px-4 py-10
-          sm:px-6 sm:py-12 lg:px-8 lg:py-14
+          relative mx-auto w-full max-w-7xl px-4 py-8
+          sm:px-6 sm:py-9 lg:px-8 lg:py-11
         "
       >
         {/* Heading */}
         <div className="mb-8 text-center">
-          <div
-            className={`
-              mb-3 inline-flex items-center gap-2 rounded-full
-              border border-[#0052CC]/15 bg-white
-              px-3.5 py-1 text-[11px] font-bold [font-synthesis:weight]
-              uppercase tracking-wider text-[#0052CC] shadow-2xs
-              ${bn(lang)}
-            `}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
-            {lang === 'bn'
-              ? 'স্বচ্ছ BTRC ট্যারিফ'
-              : 'TRANSPARENT BTRC TARIFFS'}
-          </div>
+<div className="mb-3 flex items-center gap-2.5 justify-center">
+              <span aria-hidden="true" className="flex h-1 gap-0.5">
+                <span className="w-5 rounded-full bg-[#0088D0]" />
+                <span className="w-2 rounded-full bg-[#E00010]" />
+                <span className="w-2 rounded-full bg-[#F58220]" />
+                <span className="w-2 rounded-full bg-[#F8E800]" />
+              </span>
+              <span className={`text-[13px] font-bold tracking-wide text-[#006DA8] ${bn(lang)}`}>
+                {lang === 'bn' ? 'স্বচ্ছ BTRC ট্যারিফ' : 'Transparent BTRC Tariffs'}
+              </span>
+            </div>
 
           <h2
             className={`
-              mb-2 text-[clamp(24px,4vw,36px)]
+              mb-2 text-[clamp(28px,3.5vw,40px)]
               font-bold [font-synthesis:weight]
               leading-tight text-[#003366]
               ${lang === 'bn' ? bn(lang) : 'font-agni-heading'}
@@ -557,7 +509,7 @@ export default function Rates({ lang = 'en' }) {
           <p
             className={`
               mx-auto max-w-2xl text-sm leading-relaxed
-              text-slate-600 sm:text-base ${bn(lang)}
+              text-slate-700 sm:text-base ${bn(lang)}
             `}
           >
             {lang === 'bn'
@@ -570,7 +522,7 @@ export default function Rates({ lang = 'en' }) {
         <div
           className="
             mb-6 flex flex-col items-stretch gap-3
-            rounded-[20px] border border-slate-200/90
+            rounded-xl border border-slate-200/90
             bg-white p-3 shadow-[0_4px_18px_-6px_rgba(15,23,42,0.06)]
             sm:p-3.5 lg:flex-row lg:items-center
           "
@@ -580,7 +532,7 @@ export default function Rates({ lang = 'en' }) {
               aria-hidden="true"
               className="
                 pointer-events-none absolute left-3.5 top-1/2
-                -translate-y-1/2 text-[#0052CC]
+                -translate-y-1/2 text-[#006DA8]
               "
             >
               <IconSearch />
@@ -605,9 +557,9 @@ export default function Rates({ lang = 'en' }) {
                 bg-[#F8FAFC] py-2.5 pl-11 pr-4
                 text-sm text-slate-700 outline-none
                 transition-colors duration-200
-                placeholder:text-slate-400
-                focus:border-[#0052CC] focus:bg-white
-                focus:ring-2 focus:ring-[#0052CC]/15
+                placeholder:text-slate-500
+                focus:border-[#006DA8] focus:bg-white
+                focus:ring-2 focus:ring-[#006DA8]/15
                 motion-reduce:transition-none
                 ${bn(lang)}
               `}
@@ -628,20 +580,20 @@ export default function Rates({ lang = 'en' }) {
                 aria-pressed={filter === item.id}
                 onClick={() => setFilter(item.id)}
                 className={`
-                  rounded-xl px-3.5 py-2 text-xs
+                  rounded-xl px-3.5 py-2 text-[13px]
                   font-bold [font-synthesis:weight]
                   transition-[background-color,color,box-shadow,transform]
                   duration-200 cursor-pointer
                   focus-visible:outline-2
                   focus-visible:outline-offset-2
-                  focus-visible:outline-[#0052CC]
+                  focus-visible:outline-[#006DA8]
                   motion-safe:active:scale-[0.97]
                   motion-reduce:transition-none
                   ${bn(lang)}
                   ${
                     filter === item.id
                       ? 'bg-[#003366] text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-[#F4F8FF] hover:text-[#0052CC]'
+                      : 'bg-slate-100 text-slate-700 hover:bg-[#EDF7FC] hover:text-[#006DA8]'
                   }
                 `}
               >
@@ -654,7 +606,7 @@ export default function Rates({ lang = 'en' }) {
         {/* 3-Column Rate Cards Grid */}
         <div
           className="
-            mb-10 grid grid-cols-1 gap-4
+            mb-7 grid grid-cols-1 gap-4
             sm:grid-cols-2 sm:gap-5 lg:grid-cols-3
           "
         >
@@ -671,8 +623,8 @@ export default function Rates({ lang = 'en' }) {
             <div
               role="status"
               className={`
-                col-span-full rounded-[20px] border border-slate-200/90
-                bg-white px-5 py-9 text-center text-sm text-slate-500
+                col-span-full rounded-xl border border-slate-200/90
+                bg-white px-5 py-9 text-center text-sm text-slate-700
                 ${bn(lang)}
               `}
             >
@@ -687,7 +639,7 @@ export default function Rates({ lang = 'en' }) {
         <div
           className="
             grid grid-cols-1 items-center gap-6
-            rounded-[20px] border border-slate-200/90
+            rounded-xl border border-slate-200/90
             bg-white p-4 sm:p-6
             shadow-[0_8px_24px_-8px_rgba(15,23,42,0.08)]
             lg:grid-cols-2 lg:gap-8
@@ -711,8 +663,8 @@ export default function Rates({ lang = 'en' }) {
 
               <span
                 className={`
-                  rounded-xl border border-[#0052CC]/15 bg-[#F4F8FF]
-                  px-3 py-1.5 text-xs sm:text-sm font-bold [font-synthesis:weight] text-[#0052CC]
+                  rounded-xl border border-[#006DA8]/15 bg-[#EDF7FC]
+                  px-3 py-1.5 text-[13px] sm:text-sm font-bold [font-synthesis:weight] text-[#006DA8]
                   ${bn(lang)}
                 `}
               >
@@ -735,16 +687,16 @@ export default function Rates({ lang = 'en' }) {
                 setMinutes(Number(event.target.value))
               }
               className="
-                mb-5 h-5 w-full cursor-pointer accent-[#0052CC]
+                mb-5 h-5 w-full cursor-pointer accent-[#006DA8]
                 focus-visible:outline-2
                 focus-visible:outline-offset-4
-                focus-visible:outline-[#0052CC]
+                focus-visible:outline-[#006DA8]
               "
             />
 
             <fieldset>
               <legend
-                className={`mb-2.5 text-xs sm:text-sm font-bold [font-synthesis:weight] text-slate-600 ${bn(lang)}`}
+                className={`mb-2.5 text-[13px] sm:text-sm font-bold [font-synthesis:weight] text-slate-700 ${bn(lang)}`}
               >
                 {lang === 'bn' ? 'গন্তব্য' : 'Destination'}
               </legend>
@@ -752,7 +704,7 @@ export default function Rates({ lang = 'en' }) {
               <div
                 className="
                   grid grid-cols-2 gap-1.5
-                  rounded-2xl border border-slate-200/80 bg-[#F8FAFC] p-1.5
+                  rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-1.5
                 "
               >
                 {['local', 'international'].map((item) => (
@@ -763,19 +715,19 @@ export default function Rates({ lang = 'en' }) {
                     onClick={() => setDestination(item)}
                     className={`
                       rounded-xl px-3 py-2.5
-                      text-xs leading-5 sm:text-sm
+                      text-[13px] leading-5 sm:text-sm
                       font-bold [font-synthesis:weight]
                       transition-[background-color,color,box-shadow]
                       duration-200 cursor-pointer
                       focus-visible:outline-2
                       focus-visible:outline-offset-2
-                      focus-visible:outline-[#0052CC]
+                      focus-visible:outline-[#006DA8]
                       motion-reduce:transition-none
                       ${bn(lang)}
                       ${
                         destination === item
                           ? 'bg-[#003366] text-white shadow-xs'
-                          : 'text-slate-600 hover:bg-white hover:text-[#0052CC]'
+                          : 'text-slate-700 hover:bg-white hover:text-[#006DA8]'
                       }
                     `}
                   >
@@ -784,8 +736,8 @@ export default function Rates({ lang = 'en' }) {
                         ? 'বিডি মোবাইল (৳০.৪০/মিনিট)'
                         : 'BD Mobile (৳0.40/min)'
                       : lang === 'bn'
-                        ? 'আন্তর্জাতিক (৳১.১০/মিনিট থেকে)'
-                        : 'International (from ৳1.10/min)'}
+                        ? 'আন্তর্জাতিক (৳১.১০/মিনিট আনুমানিক)'
+                        : 'International (৳1.10/min estimate)'}
                   </button>
                 ))}
               </div>
@@ -794,7 +746,7 @@ export default function Rates({ lang = 'en' }) {
 
           <div
             className="
-              rounded-2xl border border-slate-200/80
+              rounded-xl border border-slate-200/80
               bg-[#F8FAFC] p-4 sm:p-5
             "
           >
@@ -809,7 +761,7 @@ export default function Rates({ lang = 'en' }) {
                 AgniTalk
               </span>
 
-              <span className="font-bold [font-synthesis:weight] tabular-nums text-[#0052CC]">
+              <span className="font-bold [font-synthesis:weight] tabular-nums text-[#006DA8]">
                 ৳{agniCost.toLocaleString()} / {month}
               </span>
             </div>
@@ -820,17 +772,20 @@ export default function Rates({ lang = 'en' }) {
                 ${bn(lang)}
               `}
             >
-              <span className="text-slate-600">
+              <span className="text-slate-700">
                 {lang === 'bn'
                   ? 'স্ট্যান্ডার্ড মোবাইল অপারেটর'
                   : 'Standard Mobile Operator'}
               </span>
 
-              <span className="tabular-nums text-slate-600 line-through">
+              <span className="tabular-nums text-slate-700 line-through">
                 ৳{operatorCost.toLocaleString()} / {month}
               </span>
             </div>
 
+            <p className={`mb-3 text-[13px] leading-relaxed text-slate-700 ${bn(lang)}`}>
+              {lang === 'bn' ? '৩০ দিনের মাস ধরে আনুমানিক হিসাব; ভ্যাট ও অন্যান্য চার্জ অন্তর্ভুক্ত নয়। অপারেটর রেট তুলনার জন্য ধরা হয়েছে।' : 'Estimate based on a 30-day month, excluding VAT and other charges. Operator rates are comparison assumptions.'}
+            </p>
             <div className="rounded-xl border border-slate-200/80 bg-white px-3.5 py-2.5">
               <p
                 className={`text-base sm:text-lg font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}

@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom'
 import { FaApple, FaGooglePlay } from 'react-icons/fa'
 import {
@@ -12,7 +11,7 @@ import {
   useReducedMotion,
 } from 'framer-motion'
 
-import { bn, display } from '../../utils/lang'
+import { bn } from '../../utils/lang'
 
 const MotionLink = motion.create(Link)
 
@@ -66,8 +65,8 @@ function BrandBackground({ reduced }) {
             reduced
               ? {}
               : {
-                  x: [0, -25, 0],
-                  y: [0, 12, 0],
+                  x: [0, -12, 0],
+                  y: [0, 6, 0],
                 }
           }
           transition={{
@@ -80,19 +79,21 @@ function BrandBackground({ reduced }) {
             d="M1050 360 C1200 200 1100 30 1510 -70"
             stroke="#E00010"
             strokeWidth="24"
-            opacity=".65"
+            opacity=".45"
           />
 
           <path
             d="M1120 390 C1270 210 1170 40 1570 -40"
             stroke="#F58220"
             strokeWidth="34"
+            opacity=".75"
           />
 
           <path
             d="M1190 420 C1340 220 1240 50 1630 -10"
             stroke="#F8E800"
             strokeWidth="18"
+            opacity=".8"
           />
         </motion.g>
 
@@ -147,8 +148,8 @@ function AppIcon({ reduced }) {
           reduced
             ? {}
             : {
-                y: [0, -4, 0],
-                rotate: [-5, 3, -5],
+                y: [0, -2, 0],
+                rotate: [-2, 2, -2],
               }
         }
         transition={{
@@ -170,7 +171,7 @@ function AppIcon({ reduced }) {
           reduced
             ? {}
             : {
-                y: [0, -3, 0],
+                y: [0, -1.5, 0],
               }
         }
         transition={{
@@ -213,8 +214,8 @@ function StoreButton({
         reduced
           ? undefined
           : {
-              y: -4,
-              scale: 1.025,
+              y: -2,
+              scale: 1.01,
             }
       }
       whileTap={
@@ -400,35 +401,19 @@ export default function DownloadBar({ lang = 'en' }) {
               <motion.h2
                 id="download-bar-title"
                 variants={itemVariants}
-                style={display(lang)}
+                
                 className={`
-                  m-0 font-agni-heading
-                  text-[24px] leading-[1.2]
+                  m-0 font-agni-body font-bold
+                  text-[23px] leading-[1.3]
                   text-white
-                  sm:text-[28px] lg:text-[30px]
+                  sm:text-[26px] lg:text-[28px]
                   ${bn(lang)}
                 `}
               >
                 {isBangla
-                  ? 'আপনার পৃথিবী, একটি অ্যাপ।'
-                  : 'Your world. One app.'}
+                  ? 'Android ও iOS-এ AgniTalk ডাউনলোড করুন — মিনিটেই কল শুরু করুন'
+                  : 'Download AgniTalk on Android & iOS — Start Calling in Minutes'}
               </motion.h2>
-
-              <motion.p
-                variants={itemVariants}
-                className={`
-                  mb-0 mt-2
-                  font-agni-body
-                  text-[13px] leading-relaxed
-                  text-white/90
-                  sm:text-[14px]
-                  ${bn(lang)}
-                `}
-              >
-                {isBangla
-                  ? 'অগ্নিটক ডাউনলোড করুন — মিনিটেই কথা বলা শুরু করুন।'
-                  : 'Download AgniTalk and start calling in minutes.'}
-              </motion.p>
 
               {/* Brand color signature */}
               <motion.div

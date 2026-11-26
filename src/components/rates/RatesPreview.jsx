@@ -109,33 +109,6 @@ const COUNTRY_NAMES = {
   GB: 'United Kingdom',
 }
 
-function handleTilt(event) {
-  if (
-    event.pointerType !== 'mouse' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
-    return
-  }
-
-  const wrapper = event.currentTarget
-  const rect = wrapper.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
-
-  const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
-  const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
-
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 6}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 6}deg`)
-  wrapper.style.setProperty('--lift', '-4px')
-}
-
-function resetTilt(event) {
-  const wrapper = event.currentTarget
-  wrapper.style.setProperty('--tilt-x', '0deg')
-  wrapper.style.setProperty('--tilt-y', '0deg')
-  wrapper.style.setProperty('--lift', '0px')
-}
-
 export default function RatesPreview({ lang = 'en', to = '/rates' }) {
   const isBangla = lang === 'bn'
 
@@ -147,37 +120,29 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
       className="
         agnitalk-ui relative isolate overflow-hidden
         border-b border-slate-200/80
-        bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
-        pt-12! pb-18! sm:pt-14! sm:pb-20! lg:pt-16! lg:pb-22!
+        bg-[#F3F7FA]
+        py-8! sm:py-10! lg:py-12!
       "
     >
-      {/* Creative Split-Stage Backdrop: Deep Brand Navy Top + Dotted Light Bottom */}
+      {/* Restrained navy-to-blue backdrop, with a clean light lower surface */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[62%] bg-[linear-gradient(135deg,#00244D_0%,#003366_48%,#0052CC_100%)]"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:24px_24px]" />
-        <div className="absolute -left-24 -top-20 h-72 w-72 rounded-full bg-[#FF5722]/20 blur-3xl" />
-        <div className="absolute -right-24 top-10 h-80 w-80 rounded-full bg-sky-400/20 blur-3xl" />
-      </div>
-
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[62%] lg:h-[62%] bg-[linear-gradient(125deg,#123B60_0%,#194E77_60%,#24658D_100%)]"
+      />
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header on Dark Navy Stage */}
         <div className="mb-7 flex flex-col items-start justify-between gap-4 sm:mb-9 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <div
-              className={`
-                mb-2.5 inline-flex items-center gap-2 rounded-full
-                border border-white/20 bg-white/10 px-3.5 py-1
-                text-xs font-bold [font-synthesis:weight]
-                uppercase tracking-wider text-white backdrop-blur-xs
-                ${bn(lang)}
-              `}
-            >
-              <span className="h-2 w-2 rounded-full bg-[#FF5722]" />
-              {isBangla ? 'স্বচ্ছ BTRC ট্যারিফ' : 'TRANSPARENT CALL RATES'}
+<div className="mb-3 flex items-center gap-2.5 ">
+              <span aria-hidden="true" className="flex h-1 gap-0.5">
+                <span className="w-5 rounded-full bg-[#0088D0]" />
+                <span className="w-2 rounded-full bg-[#E00010]" />
+                <span className="w-2 rounded-full bg-[#F58220]" />
+                <span className="w-2 rounded-full bg-[#F8E800]" />
+              </span>
+              <span className={`text-[13px] font-bold tracking-wide text-white ${bn(lang)}`}>
+                {isBangla ? 'স্বচ্ছ BTRC ট্যারিফ' : 'Transparent Call Rates'}
+              </span>
             </div>
 
             <h2
@@ -191,7 +156,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
             </h2>
 
             <p
-              className={`mt-1.5 text-sm sm:text-base leading-relaxed text-sky-100/90 ${bn(lang)}`}
+              className={`mt-1.5 text-sm sm:text-base leading-relaxed text-[#E2EDF6] ${bn(lang)}`}
             >
               {isBangla
                 ? 'কোনো সংযোগ ফি নেই • ১-সেকেন্ড পালস • ৭০% কম ডাটা খরচ'
@@ -202,11 +167,11 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
           <Link
             to={to}
             className={`
-              group inline-flex shrink-0 items-center gap-2.5 rounded-2xl
-              bg-[#FF5722] px-5 py-2.5 text-sm font-bold [font-synthesis:weight]
-              text-white shadow-[0_14px_28px_-8px_rgba(255,87,34,0.55)]
+              group inline-flex shrink-0 items-center gap-2.5 rounded-xl
+              bg-white/10 border border-white/40 px-5 py-2.5 text-sm font-bold [font-synthesis:weight]
+              text-white shadow-sm
               transition-[background-color,transform] duration-200
-              hover:bg-[#e64a19]
+              hover:bg-white/20
               focus-visible:outline-2 focus-visible:outline-offset-2
               focus-visible:outline-white
               motion-safe:hover:-translate-y-0.5
@@ -226,44 +191,35 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
         </div>
 
         {/* 3-Card Grid: Standard Card Brightness + Rich Blue Hover + Questrial Text */}
-        <div className="grid grid-cols-1 gap-6 sm:gap-7 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3">
           {FEATURED_RATES.map((item) => {
             const t = isBangla ? item.bn : item.en
 
             return (
               <div
                 key={item.id}
-                onPointerMove={handleTilt}
-                onPointerLeave={resetTilt}
-                onPointerCancel={resetTilt}
-                className="group relative h-full [perspective:1000px]"
+
+
+
+                className="group relative h-full "
               >
-                {/* Subtle Grounded Floor Shadow */}
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none absolute -bottom-2.5 inset-x-6 h-4
-                    rounded-[100%] bg-slate-900/12 opacity-70 blur-md
-                    transition-[opacity,background-color] duration-200
-                    group-hover:bg-[#0052CC]/25 group-hover:opacity-100
-                  "
-                />
+                
 
                 <Link
                   to={to}
                   className="
                     relative flex h-full flex-col overflow-hidden
-                    rounded-[20px] border border-slate-200/90 bg-white p-5 sm:p-6
+                    rounded-xl border border-slate-200/90 bg-white p-4 sm:p-5
                     font-agni-body
                     shadow-[0_6px_18px_-4px_rgba(15,23,42,0.1)]
-                    hover:border-[#0052CC]/60 hover:bg-[#E2EEFF]
-                    hover:shadow-[0_16px_32px_-8px_rgba(0,82,204,0.24)]
-                    [transform-style:preserve-3d]
+                    hover:border-[#006DA8]/60 hover:bg-[#F0F8FC]
+                    hover:shadow-[0_16px_32px_-8px_rgba(0,109,168,0.12)]
+                    
                     transition-[transform,box-shadow,border-color,background-color]
                     duration-200 ease-out
                     focus-visible:outline-2 focus-visible:outline-offset-4
-                    focus-visible:outline-[#0052CC]
-                    motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
+                    focus-visible:outline-[#006DA8]
+                    motion-safe:hover:-translate-y-1
                     motion-reduce:transition-none
                   "
                 >
@@ -273,9 +229,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     className={`
                       absolute inset-x-0 top-0 h-[3px] transition-colors
                       ${
-                        item.isFree
-                          ? 'bg-[#FF5722]/85 group-hover:bg-[#0052CC]'
-                          : 'bg-[#003366]/85 group-hover:bg-[#0052CC]'
+                        item.isFree ? 'bg-[#F58220]' : item.id === 'mobile' ? 'bg-[#0088D0]' : 'bg-[#E00010]'
                       }
                     `}
                   />
@@ -286,20 +240,20 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                       className={`
                         inline-flex items-center gap-1.5 rounded-full
                         border border-slate-200/80 bg-[#F8FAFC]
-                        px-2.5 py-0.5 font-agni-body text-[11px] font-semibold [font-synthesis:weight]
-                        text-slate-600 transition-colors
-                        group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
+                        px-2.5 py-0.5 font-agni-body text-[13px] font-semibold [font-synthesis:weight]
+                        text-slate-700 transition-colors
+                        group-hover:border-[#006DA8]/30 group-hover:bg-white group-hover:text-[#006DA8]
                         ${bn(lang)}
                       `}
                     >
                       {item.id === 'app' && (
-                        <FiSmartphone className="h-3 w-3 text-[#0052CC]" />
+                        <FiSmartphone className="h-3 w-3 text-[#006DA8]" />
                       )}
                       {item.id === 'mobile' && (
-                        <FiPhoneCall className="h-3 w-3 text-[#0052CC]" />
+                        <FiPhoneCall className="h-3 w-3 text-[#006DA8]" />
                       )}
                       {item.id === 'international' && (
-                        <FiGlobe className="h-3 w-3 text-[#0052CC]" />
+                        <FiGlobe className="h-3 w-3 text-[#006DA8]" />
                       )}
                       {t.badge}
                     </span>
@@ -307,8 +261,8 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     <span
                       className="
                         rounded-lg border border-slate-200/80 bg-[#F8FAFC] px-2 py-0.5
-                        font-agni-body text-[11px] text-slate-600 transition-colors
-                        group-hover:border-[#0052CC]/30 group-hover:bg-white group-hover:text-[#0052CC]
+                        font-agni-body text-[13px] text-slate-700 transition-colors
+                        group-hover:border-[#006DA8]/30 group-hover:bg-white group-hover:text-[#006DA8]
                       "
                     >
                       {item.prefix}
@@ -319,12 +273,12 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                   <div className="mb-3.5 flex items-start justify-between gap-2.5">
                     <div className="min-w-0">
                       <h3
-                        className={`mb-0.5 font-agni-body text-base sm:text-[17px] font-bold [font-synthesis:weight] leading-snug text-[#003366] transition-colors group-hover:text-[#0047B3] ${bn(lang)}`}
+                        className={`mb-0.5 font-agni-body text-[17px] sm:text-[18px] font-bold [font-synthesis:weight] leading-snug text-[#003366] transition-colors group-hover:text-[#005B8C] ${bn(lang)}`}
                       >
                         {t.title}
                       </h3>
                       <p
-                        className={`font-agni-body text-xs text-slate-500 transition-colors group-hover:text-slate-600 ${bn(lang)}`}
+                        className={`font-agni-body text-[13px] text-slate-700 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
                       >
                         {t.subtitle}
                       </p>
@@ -338,7 +292,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                             className="
                               flex h-8 w-8 items-center justify-center rounded-lg
                               border border-slate-200/80 bg-[#F8FAFC]
-                              transition-colors group-hover:border-[#0052CC]/30 group-hover:bg-white
+                              transition-colors group-hover:border-[#006DA8]/30 group-hover:bg-white
                             "
                           >
                             <ReactCountryFlag
@@ -363,18 +317,18 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                   <div
                     className="
                       mb-3.5 rounded-xl border border-slate-200/75 bg-[#F8FAFC] px-3.5 py-2.5
-                      transition-colors group-hover:border-[#0052CC]/25 group-hover:bg-white/90
+                      transition-colors group-hover:border-[#006DA8]/25 group-hover:bg-white/90
                     "
                   >
                     <div className="flex items-baseline gap-2">
                       <span
                         className={`
-                          font-agni-body text-[32px] sm:text-[36px]
+                          font-agni-body text-[34px] sm:text-[40px]
                           font-bold [font-synthesis:weight] leading-none tracking-tight transition-colors
                           ${
                             item.isFree
-                              ? 'text-[#FF5722]'
-                              : 'text-[#003366] group-hover:text-[#0052CC]'
+                              ? 'text-[#98500C]'
+                              : 'text-[#003366] group-hover:text-[#006DA8]'
                           }
                         `}
                       >
@@ -383,7 +337,7 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
 
                       {t.unit && (
                         <span
-                          className={`font-agni-body text-xs sm:text-sm font-medium text-slate-500 transition-colors group-hover:text-slate-600 ${bn(lang)}`}
+                          className={`font-agni-body text-[13px] sm:text-sm font-medium text-slate-700 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
                         >
                           {t.unit}
                         </span>
@@ -395,13 +349,13 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     {t.highlights.map((point, index) => (
                       <li
                         key={index}
-                        className={`flex items-start gap-2 font-agni-body text-xs sm:text-[13px] text-slate-600 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
+                        className={`flex items-start gap-2 font-agni-body text-[13px] sm:text-[13px] text-slate-700 transition-colors group-hover:text-slate-700 ${bn(lang)}`}
                       >
                         <span
                           aria-hidden="true"
                           className="
                             mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
-                            bg-[#F4F8FF] text-[#0052CC] transition-colors
+                            bg-[#EDF7FC] text-[#006DA8] transition-colors
                             group-hover:bg-white
                           "
                         >
@@ -417,13 +371,13 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                     className="
                       mt-auto flex items-center justify-between gap-2
                       border-t border-slate-100 pt-3 transition-colors
-                      group-hover:border-[#0052CC]/20
+                      group-hover:border-[#006DA8]/20
                     "
                   >
                     <span
                       className={`
-                        font-agni-body text-xs font-bold [font-synthesis:weight]
-                        text-[#003366] transition-colors group-hover:text-[#0052CC]
+                        font-agni-body text-[13px] font-bold [font-synthesis:weight]
+                        text-[#003366] transition-colors group-hover:text-[#006DA8]
                         ${bn(lang)}
                       `}
                     >
@@ -436,8 +390,8 @@ export default function RatesPreview({ lang = 'en', to = '/rates' }) {
                       aria-hidden="true"
                       className="
                         flex h-7 w-7 items-center justify-center rounded-full
-                        bg-[#F4F8FF] text-[#0052CC] transition-all duration-200
-                        group-hover:bg-[#0052CC] group-hover:text-white
+                        bg-[#EDF7FC] text-[#006DA8] transition-all duration-200
+                        group-hover:bg-[#006DA8] group-hover:text-white
                         motion-safe:group-hover:translate-x-1
                       "
                     >

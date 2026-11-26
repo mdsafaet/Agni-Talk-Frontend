@@ -2,7 +2,6 @@ import { useId, useState } from 'react'
 import {
   FiCheckCircle,
   FiMail,
-  FiMessageCircle,
   FiPhone,
   FiSend,
 } from 'react-icons/fi'
@@ -118,43 +117,36 @@ export default function FAQ({ lang = 'en' }) {
       id="faq"
       lang={lang}
       className="
-        relative overflow-hidden
+        agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
-        bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
-        py-12 sm:py-16
+        bg-[#F8FBFD]
+        py-9! sm:py-11! lg:py-12!
       "
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(248,250,255,0.65)_100%)]"
-      />
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <div
-            className={`
-              mb-2.5 inline-flex items-center gap-2 rounded-full
-              border border-[#0052CC]/15 bg-white
-              px-3.5 py-1 text-[11px] font-bold [font-synthesis:weight]
-              uppercase tracking-wider text-[#0052CC] shadow-2xs
-              ${bn(lang)}
-            `}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
-            {isBangla ? 'সহায়তা কেন্দ্র' : 'HELP & ENQUIRY'}
+        <div className="mx-auto mb-7 max-w-2xl text-center">
+          <div className="mb-3 flex items-center justify-center gap-2.5">
+            <span aria-hidden="true" className="flex h-1 gap-0.5">
+              <span className="w-5 rounded-full bg-[#0088D0]" />
+              <span className="w-2 rounded-full bg-[#E00010]" />
+              <span className="w-2 rounded-full bg-[#F58220]" />
+              <span className="w-2 rounded-full bg-[#F8E800]" />
+            </span>
+            <span className={`text-[13px] font-bold tracking-wide text-[#006DA8] ${bn(lang)}`}>
+              {isBangla ? 'সহায়তা কেন্দ্র' : 'Help & Enquiry'}
+            </span>
           </div>
 
           <h2
-            className={`mb-2.5 text-[clamp(24px,4vw,36px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
+            className={`mb-2.5 text-[clamp(28px,3.5vw,40px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
             style={display(lang)}
           >
             {isBangla ? 'সাধারণ প্রশ্নাবলী' : 'Frequently Asked Questions'}
           </h2>
 
-          <p className={`text-sm sm:text-base text-slate-600 ${bn(lang)}`}>
+          <p className={`text-[15px] sm:text-[17px] text-[#334155] ${bn(lang)}`}>
             {isBangla
               ? 'সাধারণ প্রশ্নের উত্তর পান দ্রুত।'
               : 'Quick answers to the most common questions about AgniTalk.'}
@@ -162,7 +154,7 @@ export default function FAQ({ lang = 'en' }) {
         </div>
 
         {/* Two-Column Layout: FAQ Accordion + Enquiry Form */}
-        <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-12 lg:gap-8">
+        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-12 lg:gap-6">
           {/* Left Column: FAQ List */}
           <div className="space-y-3 lg:col-span-7">
             {FAQS.map((f, i) => {
@@ -172,10 +164,10 @@ export default function FAQ({ lang = 'en' }) {
                 <div
                   key={i}
                   className={`
-                    rounded-[20px] border bg-white transition-colors duration-200
+                    rounded-xl border bg-white transition-colors duration-200
                     ${
                       isOpen
-                        ? 'border-[#0052CC]/35 bg-[#F4F8FF]/50 shadow-[0_10px_24px_-12px_rgba(0,82,204,0.18)]'
+                        ? 'border-[#0088D0]/40 bg-[#EDF7FC] shadow-[0_4px_16px_-8px_rgba(0,51,102,0.12)]'
                         : 'border-slate-200/90 hover:border-[#003366]/25'
                     }
                   `}
@@ -186,15 +178,15 @@ export default function FAQ({ lang = 'en' }) {
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="
                       flex w-full items-center justify-between gap-4
-                      p-4 sm:p-5 text-left cursor-pointer
-                      rounded-[20px]
+                      p-3.5 sm:p-4 text-left cursor-pointer
+                      rounded-xl
                       focus-visible:outline-2
                       focus-visible:outline-offset-2
-                      focus-visible:outline-[#0052CC]
+                      focus-visible:outline-[#006DA8]
                     "
                   >
                     <span
-                      className={`text-sm sm:text-base font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
+                      className={`text-[15px] sm:text-[17px] font-bold [font-synthesis:weight] leading-snug text-[#003366] ${bn(lang)}`}
                     >
                       {t.q}
                     </span>
@@ -203,11 +195,11 @@ export default function FAQ({ lang = 'en' }) {
                       aria-hidden="true"
                       className={`
                         flex h-7 w-7 shrink-0 items-center justify-center
-                        rounded-full transition-transform duration-200
+                        rounded-lg transition-transform duration-200 motion-reduce:transition-none
                         ${
                           isOpen
-                            ? 'rotate-180 bg-[#0052CC] text-white'
-                            : 'bg-slate-100 text-slate-500'
+                            ? 'rotate-180 bg-[#006DA8] text-white'
+                            : 'bg-slate-100 text-[#475569]'
                         }
                       `}
                     >
@@ -217,7 +209,7 @@ export default function FAQ({ lang = 'en' }) {
 
                   {isOpen && (
                     <div
-                      className={`px-4 sm:px-5 pb-4 sm:pb-5 pt-0 text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                      className={`px-4 sm:px-5 pb-4 sm:pb-5 pt-0 text-[15px] leading-7 text-[#334155] ${bn(lang)}`}
                     >
                       <div className="border-t border-slate-200/80 pt-3">
                         {t.a}
@@ -231,21 +223,21 @@ export default function FAQ({ lang = 'en' }) {
 
           {/* Right Column: Direct Enquiry Form */}
           <div className="lg:col-span-5">
-            <div className="relative overflow-hidden rounded-[20px] border border-slate-200/90 bg-white p-5 sm:p-6 shadow-[0_8px_28px_-10px_rgba(0,51,102,0.1)]">
+            <div className="relative overflow-hidden rounded-xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-[0_8px_28px_-10px_rgba(0,51,102,0.1)]">
               <span
                 aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-1 bg-[#FF5722]"
+                className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#0088D0_0%,#0088D0_55%,#E00010_55%,#E00010_70%,#F58220_70%,#F58220_85%,#F8E800_85%,#F8E800_100%)]"
               />
 
               <div className="mb-4 pt-0.5">
                 <h3
-                  className={`text-lg sm:text-xl font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                  className={`text-xl sm:text-[24px] font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
                   style={display(lang)}
                 >
                   {isBangla ? 'সরাসরি প্রশ্ন পাঠান' : 'Send Us an Enquiry'}
                 </h3>
                 <p
-                  className={`mt-1 text-xs sm:text-sm text-slate-500 ${bn(lang)}`}
+                  className={`mt-1 text-[13px] sm:text-[15px] text-[#475569] ${bn(lang)}`}
                 >
                   {isBangla
                     ? 'আপনার প্রশ্ন বা মতামত লিখুন, আমাদের সাপোর্ট টিম দ্রুত যোগাযোগ করবে।'
@@ -256,7 +248,7 @@ export default function FAQ({ lang = 'en' }) {
               {submitted ? (
                 <div
                   role="status"
-                  className="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-center space-y-2.5"
+                  className="rounded-xl border border-emerald-200 bg-emerald-50/80 p-4 text-center space-y-2.5"
                 >
                   <FiCheckCircle
                     aria-hidden="true"
@@ -270,7 +262,7 @@ export default function FAQ({ lang = 'en' }) {
                       : 'Enquiry Received!'}
                   </h4>
                   <p
-                    className={`text-xs sm:text-sm text-slate-600 leading-relaxed ${bn(lang)}`}
+                    className={`text-[13px] sm:text-[15px] text-[#334155] leading-relaxed ${bn(lang)}`}
                   >
                     {isBangla
                       ? `ধন্যবাদ, ${formData.name}। আমাদের সাপোর্ট টিম শীঘ্রই ${formData.phone} নম্বরে যোগাযোগ করবে।`
@@ -292,7 +284,7 @@ export default function FAQ({ lang = 'en' }) {
                       mt-1 inline-flex items-center justify-center
                       rounded-xl bg-[#003366] px-4 py-2 text-xs
                       font-bold [font-synthesis:weight] text-white
-                      hover:bg-[#0052CC] transition-colors cursor-pointer
+                      hover:bg-[#006DA8] transition-colors cursor-pointer
                       ${bn(lang)}
                     `}
                   >
@@ -304,7 +296,7 @@ export default function FAQ({ lang = 'en' }) {
                   <div>
                     <label
                       htmlFor={nameId}
-                      className={`mb-1 block text-xs font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                      className={`mb-1 block text-[13px] font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
                     >
                       {isBangla ? 'আপনার নাম *' : 'Your Name *'}
                     </label>
@@ -320,9 +312,9 @@ export default function FAQ({ lang = 'en' }) {
                       }
                       className={`
                         w-full rounded-xl border border-slate-200 bg-[#F8FAFC]
-                        px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                        transition-colors placeholder:text-slate-400
-                        focus:border-[#0052CC] focus:bg-white focus:ring-2 focus:ring-[#0052CC]/15
+                        px-3.5 py-2.5 text-[15px] text-slate-800 outline-none
+                        transition-colors placeholder:text-slate-500
+                        focus:border-[#006DA8] focus:bg-white focus:ring-2 focus:ring-[#006DA8]/15
                         ${bn(lang)}
                       `}
                     />
@@ -332,7 +324,7 @@ export default function FAQ({ lang = 'en' }) {
                     <div>
                       <label
                         htmlFor={phoneId}
-                        className={`mb-1 block text-xs font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                        className={`mb-1 block text-[13px] font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
                       >
                         {isBangla ? 'মোবাইল নম্বর *' : 'Phone Number *'}
                       </label>
@@ -346,9 +338,9 @@ export default function FAQ({ lang = 'en' }) {
                         placeholder="01XXXXXXXXX"
                         className="
                           w-full rounded-xl border border-slate-200 bg-[#F8FAFC]
-                          px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                          transition-colors placeholder:text-slate-400
-                          focus:border-[#0052CC] focus:bg-white focus:ring-2 focus:ring-[#0052CC]/15
+                          px-3.5 py-2.5 text-[15px] text-slate-800 outline-none
+                          transition-colors placeholder:text-slate-500
+                          focus:border-[#006DA8] focus:bg-white focus:ring-2 focus:ring-[#006DA8]/15
                         "
                       />
                     </div>
@@ -356,7 +348,7 @@ export default function FAQ({ lang = 'en' }) {
                     <div>
                       <label
                         htmlFor={emailId}
-                        className={`mb-1 block text-xs font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                        className={`mb-1 block text-[13px] font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
                       >
                         {isBangla ? 'ইমেইল (ঐচ্ছিক)' : 'Email (Optional)'}
                       </label>
@@ -369,9 +361,9 @@ export default function FAQ({ lang = 'en' }) {
                         placeholder="you@example.com"
                         className="
                           w-full rounded-xl border border-slate-200 bg-[#F8FAFC]
-                          px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                          transition-colors placeholder:text-slate-400
-                          focus:border-[#0052CC] focus:bg-white focus:ring-2 focus:ring-[#0052CC]/15
+                          px-3.5 py-2.5 text-[15px] text-slate-800 outline-none
+                          transition-colors placeholder:text-slate-500
+                          focus:border-[#006DA8] focus:bg-white focus:ring-2 focus:ring-[#006DA8]/15
                         "
                       />
                     </div>
@@ -380,7 +372,7 @@ export default function FAQ({ lang = 'en' }) {
                   <div>
                     <label
                       htmlFor={topicId}
-                      className={`mb-1 block text-xs font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                      className={`mb-1 block text-[13px] font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
                     >
                       {isBangla ? 'বিষয় নির্বাচন করুন' : 'Enquiry Topic'}
                     </label>
@@ -391,9 +383,9 @@ export default function FAQ({ lang = 'en' }) {
                       onChange={handleChange}
                       className={`
                         w-full rounded-xl border border-slate-200 bg-[#F8FAFC]
-                        px-3.5 py-2.5 text-sm text-slate-800 outline-none
+                        px-3.5 py-2.5 text-[15px] text-slate-800 outline-none
                         transition-colors
-                        focus:border-[#0052CC] focus:bg-white focus:ring-2 focus:ring-[#0052CC]/15
+                        focus:border-[#006DA8] focus:bg-white focus:ring-2 focus:ring-[#006DA8]/15
                         ${bn(lang)}
                       `}
                     >
@@ -408,7 +400,7 @@ export default function FAQ({ lang = 'en' }) {
                   <div>
                     <label
                       htmlFor={messageId}
-                      className={`mb-1 block text-xs font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
+                      className={`mb-1 block text-[13px] font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
                     >
                       {isBangla ? 'আপনার বার্তা *' : 'Your Message *'}
                     </label>
@@ -426,9 +418,9 @@ export default function FAQ({ lang = 'en' }) {
                       }
                       className={`
                         w-full resize-none rounded-xl border border-slate-200 bg-[#F8FAFC]
-                        px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                        transition-colors placeholder:text-slate-400
-                        focus:border-[#0052CC] focus:bg-white focus:ring-2 focus:ring-[#0052CC]/15
+                        px-3.5 py-2.5 text-[15px] text-slate-800 outline-none
+                        transition-colors placeholder:text-slate-500
+                        focus:border-[#006DA8] focus:bg-white focus:ring-2 focus:ring-[#006DA8]/15
                         ${bn(lang)}
                       `}
                     />
@@ -438,14 +430,14 @@ export default function FAQ({ lang = 'en' }) {
                     type="submit"
                     className={`
                       inline-flex w-full items-center justify-center gap-2
-                      rounded-xl bg-[#FF5722] px-5 py-3 text-sm
+                      rounded-xl bg-[#006DA8] px-5 py-3 text-[15px]
                       font-bold [font-synthesis:weight] text-white
-                      shadow-[0_10px_22px_-8px_rgba(255,87,34,0.5)]
+                      shadow-[0_10px_22px_-8px_rgba(0,109,168,0.22)]
                       transition-[background-color,transform,box-shadow]
-                      duration-200 hover:bg-[#e64a19]
+                      duration-200 hover:bg-[#003366]
                       focus-visible:outline-2
                       focus-visible:outline-offset-2
-                      focus-visible:outline-[#0052CC]
+                      focus-visible:outline-[#006DA8]
                       motion-safe:active:scale-[0.98]
                       cursor-pointer
                       ${bn(lang)}
@@ -463,15 +455,15 @@ export default function FAQ({ lang = 'en' }) {
         </div>
 
         {/* Direct Support Contacts Strip */}
-        <div className="mt-8 rounded-[20px] border border-slate-200/90 bg-white px-4 py-3.5 text-center shadow-2xs">
-          <p className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-600 ${bn(lang)}`}>
+        <div className="mt-6 rounded-xl border border-slate-200/90 bg-white px-4 py-3.5 text-center shadow-2xs">
+          <p className={`flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13px] sm:text-[15px] text-[#334155] ${bn(lang)}`}>
             <span className="font-bold [font-synthesis:weight] text-[#003366]">
               {isBangla ? 'আরো সাহায্য দরকার?' : 'Need more help?'}
             </span>
 
             <a
               href="tel:16620"
-              className="inline-flex items-center gap-1.5 font-bold [font-synthesis:weight] text-[#0052CC] hover:underline"
+              className="inline-flex items-center gap-1.5 font-bold [font-synthesis:weight] text-[#006DA8] hover:underline"
             >
               <FiPhone aria-hidden="true" className="h-3.5 w-3.5" />
               16620
@@ -479,22 +471,13 @@ export default function FAQ({ lang = 'en' }) {
 
             <span aria-hidden="true" className="text-slate-300">·</span>
 
-            {/* <a
-              href="https://wa.me/8801894829135"
-              className="inline-flex items-center gap-1.5 font-bold [font-synthesis:weight] text-[#28A745] hover:underline"
-            >
-              <FiMessageCircle aria-hidden="true" className="h-3.5 w-3.5" />
-              WhatsApp 01894829135
-            </a> */}
-
-            <span aria-hidden="true" className="text-slate-300">·</span>
 
             <a
               href="mailto:customer.care@agni.com"
               className="inline-flex items-center gap-1.5 font-bold [font-synthesis:weight] text-[#003366] hover:underline"
             >
               <FiMail aria-hidden="true" className="h-3.5 w-3.5" />
-              - customer.care@agni.com
+              customer.care@agni.com
             </a>
           </p>
         </div>

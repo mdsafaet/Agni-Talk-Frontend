@@ -1,4 +1,4 @@
-import { FiArrowRight, FiCheckCircle, FiLock, FiShield } from 'react-icons/fi'
+import { FiArrowRight, FiCheckCircle, FiShield } from 'react-icons/fi'
 import { IconID, IconLock, IconPrivacy } from '../icons/Icons'
 import { bn, display } from '../../utils/lang'
 
@@ -53,32 +53,11 @@ const PILLARS = [
   },
 ]
 
-function handleTilt(event) {
-  if (
-    event.pointerType !== 'mouse' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
-    return
-  }
-
-  const wrapper = event.currentTarget
-  const rect = wrapper.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
-
-  const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
-  const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
-
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 8}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`)
-  wrapper.style.setProperty('--lift', '-5px')
-}
-
-function resetTilt(event) {
-  const wrapper = event.currentTarget
-  wrapper.style.setProperty('--tilt-x', '0deg')
-  wrapper.style.setProperty('--tilt-y', '0deg')
-  wrapper.style.setProperty('--lift', '0px')
-}
+const THEMES = [
+  { accent: '#0088D0', ink: '#005B8C', soft: '#EAF6FC' },
+  { accent: '#F58220', ink: '#934509', soft: '#FFF3E8' },
+  { accent: '#E00010', ink: '#A81020', soft: '#FFF0F1' },
+]
 
 export default function Security({ lang = 'en' }) {
   const isBangla = lang === 'bn'
@@ -88,163 +67,71 @@ export default function Security({ lang = 'en' }) {
       id="security"
       lang={lang}
       aria-labelledby="security-title"
-      className="relative isolate overflow-hidden bg-[#07162B] py-14 sm:py-16 lg:py-20"
+      className="agnitalk-ui relative isolate overflow-hidden bg-[#F0F7FC] py-10 sm:py-12 lg:py-14 font-agni-body"
     >
-      {/* Creative Layered Dark Security Backdrop */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(145deg,#061326_0%,#0A2244_55%,#081B36_100%)]"
-      >
-        {/* Subtle Precision Matrix Dots */}
-        <div className="absolute inset-0 bg-[radial-gradient(rgba(148,163,184,0.14)_1px,transparent_1px)] [background-size:24px_24px]" />
-
-        {/* Ambient Emerald & Royal Blue Security Glows */}
-        <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-emerald-500/12 blur-3xl" />
-        <div className="absolute -right-24 bottom-6 h-96 w-96 rounded-full bg-[#0052CC]/25 blur-3xl" />
-      </div>
-
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(135deg,#EAF4FC_0%,#F5F9FC_65%,#EDF5FA_100%)]" />
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
-          <div
-            className={`
-              mb-3 inline-flex items-center gap-2 rounded-full
-              border border-emerald-400/25 bg-emerald-500/10
-              px-4 py-1.5 text-xs font-bold [font-synthesis:weight]
-              uppercase tracking-wider text-emerald-300
-              ${bn(lang)}
-            `}
-          >
-            <FiLock aria-hidden="true" className="h-3.5 w-3.5" />
-            <span>{isBangla ? 'সুরক্ষা ও গোপনীয়তা' : 'SECURITY & PRIVACY'}</span>
+        <header className="mx-auto mb-7 max-w-2xl text-center sm:mb-9">
+          <div className="mb-3 flex items-center justify-center gap-2.5">
+            <span aria-hidden="true" className="flex h-1 gap-0.5">
+              <span className="w-5 rounded-full bg-[#0088D0]" />
+              <span className="w-2 rounded-full bg-[#E00010]" />
+              <span className="w-2 rounded-full bg-[#F58220]" />
+              <span className="w-2 rounded-full bg-[#F8E800]" />
+            </span>
+            <span className={`text-[13px] font-bold tracking-wide text-[#006DA8] ${bn(lang)}`}>
+              {isBangla ? 'সুরক্ষা ও গোপনীয়তা' : 'Security & Privacy'}
+            </span>
           </div>
-
-          <h2
-            id="security-title"
-            className={`mb-3 text-[clamp(24px,4vw,38px)] font-bold [font-synthesis:weight] leading-tight text-white ${bn(lang)}`}
-            style={display(lang)}
-          >
-            {isBangla
-              ? 'আপনার কথোপকথন সম্পূর্ণ নিরাপদ'
-              : 'Your Privacy Is Non-Negotiable'}
+          <h2 id="security-title" style={display(lang)} className={`mb-3 text-[clamp(28px,3.8vw,40px)] font-agni-heading font-bold leading-[1.2] text-[#003366] ${bn(lang)}`}>
+            {isBangla ? 'আপনার কথোপকথন সম্পূর্ণ নিরাপদ' : 'Your Privacy Is Non-Negotiable'}
           </h2>
-
-          <p
-            className={`mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-slate-300/80 ${bn(lang)}`}
-          >
+          <p className={`mx-auto max-w-xl text-[16px] leading-relaxed text-slate-700 ${bn(lang)}`}>
             {isBangla
               ? 'অগ্নিটক ব্যবহার করে কথা বলুন নিশ্চিন্তে — প্রতিটি কল ও বার্তা আন্তর্জাতিক নিরাপত্তা মানদণ্ডে সুরক্ষিত।'
               : "Built on Agni Systems' enterprise-grade infrastructure with international security standards applied to every connection."}
           </p>
-        </div>
+        </header>
 
-        {/* 3 Security Pillar Cards */}
-        <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-3">
-          {PILLARS.map((p) => {
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-5">
+          {PILLARS.map((p, index) => {
             const t = isBangla ? p.bn : p.en
+            const theme = THEMES[index]
             return (
-              <div
+              <article
                 key={p.id}
-                onPointerMove={handleTilt}
-                onPointerLeave={resetTilt}
-                onPointerCancel={resetTilt}
-                className="group relative h-full [perspective:1000px]"
+                style={{ '--security-accent': theme.accent, '--security-ink': theme.ink, '--security-soft': theme.soft }}
+                className="group font-agni-body relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-[#D7E5EF] bg-white p-5 sm:p-6 transition-[transform,border-color,background-color] duration-200 hover:border-[var(--security-accent)] hover:bg-white hover:shadow-md motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
               >
-                <article
-                  className="
-                    relative flex h-full flex-col overflow-hidden
-                    rounded-[22px] border border-white/10
-                    bg-white/[0.04] p-6 sm:p-7
-                    shadow-[0_18px_40px_-16px_rgba(0,0,0,0.45)]
-                    backdrop-blur-md
-                    [transform-style:preserve-3d]
-                    transition-[transform,border-color,background-color,box-shadow]
-                    duration-200 ease-out
-                    hover:border-emerald-400/40
-                    hover:bg-white/[0.07]
-                    hover:shadow-[0_22px_48px_-14px_rgba(16,185,129,0.18)]
-                    motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
-                    motion-reduce:transition-none
-                  "
-                >
-                  {/* Top Accent Line */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400/80 via-[#0052CC] to-emerald-400/80 opacity-70 transition-opacity duration-200 group-hover:opacity-100"
-                  />
-
-                  {/* Icon & Compliance Tag */}
-                  <div className="mb-5 flex items-center justify-between gap-3 pt-0.5">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/25 bg-emerald-500/15 text-emerald-300 transition-colors duration-200 group-hover:bg-emerald-400 group-hover:text-[#061326]">
-                      {p.icon}
-                    </div>
-
-                    <span
-                      className={`
-                        rounded-full border border-white/10 bg-white/[0.05]
-                        px-3 py-1 text-[11px] font-bold [font-synthesis:weight]
-                        text-slate-300
-                        ${bn(lang)}
-                      `}
-                    >
-                      {t.badge}
-                    </span>
+                <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] bg-[var(--security-accent)]" />
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <div aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--security-soft)] text-[var(--security-ink)] [&_svg]:h-6 [&_svg]:w-6">
+                    {p.icon}
                   </div>
-
-                  <h3
-                    className={`mb-2.5 text-lg sm:text-xl font-bold [font-synthesis:weight] leading-snug text-white ${bn(lang)}`}
-                    style={display(lang)}
-                  >
-                    {t.title}
-                  </h3>
-
-                  <p
-                    className={`mb-6 text-sm leading-relaxed text-slate-300/80 ${bn(lang)}`}
-                  >
-                    {t.desc}
-                  </p>
-
-                  {/* Bottom Verification Strip */}
-                  <div
-                    className={`
-                      mt-auto flex items-center gap-2 border-t border-white/10
-                      pt-3.5 text-xs font-medium text-emerald-300/90
-                      ${bn(lang)}
-                    `}
-                  >
-                    <FiCheckCircle aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-                    <span>{t.footer}</span>
-                  </div>
-                </article>
-              </div>
+                  <span className={`rounded-md bg-[var(--security-soft)] px-2.5 py-1 text-[14px] font-bold [font-synthesis:weight] text-[var(--security-ink)] ${bn(lang)}`}>
+                    {t.badge}
+                  </span>
+                </div>
+                <h3 className={`mb-2 font-agni-body text-[23px] sm:text-[24px] font-bold [font-synthesis:weight] leading-[1.25] text-[#002B55] ${bn(lang)}`}>
+                  {t.title}
+                </h3>
+                <p className={`mb-5 text-[16px] leading-[1.65] text-[#25364A] ${bn(lang)}`}>
+                  {t.desc}
+                </p>
+                <div className={`mt-auto flex items-center gap-2 border-t border-[#D7E5EF] pt-3 text-[15px] font-bold [font-synthesis:weight] leading-snug text-[var(--security-ink)] ${bn(lang)}`}>
+                  <FiCheckCircle aria-hidden="true" className="h-4 w-4 shrink-0" />
+                  <span>{t.footer}</span>
+                </div>
+              </article>
             )
           })}
         </div>
 
-        {/* Bottom Policy Link Bar */}
-        <div className="mt-9 flex justify-center">
-          <a
-            href="#privacy-policy"
-            className={`
-              group inline-flex items-center gap-2 rounded-full
-              border border-white/12 bg-white/[0.04] px-5 py-2.5
-              text-xs sm:text-sm font-bold [font-synthesis:weight]
-              text-slate-200 transition-[background-color,border-color,color]
-              duration-200 hover:border-emerald-400/40 hover:bg-white/[0.08] hover:text-white
-              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400
-              ${bn(lang)}
-            `}
-          >
-            <FiShield aria-hidden="true" className="h-4 w-4 text-emerald-400" />
-            <span>
-              {isBangla
-                ? 'আমাদের সম্পূর্ণ গোপনীয়তা নীতি পড়ুন'
-                : 'Read Our Full Security & Privacy Policy'}
-            </span>
-            <FiArrowRight
-              aria-hidden="true"
-              className="h-3.5 w-3.5 text-emerald-400 transition-transform duration-200 motion-safe:group-hover:translate-x-1"
-            />
+        <div className="mt-6 flex justify-center">
+          <a href="#privacy-policy" className={`group inline-flex min-h-11 items-center justify-center gap-2.5 rounded-lg border border-[#C9DDEB] bg-white px-5 py-2.5 text-[15px] font-bold text-[#003366] transition-colors hover:border-[#0088D0] hover:bg-[#EAF6FC] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#005B8C] ${bn(lang)}`}>
+            <FiShield aria-hidden="true" className="h-4 w-4 shrink-0 text-[#005B8C]" />
+            <span>{isBangla ? 'আমাদের সম্পূর্ণ গোপনীয়তা নীতি পড়ুন' : 'Read Our Full Security & Privacy Policy'}</span>
+            <FiArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-[#005B8C] transition-transform motion-safe:group-hover:translate-x-1 motion-reduce:transition-none" />
           </a>
         </div>
       </div>

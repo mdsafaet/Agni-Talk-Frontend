@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
   FiCheckCircle,
   FiChevronRight,
@@ -70,41 +71,17 @@ const STEPS = [
   },
 ]
 
-function handleTilt(event) {
-  if (
-    event.pointerType !== 'mouse' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
-    return
-  }
-
-  const wrapper = event.currentTarget
-  const rect = wrapper.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
-
-  const x = Math.max(
-    0,
-    Math.min(1, (event.clientX - rect.left) / rect.width),
-  )
-  const y = Math.max(
-    0,
-    Math.min(1, (event.clientY - rect.top) / rect.height),
-  )
-
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 10}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 10}deg`)
-  wrapper.style.setProperty('--lift', '-4px')
-}
-
-function resetTilt(event) {
-  const wrapper = event.currentTarget
-  wrapper.style.setProperty('--tilt-x', '0deg')
-  wrapper.style.setProperty('--tilt-y', '0deg')
-  wrapper.style.setProperty('--lift', '0px')
-}
+// Logo-inspired accents with readable foreground colors.
+const PALETTES = [
+  { accent: '#0088D0', ink: '#005B8C', soft: '#EAF6FC', border: '#BBDFF2' },
+  { accent: '#F58220', ink: '#984708', soft: '#FFF3E8', border: '#F2D2B7' },
+  { accent: '#E00010', ink: '#A81020', soft: '#FFF0F1', border: '#F1C7CB' },
+  { accent: '#F8E800', ink: '#716000', soft: '#FFFBE2', border: '#E8DFA5' },
+]
 
 export default function HowItWorks({ lang = 'en' }) {
   const [activeStep, setActiveStep] = useState(0)
+  const reduced = useReducedMotion()
   const isBangla = lang === 'bn'
   const currentStep = STEPS[activeStep] || STEPS[0]
   const currentContent = isBangla ? currentStep.bn : currentStep.en
@@ -117,37 +94,37 @@ export default function HowItWorks({ lang = 'en' }) {
       className="
         agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
-        bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
+        bg-[#F8FBFD]
         py-0!
       "
     >
       {/* Subtle surface fade */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(248,250,255,0.65)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFD_100%)]"
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-11">
         {/* Compact Heading */}
-        <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
-          <div
-            className={`
-              mb-2.5 inline-flex items-center gap-2 rounded-full
-              border border-[#0052CC]/15 bg-white
-              px-3.5 py-1 text-[11px] font-bold [font-synthesis:weight]
-              uppercase tracking-wider text-[#0052CC] shadow-2xs
-              ${bn(lang)}
-            `}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
-            {isBangla ? 'দ্রুত অ্যাক্টিভেশন' : 'INSTANT ONBOARDING'}
-          </div>
+        <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
+         <div className="mb-3 flex items-center justify-center gap-2.5">
+  <span aria-hidden="true" className="flex h-1 gap-0.5">
+    <span className="w-5 rounded-full bg-[#0088D0]" />
+    <span className="w-2 rounded-full bg-[#E00010]" />
+    <span className="w-2 rounded-full bg-[#F58220]" />
+    <span className="w-2 rounded-full bg-[#F8E800]" />
+  </span>
+
+  <span
+    className={`text-[13px] font-bold tracking-wide text-[#006DA8] ${bn(lang)}`}
+  >
+    {isBangla ? 'দ্রুত অ্যাক্টিভেশন' : 'Instant Onboarding'}
+  </span>
+</div>
 
           <h2
             id="how-it-works-title"
-            className={`mb-2 text-[clamp(24px,4vw,36px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
+            className={`mb-2 text-[clamp(28px,4vw,40px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
             style={display(lang)}
           >
             {isBangla
@@ -156,7 +133,7 @@ export default function HowItWorks({ lang = 'en' }) {
           </h2>
 
           <p
-            className={`mx-auto max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base ${bn(lang)}`}
+            className={`mx-auto max-w-xl text-base leading-7 text-slate-700 sm:text-[17px] ${bn(lang)}`}
           >
             {isBangla
               ? 'NID যাচাই থেকে শুরু করে প্রথম কল পর্যন্ত — সব কিছু সহজ।'
@@ -169,7 +146,7 @@ export default function HowItWorks({ lang = 'en' }) {
           <div className="relative mx-auto max-w-5xl px-12">
             <div className="h-1.5 w-full rounded-full bg-slate-200/80 overflow-hidden">
               <div
-                className="h-full rounded-full bg-[#0052CC] transition-all duration-300 ease-out"
+                className="h-full rounded-full bg-[#006DA8] transition-all duration-300 ease-out"
                 style={{
                   width: `${((activeStep + 1) / STEPS.length) * 100}%`,
                 }}
@@ -185,14 +162,17 @@ export default function HowItWorks({ lang = 'en' }) {
             const { Icon } = step
             const isSelected = activeStep === index
             const isCompleted = index < activeStep
+            const palette = PALETTES[index]
 
             return (
               <li key={step.num} className="relative h-full">
-                <div
-                  onPointerMove={handleTilt}
-                  onPointerLeave={resetTilt}
-                  onPointerCancel={resetTilt}
-                  className="group relative h-full [perspective:1000px]"
+                <motion.div
+                  initial={reduced ? false : { opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: reduced ? 0 : 0.35, delay: reduced ? 0 : index * 0.06 }}
+                  className="group relative h-full"
+                  style={{ '--step-accent': palette.accent, '--step-ink': palette.ink, '--step-soft': palette.soft, '--step-border': palette.border }}
                 >
                   <button
                     type="button"
@@ -200,22 +180,22 @@ export default function HowItWorks({ lang = 'en' }) {
                     onClick={() => setActiveStep(index)}
                     className={`
                       relative flex h-full w-full flex-col overflow-hidden
-                      rounded-[20px] border p-4 text-left sm:p-5
+                      rounded-xl border p-4 text-left sm:p-4
                       font-agni-body
                       shadow-[0_4px_16px_-4px_rgba(0,51,102,0.06)]
-                      [transform-style:preserve-3d] cursor-pointer
+                      cursor-pointer
                       transition-[transform,box-shadow,border-color,background-color]
                       duration-200 ease-out
                       focus-visible:outline-2
                       focus-visible:outline-offset-4
-                      focus-visible:outline-[#0052CC]
-                      motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
+                      focus-visible:outline-[#006DA8]
+                      motion-safe:hover:-translate-y-1
                       motion-safe:active:scale-[0.99]
                       motion-reduce:transition-none
                       ${
                         isSelected
-                          ? 'border-[#0052CC] bg-[#F4F8FF] ring-2 ring-[#0052CC]/20 shadow-[0_14px_28px_-10px_rgba(0,82,204,0.2)]'
-                          : 'border-slate-200/90 bg-white hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/65 hover:shadow-[0_14px_28px_-10px_rgba(0,82,204,0.14)]'
+                          ? 'border-[var(--step-border)] bg-[var(--step-soft)] ring-1 ring-[var(--step-accent)] shadow-sm'
+                          : 'border-slate-200 bg-white hover:border-[var(--step-border)] hover:shadow-md'
                       }
                     `}
                   >
@@ -226,10 +206,8 @@ export default function HowItWorks({ lang = 'en' }) {
                         absolute inset-x-0 top-0 h-1 transition-colors
                         ${
                           isSelected
-                            ? 'bg-[#FF5722]'
-                            : isCompleted
-                              ? 'bg-[#0052CC]'
-                              : 'bg-slate-200 group-hover:bg-[#0052CC]/50'
+                            ? 'bg-[var(--step-accent)]'
+                            : 'bg-[var(--step-accent)]/60'
                         }
                       `}
                     />
@@ -243,8 +221,8 @@ export default function HowItWorks({ lang = 'en' }) {
                           rounded-2xl border transition-colors duration-200
                           ${
                             isSelected
-                              ? 'border-[#0052CC] bg-[#0052CC] text-white shadow-xs'
-                              : 'border-[#0052CC]/15 bg-[#F4F8FF] text-[#0052CC] group-hover:bg-[#0052CC] group-hover:text-white'
+                              ? 'border-[var(--step-border)] bg-white text-[var(--step-ink)]'
+                              : 'border-[var(--step-border)] bg-[var(--step-soft)] text-[var(--step-ink)]'
                           }
                         `}
                       >
@@ -254,7 +232,7 @@ export default function HowItWorks({ lang = 'en' }) {
                       <span
                         className={`
                           inline-flex items-center gap-1 rounded-full px-2.5 py-0.5
-                          font-agni-body text-xs font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.35px_currentColor]
+                          font-agni-body text-sm font-bold [font-synthesis:weight]
                           transition-colors
                           ${
                             isSelected
@@ -274,13 +252,13 @@ export default function HowItWorks({ lang = 'en' }) {
                     </div>
 
                     <h3
-                      className={`mb-2 font-agni-body text-[17px] sm:text-[18px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] leading-snug text-[#003366] ${bn(lang)}`}
+                      className={`mb-2 font-agni-body text-[18px] sm:text-[19px] font-bold [font-synthesis:weight] tracking-[0.01em] leading-snug text-[#003366] ${bn(lang)}`}
                     >
                       {content.title}
                     </h3>
 
                     <p
-                      className={`mb-4 font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                      className={`mb-4 font-agni-body text-[15px] leading-6 text-slate-700 ${bn(lang)}`}
                     >
                       {content.desc}
                     </p>
@@ -289,44 +267,44 @@ export default function HowItWorks({ lang = 'en' }) {
                     <div
                       className={`
                         mt-auto flex w-full items-center justify-between gap-2
-                        border-t pt-2.5 font-agni-body text-[11px] font-bold [font-synthesis:weight]
+                        border-t pt-2.5 font-agni-body text-[13px] font-bold [font-synthesis:weight]
                         ${
                           isSelected
-                            ? 'border-[#0052CC]/15 text-[#0052CC]'
+                            ? 'border-[var(--step-border)] text-[var(--step-ink)]'
                             : 'border-slate-100 text-slate-500'
                         }
                         ${bn(lang)}
                       `}
                     >
-                      <span className="truncate">{content.status}</span>
+                      <span className="min-w-0 break-words leading-5">{content.status}</span>
                       <FiChevronRight
                         aria-hidden="true"
                         className={`h-3.5 w-3.5 shrink-0 transition-transform ${
-                          isSelected ? 'translate-x-0.5 text-[#FF5722]' : ''
+                          isSelected ? 'translate-x-0.5 text-[#984708]' : ''
                         }`}
                       />
                     </div>
                   </button>
-                </div>
+                </motion.div>
               </li>
             )
           })}
         </ol>
 
         {/* Bottom Showcase & Regulatory Compliance Cards */}
-        <div className="mt-7 grid grid-cols-1 gap-4 lg:mt-8 lg:grid-cols-12 lg:gap-5">
+        <div className="mt-5 grid grid-cols-1 gap-4 lg:mt-6 lg:grid-cols-12 lg:gap-5">
           {/* Phone Preview Stage */}
-          <div className="relative flex flex-col items-center justify-between overflow-hidden rounded-[20px] border border-slate-200/90 bg-white p-5 font-agni-body shadow-[0_6px_22px_-8px_rgba(0,51,102,0.08)] sm:p-6 lg:col-span-5">
+          <div className="relative flex flex-col items-center justify-between overflow-hidden rounded-xl border border-slate-200/90 bg-white p-5 font-agni-body shadow-[0_6px_22px_-8px_rgba(0,51,102,0.08)] sm:p-6 lg:col-span-5">
             <div className="mb-3 flex w-full items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F4F8FF] px-3 py-1 font-agni-body text-[11px] font-bold [font-synthesis:weight] text-[#0052CC]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF6FC] px-3 py-1 font-agni-body text-[13px] font-bold [font-synthesis:weight] text-[#006DA8]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#F58220]" />
                 {isBangla
                   ? `ধাপ ${currentStep.num} প্রিভিউ`
                   : `Step ${currentStep.num} Highlight`}
               </span>
 
               <span
-                className={`font-agni-body text-xs font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.35px_currentColor] text-[#003366] ${bn(lang)}`}
+                className={`font-agni-body text-sm font-bold [font-synthesis:weight] text-[#003366] ${bn(lang)}`}
               >
                 {currentContent.title}
               </span>
@@ -341,8 +319,8 @@ export default function HowItWorks({ lang = 'en' }) {
                 loading="lazy"
                 draggable={false}
                 className="
-                  h-auto w-full max-w-[265px]
-                  motion-safe:animate-[agniHeroFloat_4.8s_ease-in-out_infinite]
+                  h-auto w-full max-w-[225px]
+                  
                 "
               />
             </div>
@@ -354,14 +332,15 @@ export default function HowItWorks({ lang = 'en' }) {
                   key={s.num}
                   type="button"
                   onClick={() => setActiveStep(idx)}
-                  aria-label={`Select step ${s.num}`}
+                  aria-label={isBangla ? `ধাপ ${s.num} নির্বাচন করুন` : `Select step ${s.num}`}
+                  aria-pressed={activeStep === idx}
                   className={`
-                    rounded-lg px-2.5 py-1 font-agni-body text-[11px]
-                    font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.35px_currentColor] transition-colors cursor-pointer
+                    rounded-lg px-2.5 py-1 font-agni-body text-[13px]
+                    font-bold [font-synthesis:weight] transition-colors cursor-pointer
                     ${
                       activeStep === idx
                         ? 'bg-[#003366] text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-[#F4F8FF] hover:text-[#0052CC]'
+                        : 'bg-slate-100 text-slate-600 hover:bg-[#EAF6FC] hover:text-[#006DA8]'
                     }
                   `}
                 >
@@ -372,12 +351,12 @@ export default function HowItWorks({ lang = 'en' }) {
           </div>
 
           {/* Regulatory & Privacy Assurance Cards */}
-          <div className="flex flex-col justify-between gap-4 lg:col-span-7">
+          <div className="flex flex-col justify-between gap-3 lg:col-span-7">
             {/* NID Notice */}
-            <div className="group flex flex-1 items-start gap-4 rounded-[20px] border border-slate-200/90 bg-white p-4 font-agni-body sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#0052CC]/35 hover:bg-[#F4F8FF]/40">
+            <div className="group flex flex-1 items-start gap-4 rounded-xl border border-slate-200/90 bg-white p-4 font-agni-body sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#006DA8]/35 hover:bg-[#EAF6FC]/40">
               <span
                 aria-hidden="true"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#0052CC]/15 bg-[#F4F8FF] text-[#0052CC] transition-colors group-hover:bg-[#0052CC] group-hover:text-white"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#006DA8]/15 bg-[#EAF6FC] text-[#006DA8] transition-colors group-hover:bg-[#006DA8] group-hover:text-white"
               >
                 <FiLock className="h-5 w-5" />
               </span>
@@ -385,20 +364,20 @@ export default function HowItWorks({ lang = 'en' }) {
               <div className="min-w-0">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
                   <h3
-                    className={`font-agni-body text-base sm:text-[17px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] text-[#003366] ${bn(lang)}`}
+                    className={`font-agni-body text-base sm:text-[17px] font-bold [font-synthesis:weight] tracking-[0.01em] text-[#003366] ${bn(lang)}`}
                   >
                     {isBangla
                       ? 'কেন NID প্রয়োজন?'
                       : 'Why is NID Required?'}
                   </h3>
 
-                  <span className="rounded-full bg-[#F4F8FF] px-2.5 py-0.5 font-agni-body text-[10px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#0052CC]">
+                  <span className="rounded-full bg-[#EAF6FC] px-2.5 py-0.5 font-agni-body text-sm font-bold [font-synthesis:weight] uppercase tracking-wider text-[#006DA8]">
                     BTRC &amp; Porichoy API
                   </span>
                 </div>
 
                 <p
-                  className={`font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                  className={`font-agni-body text-[15px] leading-6 text-slate-700 ${bn(lang)}`}
                 >
                   {isBangla
                     ? 'BTRC-এর বিধিমালা অনুযায়ী ০৯৬০৬ ভার্চুয়াল নম্বর সক্রিয় করতে NID যাচাই বাধ্যতামূলক। আপনার তথ্য Porichoy API-এ এনক্রিপ্টেড আকারে পাঠানো হয়।'
@@ -408,10 +387,10 @@ export default function HowItWorks({ lang = 'en' }) {
             </div>
 
             {/* GPS Notice */}
-            <div className="group flex flex-1 items-start gap-4 rounded-[20px] border border-slate-200/90 bg-white p-4 font-agni-body sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#FF5722]/35 hover:bg-[#FFF7F4]/40">
+            <div className="group flex flex-1 items-start gap-4 rounded-xl border border-slate-200/90 bg-white p-4 font-agni-body sm:p-5 shadow-[0_4px_16px_-4px_rgba(0,51,102,0.05)] transition-colors hover:border-[#F58220]/35 hover:bg-[#FFF3E8]/40">
               <span
                 aria-hidden="true"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#FF5722]/15 bg-[#FFF7F4] text-[#FF5722] transition-colors group-hover:bg-[#FF5722] group-hover:text-white"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#F58220]/15 bg-[#FFF3E8] text-[#984708] transition-colors group-hover:bg-[#F58220] group-hover:text-white"
               >
                 <FiMapPin className="h-5 w-5" />
               </span>
@@ -419,20 +398,20 @@ export default function HowItWorks({ lang = 'en' }) {
               <div className="min-w-0">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
                   <h3
-                    className={`font-agni-body text-base sm:text-[17px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] text-[#003366] ${bn(lang)}`}
+                    className={`font-agni-body text-base sm:text-[17px] font-bold [font-synthesis:weight] tracking-[0.01em] text-[#003366] ${bn(lang)}`}
                   >
                     {isBangla
                       ? 'GPS অনুমতি কেন?'
                       : 'Why GPS Location Permission?'}
                   </h3>
 
-                  <span className="rounded-full bg-[#FFF7F4] px-2.5 py-0.5 font-agni-body text-[10px] font-bold [font-synthesis:weight] uppercase tracking-wider text-[#FF5722]">
+                  <span className="rounded-full bg-[#FFF3E8] px-2.5 py-0.5 font-agni-body text-sm font-bold [font-synthesis:weight] uppercase tracking-wider text-[#984708]">
                     One-Time Check
                   </span>
                 </div>
 
                 <p
-                  className={`font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                  className={`font-agni-body text-[15px] leading-6 text-slate-700 ${bn(lang)}`}
                 >
                   {isBangla
                     ? 'টেলিযোগাযোগ আইন অনুযায়ী নিবন্ধনের সময় একবার GPS অনুমতি প্রয়োজন যা নিশ্চিত করে আপনি বাংলাদেশে আছেন।'

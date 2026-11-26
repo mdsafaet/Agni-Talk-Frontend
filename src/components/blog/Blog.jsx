@@ -201,38 +201,18 @@ const POSTS = [
   },
 ]
 
-function handleTilt(event) {
-  if (
-    event.pointerType !== 'mouse' ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
-    return
-  }
-
-  const wrapper = event.currentTarget
-  const rect = wrapper.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
-
-  const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
-  const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
-
-  wrapper.style.setProperty('--tilt-x', `${(0.5 - y) * 8}deg`)
-  wrapper.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`)
-  wrapper.style.setProperty('--lift', '-4px')
+const CATEGORY_THEME = {
+  tips: { accent: '#0088D0', ink: '#005B8C', bg: '#EAF6FC' },
+  news: { accent: '#F58220', ink: '#984708', bg: '#FFF3E8' },
+  safety: { accent: '#E00010', ink: '#A81020', bg: '#FFF0F1' },
 }
 
-function resetTilt(event) {
-  const wrapper = event.currentTarget
-  wrapper.style.setProperty('--tilt-x', '0deg')
-  wrapper.style.setProperty('--tilt-y', '0deg')
-  wrapper.style.setProperty('--lift', '0px')
-}
-
-function Cover({ cover, tall }) {
+function Cover({ cover, tall, category }) {
   const isIcon = cover.kind === 'icon'
   return (
     <div
-      className={`flex justify-center overflow-hidden bg-[#F0F5FB] ${
+      style={{ backgroundColor: CATEGORY_THEME[category]?.bg || '#EDF7FC' }}
+      className={`flex justify-center overflow-hidden ${
         isIcon ? 'items-center' : 'items-start pt-5'
       } ${tall ? 'min-h-[240px] lg:min-h-full' : 'h-44'}`}
     >
@@ -264,7 +244,7 @@ function formatDate(iso, lang) {
 function PostMeta({ post, lang }) {
   return (
     <div
-      className={`flex items-center gap-2 font-agni-body text-xs text-slate-400 ${bn(lang)}`}
+      className={`flex items-center gap-2 font-agni-body text-xs text-slate-700 ${bn(lang)}`}
     >
       <span>{formatDate(post.date, lang)}</span>
       <span>·</span>
@@ -331,35 +311,28 @@ export default function Blog({ lang = 'en' }) {
       className="
         agnitalk-ui relative overflow-hidden
         border-b border-slate-200/70
-        bg-[#F8FAFF]
-        bg-[radial-gradient(#CBD5E1_0.85px,transparent_0.85px)]
-        [background-size:22px_22px]
-        py-12 sm:py-16
+        bg-[#F8FBFD]
+        py-8! sm:py-10! lg:py-12!
       "
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(248,250,255,0.65)_100%)]"
-      />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
-          <div
-            className={`
-              mb-2.5 inline-flex items-center gap-2 rounded-full
-              border border-[#0052CC]/15 bg-white
-              px-3.5 py-1 text-[11px] font-bold [font-synthesis:weight]
-              uppercase tracking-wider text-[#0052CC] shadow-2xs
-              ${bn(lang)}
-            `}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
-            {isBangla ? 'ব্লগ' : 'THE AGNITALK BLOG'}
+        <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
+          <div className="mb-3 flex items-center justify-center gap-2.5">
+            <span aria-hidden="true" className="flex h-1 gap-0.5">
+              <span className="w-5 rounded-full bg-[#0088D0]" />
+              <span className="w-2 rounded-full bg-[#E00010]" />
+              <span className="w-2 rounded-full bg-[#F58220]" />
+              <span className="w-2 rounded-full bg-[#F8E800]" />
+            </span>
+            <span className={`text-[13px] font-bold tracking-wide text-[#006DA8] ${bn(lang)}`}>
+              {isBangla ? 'ব্লগ' : 'The AgniTalk Blog'}
+            </span>
           </div>
 
           <h2
-            className={`mb-2.5 text-[clamp(24px,4vw,36px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
+            className={`mb-2.5 text-[clamp(28px,4vw,40px)] font-bold [font-synthesis:weight] leading-tight text-[#003366] ${bn(lang)}`}
             style={display(lang)}
           >
             {isBangla
@@ -368,7 +341,7 @@ export default function Blog({ lang = 'en' }) {
           </h2>
 
           <p
-            className={`mx-auto max-w-xl text-sm sm:text-base text-slate-600 ${bn(lang)}`}
+            className={`mx-auto max-w-xl text-[15px] sm:text-base text-slate-700 ${bn(lang)}`}
           >
             {isBangla
               ? 'কম খরচে কল করা, নিরাপদ থাকা এবং AgniTalk-এর নতুন ফিচার সম্পর্কে জানুন।'
@@ -377,7 +350,7 @@ export default function Blog({ lang = 'en' }) {
         </div>
 
         {/* Category filter */}
-        <div className="mb-8 flex flex-wrap justify-center gap-2">
+        <div className="mb-6 flex flex-wrap justify-center gap-2">
           {CATEGORIES.map((c) => {
             const active = category === c.id
             return (
@@ -387,18 +360,18 @@ export default function Blog({ lang = 'en' }) {
                 aria-pressed={active}
                 onClick={() => setCategory(c.id)}
                 className={`
-                  rounded-xl px-4 py-2 text-xs sm:text-sm
+                  rounded-xl px-4 py-2 text-sm
                   font-bold [font-synthesis:weight]
                   transition-[background-color,color,border-color,box-shadow]
                   duration-200 cursor-pointer
                   focus-visible:outline-2
                   focus-visible:outline-offset-2
-                  focus-visible:outline-[#0052CC]
+                  focus-visible:outline-[#006DA8]
                   ${bn(lang)}
                   ${
                     active
                       ? 'border border-[#003366] bg-[#003366] text-white shadow-xs'
-                      : 'border border-slate-200/90 bg-white text-slate-600 hover:border-[#0052CC]/35 hover:bg-[#F4F8FF] hover:text-[#0052CC]'
+                      : 'border border-slate-200/90 bg-white text-slate-700 hover:border-[#006DA8]/35 hover:bg-[#EDF7FC] hover:text-[#006DA8]'
                   }
                 `}
               >
@@ -411,63 +384,62 @@ export default function Blog({ lang = 'en' }) {
         {/* Featured post */}
         {featured && (
           <div
-            onPointerMove={handleTilt}
-            onPointerLeave={resetTilt}
-            onPointerCancel={resetTilt}
-            className="mb-7 [perspective:1200px]"
+            className="mb-7 "
           >
             <button
               type="button"
               onClick={() => setActivePostId(featured.id)}
               className="
                 group relative block w-full overflow-hidden
-                rounded-[20px] border border-slate-200/90
+                rounded-xl border border-slate-200/90
                 bg-white text-left font-agni-body
                 shadow-[0_6px_22px_-8px_rgba(0,51,102,0.08)]
                 transition-[transform,border-color,box-shadow,background-color]
                 duration-200 ease-out cursor-pointer
-                hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/45
+                hover:border-[#006DA8]/45 hover:bg-[#EDF7FC]/45
                 hover:shadow-[0_16px_32px_-12px_rgba(0,82,204,0.16)]
                 focus-visible:outline-2
                 focus-visible:outline-offset-4
-                focus-visible:outline-[#0052CC]
-                motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
+                focus-visible:outline-[#006DA8]
+                motion-safe:hover:-translate-y-1
                 motion-reduce:transition-none
                 lg:grid lg:grid-cols-2
               "
             >
               <span
                 aria-hidden="true"
-                className="absolute inset-x-0 top-0 z-10 h-1 bg-[#FF5722]"
+                className="absolute inset-x-0 top-0 z-10 h-1"
+                style={{ backgroundColor: CATEGORY_THEME[featured.category].accent }}
               />
 
-              <Cover cover={featured.cover} tall />
+              <Cover category={featured.category} cover={featured.cover} tall />
 
               <div className="flex flex-col justify-center p-5 font-agni-body sm:p-7">
                 <div className="mb-3 flex items-center gap-2">
                   <span
+                    style={{ backgroundColor: CATEGORY_THEME[featured.category].bg, color: CATEGORY_THEME[featured.category].ink }}
                     className={`
-                      inline-flex rounded-full bg-[#F4F8FF] px-3 py-1
-                      font-agni-body text-xs font-bold [font-synthesis:weight] text-[#0052CC]
+                      inline-flex rounded-full bg-[#EDF7FC] px-3 py-1
+                      font-agni-body text-xs font-bold [font-synthesis:weight] text-[#006DA8]
                       ${bn(lang)}
                     `}
                   >
                     {label(featured.category)}
                   </span>
 
-                  <span className="rounded-full bg-[#FFF7F4] px-2.5 py-0.5 font-agni-body text-[11px] font-bold [font-synthesis:weight] text-[#FF5722]">
+                  <span className="rounded-full bg-[#FFFBE2] px-2.5 py-0.5 font-agni-body text-xs font-bold [font-synthesis:weight] text-[#756500]">
                     {isBangla ? 'ফিচার্ড' : 'Featured'}
                   </span>
                 </div>
 
                 <h3
-                  className={`mb-2.5 font-agni-body text-[clamp(20px,2.8vw,28px)] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.45px_currentColor] tracking-[0.01em] leading-snug text-[#003366] group-hover:text-[#0052CC] transition-colors ${bn(lang)}`}
+                  className={`mb-2.5 font-agni-body text-[clamp(20px,2.8vw,28px)] font-bold [font-synthesis:weight] tracking-[0.01em] leading-snug text-[#003366] group-hover:text-[#006DA8] transition-colors ${bn(lang)}`}
                 >
                   {isBangla ? featured.bn.title : featured.en.title}
                 </h3>
 
                 <p
-                  className={`mb-5 font-agni-body text-sm sm:text-base leading-relaxed text-slate-600 ${bn(lang)}`}
+                  className={`mb-5 font-agni-body text-[15px] sm:text-base leading-relaxed text-slate-700 ${bn(lang)}`}
                 >
                   {isBangla ? featured.bn.excerpt : featured.en.excerpt}
                 </p>
@@ -478,7 +450,7 @@ export default function Blog({ lang = 'en' }) {
                   <span
                     className={`
                       inline-flex items-center gap-1.5 font-agni-body text-sm
-                      font-bold [font-synthesis:weight] text-[#0052CC]
+                      font-bold [font-synthesis:weight] text-[#006DA8]
                       ${bn(lang)}
                     `}
                   >
@@ -496,45 +468,44 @@ export default function Blog({ lang = 'en' }) {
           {rest.map((p) => (
             <div
               key={p.id}
-              onPointerMove={handleTilt}
-              onPointerLeave={resetTilt}
-              onPointerCancel={resetTilt}
-              className="h-full [perspective:1000px]"
+              className="h-full "
             >
               <button
                 type="button"
                 onClick={() => setActivePostId(p.id)}
                 className="
                   group relative flex h-full w-full flex-col overflow-hidden
-                  rounded-[20px] border border-slate-200/90
+                  rounded-xl border border-slate-200/90
                   bg-white text-left font-agni-body
                   shadow-[0_4px_16px_-4px_rgba(0,51,102,0.06)]
                   transition-[transform,border-color,box-shadow,background-color]
                   duration-200 ease-out cursor-pointer
-                  hover:border-[#0052CC]/45 hover:bg-[#F4F8FF]/45
+                  hover:border-[#006DA8]/45 hover:bg-[#EDF7FC]/45
                   hover:shadow-[0_14px_28px_-10px_rgba(0,82,204,0.14)]
                   focus-visible:outline-2
                   focus-visible:outline-offset-4
-                  focus-visible:outline-[#0052CC]
-                  motion-safe:[transform:translateY(var(--lift,0px))_rotateX(var(--tilt-x,0deg))_rotateY(var(--tilt-y,0deg))]
+                  focus-visible:outline-[#006DA8]
+                  motion-safe:hover:-translate-y-1
                   motion-reduce:transition-none
                 "
               >
                 <span
                   aria-hidden="true"
-                  className="absolute inset-x-0 top-0 z-10 h-1 bg-[#0052CC]"
+                  className="absolute inset-x-0 top-0 z-10 h-1"
+                  style={{ backgroundColor: CATEGORY_THEME[p.category].accent }}
                 />
 
                 <div className="w-full">
-                  <Cover cover={p.cover} />
+                  <Cover category={p.category} cover={p.cover} />
                 </div>
 
                 <div className="flex flex-1 flex-col p-4 font-agni-body sm:p-5">
                   <span
+                    style={{ backgroundColor: CATEGORY_THEME[p.category].bg, color: CATEGORY_THEME[p.category].ink }}
                     className={`
                       mb-2.5 inline-flex self-start rounded-full
-                      bg-[#F4F8FF] px-2.5 py-0.5 font-agni-body text-[11px]
-                      font-bold [font-synthesis:weight] text-[#0052CC]
+                      bg-[#EDF7FC] px-2.5 py-0.5 font-agni-body text-xs
+                      font-bold [font-synthesis:weight] text-[#006DA8]
                       ${bn(lang)}
                     `}
                   >
@@ -542,13 +513,13 @@ export default function Blog({ lang = 'en' }) {
                   </span>
 
                   <h3
-                    className={`mb-2 font-agni-body text-[17px] sm:text-[18px] font-extrabold [font-synthesis-weight:auto] [-webkit-text-stroke:0.4px_currentColor] tracking-[0.01em] leading-snug text-[#003366] group-hover:text-[#0052CC] transition-colors ${bn(lang)}`}
+                    className={`mb-2 font-agni-body text-[18px] sm:text-[19px] font-bold [font-synthesis:weight] tracking-[0.01em] leading-snug text-[#003366] group-hover:text-[#006DA8] transition-colors ${bn(lang)}`}
                   >
                     {isBangla ? p.bn.title : p.en.title}
                   </h3>
 
                   <p
-                    className={`mb-4 font-agni-body text-sm leading-relaxed text-slate-600 ${bn(lang)}`}
+                    className={`mb-4 font-agni-body text-[15px] leading-relaxed text-slate-700 ${bn(lang)}`}
                   >
                     {isBangla ? p.bn.excerpt : p.en.excerpt}
                   </p>
@@ -559,7 +530,7 @@ export default function Blog({ lang = 'en' }) {
                     <span
                       className={`
                         inline-flex items-center gap-1 font-agni-body text-xs
-                        font-bold [font-synthesis:weight] text-[#FF5722]
+                        font-bold [font-synthesis:weight] text-[#B6530A]
                         ${bn(lang)}
                       `}
                     >
@@ -577,8 +548,8 @@ export default function Blog({ lang = 'en' }) {
           <div
             role="status"
             className={`
-              rounded-[20px] border border-slate-200/90 bg-white
-              py-10 text-center text-sm text-slate-500
+              rounded-xl border border-slate-200/90 bg-white
+              py-10 text-center text-sm text-slate-700
               ${bn(lang)}
             `}
           >
@@ -599,15 +570,16 @@ export default function Blog({ lang = 'en' }) {
           onClick={() => setActivePostId(null)}
         >
           <article
-            className="relative max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-[24px] border border-slate-200 bg-white shadow-[0_24px_60px_-15px_rgba(0,33,71,0.4)]"
+            className="relative max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-[0_24px_60px_-15px_rgba(0,33,71,0.4)]"
             onClick={(event) => event.stopPropagation()}
           >
             {/* Top Bar */}
             <div className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-slate-100 bg-white/95 px-5 py-3.5 backdrop-blur-xs sm:px-6">
               <span
+                    style={{ backgroundColor: CATEGORY_THEME[activePost.category].bg, color: CATEGORY_THEME[activePost.category].ink }}
                 className={`
-                  inline-flex rounded-full bg-[#F4F8FF] px-3 py-1
-                  text-xs font-bold [font-synthesis:weight] text-[#0052CC]
+                  inline-flex rounded-full bg-[#EDF7FC] px-3 py-1
+                  text-xs font-bold [font-synthesis:weight] text-[#006DA8]
                   ${bn(lang)}
                 `}
               >
@@ -621,9 +593,9 @@ export default function Blog({ lang = 'en' }) {
                 className="
                   inline-flex h-8 w-8 items-center justify-center
                   rounded-full border border-slate-200 bg-slate-50
-                  text-slate-600 transition-colors hover:bg-[#003366] hover:text-white
+                  text-slate-700 transition-colors hover:bg-[#003366] hover:text-white
                   cursor-pointer
-                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0052CC]
+                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#006DA8]
                 "
               >
                 <FiX className="h-4 w-4" />
@@ -631,20 +603,20 @@ export default function Blog({ lang = 'en' }) {
             </div>
 
             {/* Cover Banner */}
-            <Cover cover={activePost.cover} />
+            <Cover category={activePost.category} cover={activePost.cover} />
 
             {/* Article Body */}
             <div className="p-5 sm:p-7">
               <div
-                className={`mb-3 flex flex-wrap items-center gap-4 text-xs text-slate-500 ${bn(lang)}`}
+                className={`mb-3 flex flex-wrap items-center gap-4 text-xs text-slate-700 ${bn(lang)}`}
               >
                 <span className="inline-flex items-center gap-1.5">
-                  <FiCalendar className="h-3.5 w-3.5 text-[#0052CC]" />
+                  <FiCalendar className="h-3.5 w-3.5 text-[#006DA8]" />
                   {formatDate(activePost.date, lang)}
                 </span>
 
                 <span className="inline-flex items-center gap-1.5">
-                  <FiClock className="h-3.5 w-3.5 text-[#FF5722]" />
+                  <FiClock className="h-3.5 w-3.5 text-[#B6530A]" />
                   {activePost.readMin}{' '}
                   {isBangla ? 'মিনিট পড়া' : 'min read'}
                 </span>
@@ -658,7 +630,7 @@ export default function Blog({ lang = 'en' }) {
                 {isBangla ? activePost.bn.title : activePost.en.title}
               </h3>
 
-              <div className={`space-y-3.5 text-sm sm:text-base leading-relaxed text-slate-700 ${bn(lang)}`}>
+              <div className={`space-y-3.5 text-[15px] sm:text-base leading-relaxed text-slate-700 ${bn(lang)}`}>
                 {(isBangla ? activePost.bn.body : activePost.en.body).map(
                   (paragraph, index) => (
                     <p key={index}>{paragraph}</p>
@@ -674,7 +646,7 @@ export default function Blog({ lang = 'en' }) {
                   className={`
                     inline-flex items-center gap-1.5 rounded-xl border border-slate-200
                     bg-[#F8FAFC] px-3.5 py-2 text-xs font-bold [font-synthesis:weight]
-                    text-[#003366] transition-colors hover:border-[#0052CC]/40 hover:bg-[#F4F8FF] hover:text-[#0052CC]
+                    text-[#003366] transition-colors hover:border-[#006DA8]/40 hover:bg-[#EDF7FC] hover:text-[#006DA8]
                     cursor-pointer
                     ${bn(lang)}
                   `}
@@ -689,7 +661,7 @@ export default function Blog({ lang = 'en' }) {
                   className={`
                     inline-flex items-center gap-1.5 rounded-xl border border-slate-200
                     bg-[#F8FAFC] px-3.5 py-2 text-xs font-bold [font-synthesis:weight]
-                    text-[#003366] transition-colors hover:border-[#0052CC]/40 hover:bg-[#F4F8FF] hover:text-[#0052CC]
+                    text-[#003366] transition-colors hover:border-[#006DA8]/40 hover:bg-[#EDF7FC] hover:text-[#006DA8]
                     cursor-pointer
                     ${bn(lang)}
                   `}

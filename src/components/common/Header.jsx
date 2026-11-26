@@ -23,7 +23,7 @@ export default function Header({ lang = 'en', setLang }) {
   const closeMenu = () => setMenuOpen(false)
 
   useEffect(() => {
-    menuRef.current?.close()
+    setMenuOpen(false)
   }, [location])
 
   useEffect(() => {
@@ -34,13 +34,13 @@ export default function Header({ lang = 'en', setLang }) {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
-    dialog.showModal()
+    if (!dialog.open) dialog.showModal()
 
     const desktop = window.matchMedia('(min-width: 1280px)')
 
     const handleResize = () => {
       if (desktop.matches) {
-        dialog.close()
+        setMenuOpen(false)
       }
     }
 
@@ -53,7 +53,7 @@ export default function Header({ lang = 'en', setLang }) {
 
       if (dialog.open) dialog.close()
 
-      openButtonRef.current?.focus()
+      if (!desktop.matches) openButtonRef.current?.focus()
     }
   }, [menuOpen])
 
@@ -76,7 +76,7 @@ export default function Header({ lang = 'en', setLang }) {
           className="h-6 w-auto max-w-full object-contain"
         />
 
-        <span className="mt-1 block text-[10px] text-slate-500 sm:text-xs">
+        <span className="mt-1 block text-[11px] text-slate-600 sm:text-[12px]">
           by Agni Systems PLC.
         </span>
       </div>
@@ -88,14 +88,20 @@ export default function Header({ lang = 'en', setLang }) {
       <header
         lang={lang}
         className="
-          agnitalk-ui agnitalk-header
+          agnitalk-ui agnitalk-header font-agni-body
           sticky top-0 z-40 w-full
-          border-b border-slate-200 bg-white
+          border-b border-[#DCE6EF] bg-white
         "
       >
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 flex h-[3px] pointer-events-none">
+          <span className="flex-1 bg-[#0088D0]" />
+          <span className="w-[5%] bg-[#E00010]" />
+          <span className="w-[5%] bg-[#F58220]" />
+          <span className="w-[5%] bg-[#F8E800]" />
+        </div>
         <div
           className="
-            flex h-20 w-full items-center justify-between
+            flex h-[76px] w-full items-center justify-between
             gap-4 px-4 sm:px-6 lg:px-10
           "
         >
@@ -110,7 +116,7 @@ export default function Header({ lang = 'en', setLang }) {
           {/* Desktop navigation */}
           <nav
             aria-label="Main navigation"
-            className="hidden items-center gap-6 xl:flex"
+            className="hidden items-center gap-1.5 xl:flex"
           >
             {navigation.map((item) => (
               <NavLink
@@ -118,11 +124,11 @@ export default function Header({ lang = 'en', setLang }) {
                 to={item.to}
                 className={({ isActive }) =>
                   `
-                    whitespace-nowrap py-2 text-sm
+                    relative whitespace-nowrap rounded-lg px-3 py-2.5 text-[15px] font-bold [font-synthesis:weight] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0088D0]
                     transition-colors duration-200
-                    hover:text-[#0052CC]
+                    hover:text-[#006DA8]
                     motion-reduce:transition-none
-                    ${isActive ? 'text-[#0052CC]' : 'text-slate-600'}
+                    ${isActive ? 'bg-[#EAF6FC] text-[#006DA8] after:absolute after:bottom-0 after:left-3 after:right-3 after:h-[2px] after:rounded-full after:bg-[#0088D0]' : 'text-[#334155] hover:bg-[#F4F8FB]'}
                   `
                 }
               >
@@ -139,9 +145,9 @@ export default function Header({ lang = 'en', setLang }) {
                 onClick={toggleLanguage}
                 className="
                   rounded-lg border border-slate-300
-                  px-4 py-3 text-sm text-slate-700
+                  px-4 py-2.5 text-[15px] font-bold [font-synthesis:weight] text-[#003366]
                   transition-colors duration-200 cursor-pointer
-                  hover:border-[#0052CC] hover:bg-[#F4F8FF] hover:text-[#0052CC]
+                  hover:border-[#006DA8] hover:bg-[#F4F8FF] hover:text-[#006DA8]
                   motion-reduce:transition-none
                 "
               >
@@ -152,10 +158,10 @@ export default function Header({ lang = 'en', setLang }) {
             <Link
               to="/download"
               className="
-                rounded-lg bg-[#FF5722]
-                px-5 py-3 text-sm text-white
+                rounded-lg bg-[#006DA8]
+                px-5 py-2.5 text-[15px] font-bold [font-synthesis:weight] text-white
                 transition-colors duration-200
-                hover:bg-[#0052CC]
+                hover:bg-[#005580]
                 motion-reduce:transition-none
               "
             >
@@ -201,7 +207,7 @@ export default function Header({ lang = 'en', setLang }) {
         aria-label={isBangla ? 'মেনু' : 'Navigation menu'}
         onClose={() => setMenuOpen(false)}
         className="
-          agnitalk-ui agnitalk-header
+          agnitalk-ui agnitalk-header font-agni-body
           fixed inset-0 m-0 h-dvh max-h-none
           w-full max-w-none border-0
           bg-white p-0 text-slate-800
@@ -212,7 +218,7 @@ export default function Header({ lang = 'en', setLang }) {
           {/* Mobile header */}
           <div
             className="
-              flex h-20 shrink-0 items-center justify-between
+              flex h-[76px] shrink-0 items-center justify-between
               gap-4 border-b border-slate-200 px-4 sm:px-6
             "
           >
@@ -268,13 +274,13 @@ export default function Header({ lang = 'en', setLang }) {
                       className={({ isActive }) =>
                         `
                           flex min-h-14 items-center justify-between
-                          gap-4 rounded-xl px-4 py-4 text-xl
+                          gap-4 rounded-xl px-4 py-3 text-[17px] font-bold [font-synthesis:weight]
                           transition-colors duration-200
                           motion-reduce:transition-none
                           ${
                             isActive
-                              ? 'bg-blue-50 text-[#0052CC]'
-                              : 'text-slate-700 hover:bg-slate-50'
+                              ? 'bg-[#EAF6FC] text-[#006DA8]'
+                              : 'text-[#334155] hover:bg-slate-50'
                           }
                         `
                       }
@@ -303,9 +309,9 @@ export default function Header({ lang = 'en', setLang }) {
                     className="
                       min-h-12 flex-1 rounded-xl
                       border border-slate-300
-                      px-5 py-3 text-base text-slate-700
+                      px-5 py-3 text-base font-bold [font-synthesis:weight] text-[#003366]
                       transition-colors duration-200 cursor-pointer
-                      hover:border-[#0052CC] hover:bg-[#F4F8FF] hover:text-[#0052CC]
+                      hover:border-[#006DA8] hover:bg-[#F4F8FF] hover:text-[#006DA8]
                       motion-reduce:transition-none
                     "
                   >
@@ -318,10 +324,10 @@ export default function Header({ lang = 'en', setLang }) {
                   onClick={closeMenu}
                   className="
                     flex min-h-12 flex-1 items-center justify-center
-                    rounded-xl bg-[#FF5722]
-                    px-5 py-3 text-base text-white
+                    rounded-xl bg-[#006DA8]
+                    px-5 py-3 text-base font-bold [font-synthesis:weight] text-white
                     transition-colors duration-200
-                    hover:bg-[#0052CC]
+                    hover:bg-[#005580]
                     motion-reduce:transition-none
                   "
                 >
